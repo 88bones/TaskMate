@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 mongoose
-  .connect("mongodb://localhost:27017/timely")
+  .connect("mongodb://localhost:27017/taskmate")
   .then(() => console.log("Connected to DB."))
   .catch((error) => console.error("Failed: " + error));
 

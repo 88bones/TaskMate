@@ -1,5 +1,6 @@
 import userModel from "../models/userModel.js";
 import bcrypt from "bcrypt";
+import jwtGenerator from "../utils/jwtGenerator.js";
 
 const signUp = async (req, res) => {
   try {
@@ -21,8 +22,12 @@ const signUp = async (req, res) => {
     });
 
     await newUser.save();
+
+    const token = jwtGenerator(newUser._id);
+
     res.status(200).json({
       message: "Signed Up",
+      token,
       user: {
         id: newUser._id,
         firstname: newUser.firstname,

@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
+import Home from "./pages/Home";
 
 function AppWrapper() {
   return (
@@ -25,6 +26,7 @@ function App() {
     <>
       {!hideNavbarPaths.includes(location.pathname) && <NavBar />}
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
       </Routes>

@@ -19,7 +19,7 @@ mongoose
   .catch((error) => console.error("Failed: " + error));
 
 app.use("/api/users", userRoutes);
-app.use("/api/login", loginRoutes);
+app.use("/api/signin", loginRoutes);
 
 app.listen(PORT, () => {
   console.log("App is running.");

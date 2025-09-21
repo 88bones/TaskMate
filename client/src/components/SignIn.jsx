@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { postSignIn } from "../services/postSignIn";
 
 const SignIn = () => {
   const inputStyle =
@@ -10,8 +11,8 @@ const SignIn = () => {
     password: "",
   });
 
-  const [error, setError] = useState();
-  const [formError, setFormError] = useState();
+  const [error, setError] = useState("");
+  const [formError, setFormError] = useState("");
 
   const navigate = useNavigate();
 
@@ -22,7 +23,29 @@ const SignIn = () => {
       [name]: value,
     });
   };
-  const handleSubmit = () => {};
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const res = await postSignIn(data);
+      const { token, user, message } = res;
+
+      if (message === "success") {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+      }
+      navigate("/");
+      console.log("sign in success and token: ", token);
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setFormError(err.response.data.message || "Login Failed");
+      } else {
+        setFormError("Credentials Invalid!!");
+      }
+    }
+  };
 
   return (
     <div className="flex justify-center items-center h-screen bg-black px-4">
@@ -77,5 +100,4 @@ const SignIn = () => {
     </div>
   );
 };
-
 export default SignIn;

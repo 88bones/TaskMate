@@ -11,16 +11,20 @@ const NavBar = () => {
     <>
       <nav className=" flex justify-center py-2">
         <div className="flex justify-between w-full max-w-5xl mx-auto">
-          <header className="font-extrabold text-3xl">TaskMate</header>
+          <header className="px-4 font-extrabold text-3xl flex justify-between max-sm:w-dvw ">
+            TaskMate{" "}
+            <div className="md:hidden flex right-0">
+              <button className="text-2xl">&#9776;</button>
+            </div>
+          </header>
+
           <div className="hidden md:flex justify-around w-64">
-            <button className={buttonStyle}>Sign In</button>
+            <button className={buttonStyle} onClick={() => navigate("/signin")}>
+              Sign In
+            </button>
             <button className={buttonStyle} onClick={() => navigate("/signup")}>
               Sign Up
             </button>
-          </div>
-
-          <div className="md:hidden">
-            <button className="text-2xl p-8">&#9776;</button>
           </div>
         </div>
       </nav>

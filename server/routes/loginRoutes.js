@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
     const token = jwtGenerator(user._id);
 
     res.status(200).json({
-      message: "Signed In",
+      message: "success",
       token,
       user: {
         _id: user._id,

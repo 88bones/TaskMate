@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
+import loginRoutes from "./routes/loginRoutes.js";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ mongoose
   .catch((error) => console.error("Failed: " + error));
 
 app.use("/api/users", userRoutes);
+app.use("/api/login", loginRoutes);
 
 app.listen(PORT, () => {
   console.log("App is running.");

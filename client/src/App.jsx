@@ -9,6 +9,7 @@ import {
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import Home from "./pages/Home";
+import { useSelector } from "react-redux";
 
 function AppWrapper() {
   return (
@@ -22,6 +23,10 @@ function App() {
   const location = useLocation();
   const hideNavbarPaths = ["/signin", "/signup"];
 
+  const { firstname, lastname, email, role, _id, signedIn } = useSelector(
+    (state) => state.user
+  );
+
   return (
     <>
       {!hideNavbarPaths.includes(location.pathname) && <NavBar />}
@@ -30,6 +35,9 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
       </Routes>
+      <h1>
+        {firstname} {email} {_id}{" "}
+      </h1>
     </>
   );
 }

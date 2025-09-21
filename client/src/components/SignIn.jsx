@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { postSignIn } from "../services/postSignIn";
+import { useDispatch } from "react-redux";
+import { signin } from "../redux/slice";
 
 const SignIn = () => {
   const inputStyle =
@@ -15,6 +17,7 @@ const SignIn = () => {
   const [formError, setFormError] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,9 +38,18 @@ const SignIn = () => {
       if (message === "success") {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
+
+        dispatch(
+          signin({
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            role: user.role,
+            _id: user._id,
+          })
+        );
       }
       navigate("/");
-      console.log("sign in success and token: ", token);
     } catch (err) {
       if (err.response && err.response.data && err.response.data.message) {
         setFormError(err.response.data.message || "Login Failed");

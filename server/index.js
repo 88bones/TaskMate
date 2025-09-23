@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
 import loginRoutes from "./routes/loginRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ mongoose
 
 app.use("/api/users", userRoutes);
 app.use("/api/signin", loginRoutes);
+app.use("/api/project", projectRoutes);
 
 app.listen(PORT, () => {
   console.log("App is running.");

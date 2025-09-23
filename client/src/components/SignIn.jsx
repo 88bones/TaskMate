@@ -49,7 +49,7 @@ const SignIn = () => {
           })
         );
       }
-      navigate("/");
+      navigate("/dashboard/");
     } catch (err) {
       if (err.response && err.response.data && err.response.data.message) {
         setFormError(err.response.data.message || "Login Failed");

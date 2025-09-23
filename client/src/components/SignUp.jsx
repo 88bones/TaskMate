@@ -1,10 +1,20 @@
 import React, { useState } from "react";
 import { postSignUp } from "../services/postSignUp";
 import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
 
 const SignUp = () => {
   const inputStyle =
     "w-full border border-gray-500 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500";
+
+  const validationSchema = yup.object().shape({
+    firstname: yup.string().max(20),
+    lastname: yup.string(),
+    email: yup.string().email("Invalid email format"),
+    password: yup
+      .string()
+      .min(6, "Passwords must be atleast 6 characters or long."),
+  });
 
   const [data, setData] = useState({
     firstname: "",
@@ -30,11 +40,15 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (data.password !== data.repassword) {
-      setError("Passwords do not match");
-      return;
-    }
+
     try {
+      await validationSchema.validate(data, { abortEarly: false });
+
+      if (data.password !== data.repassword) {
+        setError("Passwords do not match");
+        return;
+      }
+
       const res = await postSignUp(data);
       const { token } = res;
 
@@ -49,11 +63,16 @@ const SignUp = () => {
         password: "",
         repassword: "",
       });
-    } catch (err) {
-      if (err.response) {
-        setFormError(err.response.data.message);
+    } catch (validationErr) {
+      if (validationErr.inner) {
+        // collect multiple errors
+        const errors = {};
+        validationErr.inner.forEach((err) => {
+          errors[err.path] = err.message;
+        });
+        setFormError(errors);
       } else {
-        setFormError(err.message);
+        setFormError(validationErr.message);
       }
     }
   };

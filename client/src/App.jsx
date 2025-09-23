@@ -10,6 +10,9 @@ import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import Home from "./pages/Home";
 import { useSelector } from "react-redux";
+import DashBoard from "./pages/DashBoard";
+import Task from "./components/Task";
+import Team from "./components/Team";
 
 function AppWrapper() {
   return (
@@ -21,23 +24,36 @@ function AppWrapper() {
 
 function App() {
   const location = useLocation();
-  const hideNavbarPaths = ["/signin", "/signup"];
+  const hideNavbarPaths = [
+    "/signin",
+    "/signup",
+    "/dashboard",
+    "/dashboard/",
+    "/dashboard/tasks",
+    "/dashboard/team",
+  ];
 
-  const { firstname, lastname, email, role, _id, signedIn } = useSelector(
-    (state) => state.user
-  );
+  // const { firstname, lastname, email, role, _id, signedIn } = useSelector(
+  //   (state) => state.user
+  // );
 
   return (
     <>
       {!hideNavbarPaths.includes(location.pathname) && <NavBar />}
       <Routes>
+        {/* Home */}
         <Route path="/" element={<Home />} />
+
+        {/* DashBoard */}
+        <Route path="/dashboard" element={<DashBoard />}>
+          <Route path="tasks" element={<Task />} />
+          <Route path="team" element={<Team />} />
+        </Route>
+
+        {/* Auths */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
       </Routes>
-      <h1>
-        {firstname} {email} {_id}{" "}
-      </h1>
     </>
   );
 }

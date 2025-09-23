@@ -35,7 +35,11 @@ const SideBar = () => {
               }}
             >
               <span className="w-6 h-6">{items.element}</span>
-              {sideBarOpen && <span>{items.name}</span>}
+              {sideBarOpen && (
+                <span className="transition-all duration-300">
+                  {items.name}
+                </span>
+              )}
             </div>
           ))}
         </nav>

@@ -29,9 +29,37 @@ const CreateProject = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const start = new Date(data.startDate);
+    const end = new Date(data.endDate);
+
+    if (start > end) {
+      setError("End date cannot be earlier than start date.");
+      return;
+    }
+
     try {
       await postProject(data);
-    } catch (err) {}
+      setSuccess("Project Created");
+      setData({
+        title: "",
+        description: "",
+        startDate: "",
+        endDate: "",
+      });
+      setError("");
+
+      setTimeout(() => {
+        setSuccess("");
+      }, 2000);
+    } catch (err) {
+      if (err.response && err.response.data.message) {
+        setError(err.response.message);
+      } else {
+        setFormError("Not Submitted");
+        console.error(err);
+      }
+    }
   };
 
   return (
@@ -87,12 +115,20 @@ const CreateProject = () => {
               />
             </div>
           </div>
+
           <button
             className="mt-2 bg-black w-full text-white font-bold text-md md:text-xl py-2 rounded-xl cursor-pointer"
             type="submit"
           >
             Create Project
           </button>
+          {error && <span className="text-red-500 font-bold">{error}</span>}
+          {success && (
+            <span className="text-green-500 font-bold">{success}</span>
+          )}
+          {formError && (
+            <span className="text-red-500 font-bold">{formError}</span>
+          )}
         </form>
       </div>
     </div>

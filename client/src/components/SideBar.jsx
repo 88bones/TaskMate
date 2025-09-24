@@ -25,7 +25,7 @@ const SideBar = () => {
   ];
 
   return (
-    <div className="flex h-screen ">
+    <div className="hidden md:flex h-screen max-sm:absolute">
       <div
         className={`${
           sideBarOpen ? "w-64" : "w-20"

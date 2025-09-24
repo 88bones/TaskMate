@@ -4,9 +4,6 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
 const SignUp = () => {
-  const inputStyle =
-    "w-full border border-gray-500 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500";
-
   const validationSchema = yup.object().shape({
     firstname: yup.string().max(20),
     lastname: yup.string(),

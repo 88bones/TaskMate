@@ -1,14 +1,25 @@
 import React, { useState } from "react";
-import { Home, ListChecks, Users, Settings, Menu } from "lucide-react";
+import {
+  Home,
+  ListChecks,
+  Users,
+  Settings,
+  Menu,
+  FolderKanban,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const SideBar = () => {
   const [sideBarOpen, setSideBarOpen] = useState(false);
+
+  const { firstname, lastname, email } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
 
   const SideItems = [
     { name: "Home", path: "/dashboard/", element: <Home /> },
+    { name: "Projects", path: "/dashboard/project", element: <FolderKanban /> },
     { name: "Tasks", path: "/dashboard/tasks", element: <ListChecks /> },
     { name: "Team", path: "/dashboard/team", element: <Users /> },
   ];
@@ -43,6 +54,19 @@ const SideBar = () => {
             </div>
           ))}
         </nav>
+        <div>
+          {sideBarOpen ? (
+            <span>
+              {" "}
+              <div>
+                {firstname} {lastname}
+              </div>
+              {email}
+            </span>
+          ) : (
+            <span>{firstname}</span>
+          )}
+        </div>
       </div>
     </div>
   );

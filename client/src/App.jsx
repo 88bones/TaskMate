@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import DashBoard from "./pages/DashBoard";
 import Task from "./components/Task";
 import Team from "./components/Team";
+import Project from "./components/Project";
 
 function AppWrapper() {
   return (
@@ -31,6 +32,7 @@ function App() {
     "/dashboard/",
     "/dashboard/tasks",
     "/dashboard/team",
+    "/dashboard/project",
   ];
 
   // const { firstname, lastname, email, role, _id, signedIn } = useSelector(
@@ -46,6 +48,7 @@ function App() {
 
         {/* DashBoard */}
         <Route path="/dashboard" element={<DashBoard />}>
+          <Route path="project" element={<Project />} />
           <Route path="tasks" element={<Task />} />
           <Route path="team" element={<Team />} />
         </Route>

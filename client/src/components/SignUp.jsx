@@ -13,6 +13,9 @@ const SignUp = () => {
       .min(6, "Passwords must be atleast 6 characters or long."),
   });
 
+  const inputStyle =
+    "w-full border border-gray-500 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500";
+
   const [data, setData] = useState({
     firstname: "",
     lastname: "",

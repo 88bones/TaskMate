@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getProject } from "../services/getProject";
+import { Plus } from "lucide-react";
 
 const CreatedProjects = () => {
   const { _id } = useSelector((state) => state.user);
@@ -26,7 +27,7 @@ const CreatedProjects = () => {
   }, []);
 
   return (
-    <div className="p-4 rounded h-fit w-full bg-white shadow-md col-span-3 max-sm:w-full">
+    <div className="p-4 rounded h-95 w-full bg-white shadow-md col-span-2 max-sm:w-full overflow-scroll overflow-x-hidden">
       <header className="mb-2 font-extrabold text-xl">
         <p>Created Projects</p>
       </header>
@@ -38,10 +39,25 @@ const CreatedProjects = () => {
           <ul className="list-disc pl-5 space-y-2">
             {projects.map((project) => (
               <li key={project._id} className="font-medium">
-                {project.title}{" "}
-                <span className="text-gray-500">
-                  ({project.startDate?.slice(0, 10)})
-                </span>
+                <div className="flex justify-between">
+                  <span>
+                    {project.title}{" "}
+                    <span className="text-gray-500">
+                      ({project.startDate?.slice(0, 10)})
+                    </span>
+                  </span>
+                  <div className="mr-2 group relative inline-flex items-center">
+                    <button className="flex items-center gap-1">
+                      <Plus size={16} className="cursor-pointer" />
+                      <span className="hidden group-hover:block w-20 text-black absolute right-4 top-1/2 -translate-y-1/2 z-10">
+                        Add Task
+                      </span>
+                    </button>
+                  </div>
+                </div>
+                <div className="w-full bg-gray-500 rounded h-4">
+                  <div className="bg-black h-4 rounded w-2/5"></div>
+                </div>
               </li>
             ))}
           </ul>

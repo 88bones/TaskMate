@@ -8,7 +8,9 @@ import {
   FolderKanban,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { signout } from "../redux/slice";
+import { LogOut } from "lucide-react";
 
 const SideBar = () => {
   const [sideBarOpen, setSideBarOpen] = useState(false);
@@ -16,6 +18,7 @@ const SideBar = () => {
   const { firstname, lastname, email } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const SideItems = [
     { name: "Home", path: "/dashboard/", element: <Home /> },
@@ -54,7 +57,7 @@ const SideBar = () => {
             </div>
           ))}
         </nav>
-        <div>
+        <div className="absolute bottom-10 flex flex-col p-8">
           {sideBarOpen ? (
             <span>
               {" "}
@@ -66,6 +69,9 @@ const SideBar = () => {
           ) : (
             <span>{firstname}</span>
           )}
+          <span onClick={() => dispatch(signout())} className="cursor-pointer">
+            <LogOut />
+          </span>
         </div>
       </div>
     </div>

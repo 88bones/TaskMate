@@ -40,10 +40,16 @@ const CreatedProjects = () => {
             {projects.map((project) => (
               <li key={project._id} className="font-medium">
                 <div className="flex justify-between">
-                  <span>
-                    {project.title}{" "}
-                    <span className="text-gray-500">
-                      ({project.startDate?.slice(0, 10)})
+                  <span className="flex flex-col">
+                    <p className="font-bold text-lg">{project.title}</p>
+                    <span>
+                      <span className="text-gray-500">
+                        Start Date: {project.startDate?.slice(0, 10)}
+                        {"  "}
+                      </span>
+                      <span className="text-gray-500">
+                        End Date: {project.startDate?.slice(0, 10)}
+                      </span>
                     </span>
                   </span>
                   <div className="mr-2 group relative inline-flex items-center">

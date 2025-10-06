@@ -13,7 +13,7 @@ export const createTask = async (req, res) => {
         .json({ message: "User and project ID not found." });
     }
 
-    const newTask = new taskModel({ ...task, projectId, userId, });
+    const newTask = new taskModel(task);
     await newTask.save();
 
     //push task into project

@@ -1,9 +1,10 @@
 import React from "react";
+import CreateTask from "./CreateTask";
 
 const Task = () => {
   return (
     <div>
-      <h1>Task </h1>
+      <CreateTask />
     </div>
   );
 };

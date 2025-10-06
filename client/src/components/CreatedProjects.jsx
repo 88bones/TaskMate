@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getProject } from "../services/getProject";
 import { Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const CreatedProjects = () => {
   const { _id } = useSelector((state) => state.user);
   const userId = _id;
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProject(userId)
@@ -54,7 +57,15 @@ const CreatedProjects = () => {
                   </span>
                   <div className="mr-2 group relative inline-flex items-center">
                     <button className="flex items-center gap-1">
-                      <Plus size={16} className="cursor-pointer" />
+                      <Plus
+                        size={16}
+                        className="cursor-pointer"
+                        onClick={() =>
+                          navigate(
+                            `/dashboard/tasks/create-task/${project._id}`
+                          )
+                        }
+                      />
                       <span className="hidden group-hover:block w-20 text-black absolute right-4 top-1/2 -translate-y-1/2 z-10">
                         Add Task
                       </span>

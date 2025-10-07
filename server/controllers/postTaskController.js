@@ -8,18 +8,16 @@ export const createTask = async (req, res) => {
     const task = req.body;
 
     if (!userId || !projectId) {
-      return res
-        .status(500)
-        .json({ message: "User and project ID not found." });
+      res.status(500).json({ message: "User and project ID not found." });
     }
 
-    const newTask = new taskModel(task);
+    const newTask = new taskModel({ ...task, createdBy: userId });
     await newTask.save();
 
     //push task into project
     const project = await projectModel.findById(projectId);
     if (!project) {
-      return res.status(404).json({ message: "Project not found." });
+      res.status(404).json({ message: "Project not found." });
     }
 
     project.tasks.push(newTask._id);
@@ -29,3 +27,5 @@ export const createTask = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export default createTask;

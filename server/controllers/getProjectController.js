@@ -3,7 +3,9 @@ import projectModel from "../models/projectModel.js";
 const getProject = async (req, res) => {
   try {
     const userId = req.params.id;
-    const result = await projectModel.find({ createdBy: userId });
+    const result = await projectModel
+      .find({ createdBy: userId })
+      .populate({ path: "tasks", select: "title" });
 
     if (result.length === 0) {
       return res.status(200).json({ message: "No projects found." });

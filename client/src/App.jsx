@@ -15,6 +15,7 @@ import Task from "./components/Task";
 import Team from "./components/Team";
 import Project from "./components/Project";
 import CreateTask from "./components/CreateTask";
+import CreatedTasks from "./components/CreatedTasks";
 
 function AppWrapper() {
   return (

@@ -66,8 +66,8 @@ const CreateTask = () => {
         setSuccess("");
       }, 2000);
     } catch (err) {
-      if (err.response && err.response.data.message) {
-        setError(err.response.message);
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
       } else {
         setFormError("Not Submitted");
         console.error(err);
@@ -76,11 +76,12 @@ const CreateTask = () => {
   };
 
   return (
-    <div className="p-4 rounded h-fit w-96 bg-white shadow-md col-span-2 max-sm:w-full">
+    <div className="p-4 rounded h-fit w-fit bg-white shadow-md max-sm:w-full">
       <header className="mb-2 font-extrabold text-xl">
         <p>Create Task.</p>
       </header>
 
+      {projectId}
       <form onSubmit={handleSubmit}>
         <input
           type="text"

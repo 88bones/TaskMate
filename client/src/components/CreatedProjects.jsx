@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getProject } from "../services/getProject";
 import { Plus } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const CreatedProjects = () => {
@@ -11,6 +12,15 @@ const CreatedProjects = () => {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+
+  const ActionItems = [
+    {
+      name: "Add Task",
+      path: `/dashboard/tasks/create-task/`,
+      element: <Plus />,
+    },
+    { name: "Delete Project", path: ``, element: <Trash /> },
+  ];
 
   useEffect(() => {
     getProject(userId)
@@ -27,7 +37,7 @@ const CreatedProjects = () => {
         console.error(err);
         setError("Failed to fetch projects.");
       });
-  }, []);
+  }, [userId]);
 
   return (
     <div className="p-4 rounded h-95 w-full bg-white shadow-md col-span-2 max-sm:w-full overflow-scroll overflow-x-hidden">
@@ -55,21 +65,25 @@ const CreatedProjects = () => {
                       </span>
                     </span>
                   </span>
-                  <div className="mr-2 group relative inline-flex items-center">
-                    <button className="flex items-center gap-1">
-                      <Plus
-                        size={16}
-                        className="cursor-pointer"
-                        onClick={() =>
-                          navigate(
-                            `/dashboard/tasks/create-task/${project._id}`
-                          )
-                        }
-                      />
-                      <span className="hidden group-hover:block w-20 text-black absolute right-4 top-1/2 -translate-y-1/2 z-10">
-                        Add Task
-                      </span>
-                    </button>
+                  <div className="inline-flex items-center w-28 justify-evenly pr-2">
+                    {ActionItems.map((items, index) => (
+                      <button
+                        className="relative flex group items-center cursor-pointer"
+                        key={index}
+                        onClick={() => navigate(`${items.path}${project._id}`)}
+                      >
+                        {items.element}
+                        <span
+                          className="absolute left-1/2 -translate-x-1/2 -top-8
+                                   hidden group-hover:block
+                                     bg-black text-white text-xs rounded-md
+                                        px-2 py-1 whitespace-nowrap shadow-md
+                                          transition-opacity duration-200 opacity-0 group-hover:opacity-100"
+                        >
+                          {items.name}
+                        </span>
+                      </button>
+                    ))}
                   </div>
                 </div>
                 <div className="w-full bg-gray-500 rounded h-4">

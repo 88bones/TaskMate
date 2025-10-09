@@ -12,7 +12,11 @@ const getTask = async (req, res) => {
 
     const result = await taskModel
       .find({ createdBy: userId })
-      .populate({ path: "projectId", select: "title" });
+      .populate({
+        path: "projectId",
+        select: "title",
+      })
+      .populate({ path: "assignedTo", select: "fullname lastname email" });
 
     if (result.length === 0) {
       res.status(200).json({ message: "No tasks found." });

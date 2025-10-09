@@ -16,6 +16,7 @@ import Team from "./components/Team";
 import Project from "./components/Project";
 import CreateTask from "./components/CreateTask";
 import CreatedTasks from "./components/CreatedTasks";
+import { useState } from "react";
 
 function AppWrapper() {
   return (
@@ -34,9 +35,7 @@ function App() {
     location.pathname.startsWith(path)
   );
 
-  // const { firstname, lastname, email, role, _id, signedIn } = useSelector(
-  //   (state) => state.user
-  // );
+  const [tasks, setTasks] = useState([]);
 
   return (
     <>
@@ -48,7 +47,10 @@ function App() {
         {/* DashBoard */}
         <Route path="/dashboard" element={<DashBoard />}>
           <Route path="project" element={<Project />} />
-          <Route path="tasks" element={<Task />}>
+          <Route
+            path="tasks"
+            element={<Task tasks={tasks} setTasks={setTasks} />}
+          >
             <Route path="create-task/:_id" element={<CreateTask />} />
           </Route>
           <Route path="team" element={<Team />} />

@@ -16,7 +16,7 @@ const getTask = async (req, res) => {
         path: "projectId",
         select: "title",
       })
-      .populate({ path: "assignedTo", select: "fullname lastname email" });
+      .populate({ path: "assignedTo", select: "firstname lastname email" });
 
     if (result.length === 0) {
       res.status(200).json({ message: "No tasks found." });

@@ -93,7 +93,7 @@ const CreatedProjects = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">{error || "No projects found."}</p>
+          <p className="text-red-500">{error || "No projects found."}</p>
         )}
       </div>
     </div>

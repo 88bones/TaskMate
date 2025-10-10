@@ -14,7 +14,7 @@ const CreateTask = () => {
   const { _id: userId } = useSelector((state) => state.user);
   const tasks = useSelector((state) => state.user.tasks || []);
 
-  const { _id: projectId } = useParams();
+  const { projectId } = useParams();
   if (!projectId) {
     return setError("Project not found!");
   }

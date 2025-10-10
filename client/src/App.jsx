@@ -46,7 +46,7 @@ function App() {
         <Route path="/dashboard" element={<DashBoard />}>
           <Route path="project" element={<Project />} />
           <Route path="tasks" element={<Task />}>
-            <Route path="create-task/:_id" element={<CreateTask />} />
+            <Route path="create-task/:projectId" element={<CreateTask />} />
           </Route>
           <Route path="team" element={<Team />} />
         </Route>

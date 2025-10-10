@@ -7,6 +7,8 @@ const initialState = {
   signedIn: !!localStorage.getItem("firstname"),
   email: localStorage.getItem("email") || "",
   _id: localStorage.getItem("_id") || "",
+  tasks: [],
+  users: [],
 };
 
 const userSlice = createSlice({
@@ -54,6 +56,12 @@ const userSlice = createSlice({
       state.email = action.payload;
       localStorage.setItem("email", action.payload);
     },
+    setTasks(state, action) {
+      state.tasks = action.payload;
+    },
+    setUsers(state, action) {
+      state.users = action.payload;
+    },
   },
 });
 
@@ -64,6 +72,8 @@ export const {
   updateLastname,
   updateEmail,
   updateRole,
+  setTasks,
+  setUsers,
 } = userSlice.actions;
 
 export default userSlice.reducer;

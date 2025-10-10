@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { postProject } from "../services/postProject";
+import { getUser } from "../services/getUser";
 
 const CreateProject = () => {
   const inputStyle =
@@ -18,6 +19,7 @@ const CreateProject = () => {
     createdBy: userId,
   });
 
+  const [users, setUsers] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [formError, setFormError] = useState("");

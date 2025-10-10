@@ -86,8 +86,8 @@ const CreatedProjects = () => {
                     ))}
                   </div>
                 </div>
-                <div className="w-full bg-gray-500 rounded h-4">
-                  <div className="bg-black h-4 rounded w-2/5"></div>
+                <div className="w-full bg-gray-500 rounded h-3">
+                  <div className="bg-black h-full rounded w-2/5"></div>
                 </div>
               </li>
             ))}

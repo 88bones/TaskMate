@@ -8,7 +8,9 @@ export const createTask = async (req, res) => {
     const task = req.body;
 
     if (!userId || !projectId) {
-      res.status(500).json({ message: "User and project ID not found." });
+      return res
+        .status(500)
+        .json({ message: "User and project ID not found." });
     }
 
     const newTask = new taskModel({ ...task, createdBy: userId });

@@ -35,8 +35,6 @@ function App() {
     location.pathname.startsWith(path)
   );
 
-  const [tasks, setTasks] = useState([]);
-
   return (
     <>
       {!hideNavbar && <NavBar />}
@@ -47,10 +45,7 @@ function App() {
         {/* DashBoard */}
         <Route path="/dashboard" element={<DashBoard />}>
           <Route path="project" element={<Project />} />
-          <Route
-            path="tasks"
-            element={<Task tasks={tasks} setTasks={setTasks} />}
-          >
+          <Route path="tasks" element={<Task />}>
             <Route path="create-task/:_id" element={<CreateTask />} />
           </Route>
           <Route path="team" element={<Team />} />

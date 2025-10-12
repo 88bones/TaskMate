@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { getProject } from "../services/getProject";
 import { Plus } from "lucide-react";
 import { Trash } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const CreatedProjects = () => {
@@ -19,7 +20,8 @@ const CreatedProjects = () => {
       path: `/dashboard/tasks/create-task/`,
       element: <Plus />,
     },
-    { name: "Delete Project", path: ``, element: <Trash /> },
+    { name: "Edit", path: ``, element: <Pencil /> },
+    { name: "Delete", path: ``, element: <Trash /> },
   ];
 
   useEffect(() => {
@@ -40,7 +42,7 @@ const CreatedProjects = () => {
   }, [userId]);
 
   return (
-    <div className="p-4 rounded h-95 w-full bg-white shadow-md col-span-2 max-sm:w-full overflow-scroll overflow-x-hidden">
+    <div className="p-4 rounded h-108 w-full bg-white shadow-md col-span-2 max-sm:w-full overflow-scroll overflow-x-hidden">
       <header className="mb-2 font-extrabold text-xl">
         <p>Created Projects</p>
       </header>

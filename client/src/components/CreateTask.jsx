@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../services/getUser";
 import { useParams } from "react-router-dom";
 import { postTask } from "../services/postTask";
-import { setTasks } from "../redux/slice";
+import { setTasks, setUsers } from "../redux/slice";
 
 const CreateTask = () => {
   const inputStyle =
@@ -13,6 +13,7 @@ const CreateTask = () => {
 
   const { _id: userId } = useSelector((state) => state.user);
   const tasks = useSelector((state) => state.user.tasks || []);
+  const users = useSelector((state) => state.user.users || []);
 
   const { projectId } = useParams();
   if (!projectId) {
@@ -29,7 +30,6 @@ const CreateTask = () => {
     createdBy: userId,
   });
 
-  const [listOfUsers, setListOfUsers] = useState([]);
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
   const [success, setSuccess] = useState("");
@@ -38,10 +38,10 @@ const CreateTask = () => {
     getUser()
       .then((res) => {
         if (res.message) {
-          setListOfUsers([]);
+          dispatch(setUsers([]));
           setError(res.message);
         } else {
-          setListOfUsers(res);
+          dispatch(setUsers(res));
           setError("");
         }
       })
@@ -93,7 +93,7 @@ const CreateTask = () => {
       <header className="mb-2 font-extrabold text-xl">
         <p>Create Task.</p>
       </header>
-      {userId},{projectId}
+      {/* {userId},{projectId} */}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -126,7 +126,7 @@ const CreateTask = () => {
         </select>
 
         <label className="mr-2">Assign to:</label>
-        {Array.isArray(listOfUsers) && listOfUsers.length > 0 ? (
+        {Array.isArray(users) && users.length > 0 ? (
           <select
             className={inputStyle}
             name="assignedTo"
@@ -134,7 +134,7 @@ const CreateTask = () => {
             onChange={handleChange}
           >
             <option value="">Select user</option>
-            {listOfUsers.map((user) => (
+            {users.map((user) => (
               <option value={user._id} key={user._id}>
                 {user.firstname} {user.lastname}
               </option>

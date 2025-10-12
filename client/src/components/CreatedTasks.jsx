@@ -26,7 +26,7 @@ const CreatedTasks = () => {
   }, [userId, dispatch]);
 
   return (
-    <div className="bg-white max-sm:p-2 p-4 rounded h-fit shadow-md col-span-2 max-sm:w-full overflow-scroll overflow-x-hidden">
+    <div className="bg-white max-sm:p-2 p-4 rounded h-fit shadow-md col-span-3 max-sm:w-full overflow-scroll overflow-x-hidden">
       <header className="mb-2 font-extrabold text-xl">
         <p>Created Tasks.</p>
       </header>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { postSignUp } from "../services/postSignUp";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { useDispatch } from "react-redux";
+import { setUsers } from "../redux/slice";
 
 const SignUp = () => {
   const validationSchema = yup.object().shape({
@@ -15,6 +17,8 @@ const SignUp = () => {
 
   const inputStyle =
     "w-full border border-gray-500 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500";
+
+  const dispatch = useDispatch();
 
   const [data, setData] = useState({
     firstname: "",
@@ -51,6 +55,8 @@ const SignUp = () => {
 
       const res = await postSignUp(data);
       const { token } = res;
+
+      dispatch(setUsers(res));
 
       localStorage.setItem("token", token);
       setSuccess("Signed Up");

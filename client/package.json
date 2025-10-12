@@ -17,6 +17,7 @@
     "react-dom": "^19.1.1",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.9.1",
+    "react-select": "^5.10.2",
     "redux": "^5.0.1",
     "tailwindcss": "^4.1.13",
     "yup": "^1.7.1"

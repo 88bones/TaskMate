@@ -3,7 +3,7 @@ import projectModel from "../models/projectModel.js";
 const getTeam = async (req, res) => {
   try {
     const result = await projectModel
-      .find({}, { _id: 1, title: 1, team: 1 })
+      .find({}, { _id: 1, title: 1, description: 1, team: 1 })
       .populate({ path: "team", select: "firstname lastname email" });
 
     if (result.length === 0) {

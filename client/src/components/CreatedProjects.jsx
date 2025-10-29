@@ -5,12 +5,14 @@ import { Plus } from "lucide-react";
 import { Trash } from "lucide-react";
 import { Pencil } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { deleteProject } from "../services/deleteProject";
 
 const CreatedProjects = () => {
   const { _id } = useSelector((state) => state.user);
   const userId = _id;
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const navigate = useNavigate();
 
@@ -21,7 +23,7 @@ const CreatedProjects = () => {
       element: <Plus />,
     },
     { name: "Edit", path: ``, element: <Pencil /> },
-    { name: "Delete", path: ``, element: <Trash /> },
+    { name: "Delete", onClick: (id) => handleDelete(id), element: <Trash /> },
   ];
 
   useEffect(() => {
@@ -40,6 +42,11 @@ const CreatedProjects = () => {
         setError("Failed to fetch projects.");
       });
   }, [userId]);
+
+  const handleDelete = async (projectId) => {
+    const result = await deleteProject(projectId);
+    setProjects((prev) => prev.filter((p) => p._id !== projectId));
+  };
 
   return (
     <div className="p-4 rounded h-108 w-full bg-white shadow-md col-span-2 max-sm:w-full overflow-scroll overflow-x-hidden">
@@ -72,7 +79,11 @@ const CreatedProjects = () => {
                       <button
                         className="relative flex group items-center cursor-pointer"
                         key={index}
-                        onClick={() => navigate(`${items.path}${project._id}`)}
+                        onClick={() =>
+                          items.path
+                            ? navigate(`${items.path}${project._id}`)
+                            : items.onClick(project._id)
+                        }
                       >
                         {items.element}
                         <span

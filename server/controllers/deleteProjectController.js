@@ -10,7 +10,8 @@ const deleteProject = async (req, res) => {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    const taskResult = await taskModel.deleteMany({ projectId });
+    const taskResult = await taskModel.deleteMany({ projectId }); 
+    
 
     res.status(200).json({
       message: "Project Deleted!",

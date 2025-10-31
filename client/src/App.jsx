@@ -17,6 +17,7 @@ import Project from "./components/Project";
 import CreateTask from "./components/CreateTask";
 import CreatedTasks from "./components/CreatedTasks";
 import { useState } from "react";
+import UpdateProject from "./components/UpdateProject";
 
 function AppWrapper() {
   return (
@@ -44,7 +45,12 @@ function App() {
 
         {/* DashBoard */}
         <Route path="/dashboard" element={<DashBoard />}>
-          <Route path="project" element={<Project />} />
+          <Route path="project" element={<Project />}>
+            <Route
+              path="update-project/:projectId"
+              element={<UpdateProject />}
+            />
+          </Route>
           <Route path="tasks" element={<Task />}>
             <Route path="create-task/:projectId" element={<CreateTask />} />
           </Route>

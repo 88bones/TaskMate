@@ -22,7 +22,11 @@ const CreatedProjects = () => {
       path: `/dashboard/tasks/create-task/`,
       element: <Plus />,
     },
-    { name: "Edit", path: ``, element: <Pencil /> },
+    {
+      name: "Edit",
+      path: `/dashboard/project/update-project/`,
+      element: <Pencil />,
+    },
     { name: "Delete", onClick: (id) => handleDelete(id), element: <Trash /> },
   ];
 

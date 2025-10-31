@@ -124,7 +124,7 @@ const CreateProject = () => {
             onChange={(selected) =>
               setSelectedUsers(selected ? selected.map((s) => s.value) : [])
             }
-            className="mb-3"
+            className="mb-3 border rounded border-black"
             placeholder="Select team members..."
           />
         ) : (

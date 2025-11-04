@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Select from "react-select";
 import { getOneProject } from "../services/getProject";
+import { updateProject } from "../services/updateProject";
 
 const UpdateProject = () => {
   const inputStyle =
@@ -12,6 +13,7 @@ const UpdateProject = () => {
   const { _id } = useSelector((state) => state.user);
   const users = useSelector((state) => state.user.users || []);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const [data, setData] = useState({
     title: "",
@@ -28,11 +30,16 @@ const UpdateProject = () => {
     label: `${u.firstname} ${u.lastname}`,
   }));
 
-  //Convert fetched project team into react-select value
-  const selectedTeam = data.team.map((member) => ({
-    value: member._id,
-    label: `${member.firstname} ${member.lastname}`,
-  }));
+  const selectedTeam = data.team
+    .map((id) => {
+      const user = users.find((u) => u._id === id);
+      return user
+        ? { value: user._id, label: `${user.firstname} ${user.lastname}` }
+        : null;
+    })
+    .filter(Boolean);
+
+  console.log(selectedTeam);
 
   // fetch project
   useEffect(() => {
@@ -74,13 +81,35 @@ const UpdateProject = () => {
     }));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const payload = {
+      title: data.title,
+      description: data.description,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      team: data.team,
+    };
+
+    updateProject(projectId, payload)
+      .then((res) => {
+        setSuccess("Project Updated");
+        setError("");
+      })
+      .catch(() => {
+        setSuccess("");
+        setError("Failed");
+      });
+  };
+
   return (
     <div className="p-4 rounded h-fit w-full bg-white shadow-md max-sm:w-full">
       <header className="mb-2 font-extrabold text-xl">
         <p>Update Project</p>
       </header>
 
-      <form className="flex flex-col">
+      <form className="flex flex-col" onSubmit={handleSubmit}>
         <input
           className={inputStyle}
           type="text"
@@ -139,6 +168,8 @@ const UpdateProject = () => {
         >
           Update Project
         </button>
+        {error && <p className="text-red-500 font-bold mt-1">{error}</p>}
+        {success && <p className="text-green-500 font-bold mt-1">{success}</p>}
       </form>
     </div>
   );

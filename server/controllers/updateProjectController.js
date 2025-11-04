@@ -1,6 +1,4 @@
 import projectModel from "../models/projectModel.js";
-import userModel from "../models/userModel.js";
-import taskModel from "../models/taskModel.js";
 
 const updateProject = async (req, res) => {
   try {

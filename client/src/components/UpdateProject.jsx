@@ -96,6 +96,11 @@ const UpdateProject = () => {
       .then((res) => {
         setSuccess("Project Updated");
         setError("");
+        const timeout = setTimeout(() => {
+          setSuccess("");
+          setError("");
+        }, 2000);
+        return () => clearTimeout(timeout);
       })
       .catch(() => {
         setSuccess("");

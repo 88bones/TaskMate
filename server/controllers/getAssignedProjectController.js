@@ -8,7 +8,7 @@ const getAssignedProject = async (req, res) => {
       .populate({ path: "team", select: "firstname lastname email" });
 
     if (result.length === 0) {
-      res.status(404).json({ message: "No projects assigned" });
+      res.status(200).json({ message: "No projects assigned" });
     }
 
     return res.json(result);

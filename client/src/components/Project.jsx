@@ -3,6 +3,7 @@ import CreateProject from "./CreateProject";
 import CreatedProjects from "./CreatedProjects";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
+import AssignedProject from "./AssignedProject";
 
 const Project = () => {
   const { role } = useSelector((state) => state.user);
@@ -16,7 +17,9 @@ const Project = () => {
             <CreatedProjects />
           </>
         ) : (
-          "user"
+          <>
+            <AssignedProject />
+          </>
         )}
         <Outlet />
       </div>

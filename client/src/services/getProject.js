@@ -21,3 +21,14 @@ export const getOneProject = async (projectId) => {
     throw err;
   }
 };
+
+export const getAssignedProject = async (userId) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:3001/api/project/assigned-project/${userId}`
+    );
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};

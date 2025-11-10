@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    department: {
+      type: String,
+      enum: ["ui/ux", "design", "frontend", "backend", "owner", "qa"],
+    },
     role: {
       type: String,
       enum: ["user", "admin"],

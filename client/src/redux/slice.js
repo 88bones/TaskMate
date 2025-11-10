@@ -38,7 +38,7 @@ const userSlice = createSlice({
       state._id = "";
       state.signedIn = false;
 
-      localStorage.clear();
+      // localStorage.clear();
     },
     updateFirstname(state, action) {
       state.firstname = action.payload;

@@ -46,16 +46,7 @@ const SmallScreenTask = ({ tasks, setTasks }) => {
                     <th>Project</th>
                     <td>{item.projectId?.title}</td>
                   </tr>
-                  <tr>
-                    <th>Assigned To</th>
-                    <td>
-                      {item.assignedTo?.firstname} {item.assignedTo?.lastname}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Email</th>
-                    <td>{item.assignedTo?.email}</td>
-                  </tr>
+
                   <tr>
                     <th>Due Date</th>
                     <td>

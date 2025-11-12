@@ -16,19 +16,6 @@ const CreatedProjects = () => {
 
   const navigate = useNavigate();
 
-  const ActionItems = [
-    {
-      name: "Add Task",
-      path: `/dashboard/tasks/create-task/`,
-      element: <Plus />,
-    },
-    {
-      name: "Edit",
-      path: `/dashboard/project/update-project/`,
-      element: <Pencil />,
-    },
-    { name: "Delete", onClick: (id) => handleDelete(id), element: <Trash /> },
-  ];
 
   useEffect(() => {
     getProject(userId)
@@ -53,58 +40,29 @@ const CreatedProjects = () => {
   };
 
   return (
-    <div className="p-4 rounded h-108 w-full bg-white shadow-md col-span-2 max-sm:w-full overflow-scroll overflow-x-hidden">
+    <div className="p-4 rounded h-fit w-full bg-white shadow-md col-span-2 max-sm:w-full overflow-scroll overflow-x-hidden">
       <header className="mb-2 font-extrabold text-xl">
         <p>Created Projects</p>
       </header>
 
-      <div>
+      <div className="w-sm">
         {error && <p className="text-red-500">{error}</p>}
 
         {Array.isArray(projects) && projects.length > 0 ? (
-          <ul className="list-disc pl-5 space-y-2">
+          <ul className="space-y-2">
             {projects.map((project) => (
-              <li key={project._id} className="font-medium">
+              <li
+                onClick={() => navigate(`/project-board/${project._id}`)}
+                key={project._id}
+                className="font-medium hover:cursor-pointer border-1 rounded px-2 border-gray-400"
+              >
                 <div className="flex justify-between">
                   <span className="flex flex-col">
                     <p className="font-bold text-lg">{project.title}</p>
-                    <span>
-                      <span className="text-gray-500">
-                        Start Date: {project.startDate?.slice(0, 10)}
-                        {"  "}
-                      </span>
-                      <span className="text-gray-500">
-                        End Date: {project.startDate?.slice(0, 10)}
-                      </span>
-                    </span>
+                    <p className="line-clamp-3 text-gray-400">
+                      {project.description}
+                    </p>
                   </span>
-                  <div className="inline-flex items-center w-28 justify-evenly pr-2">
-                    {ActionItems.map((items, index) => (
-                      <button
-                        className="relative flex group items-center cursor-pointer"
-                        key={index}
-                        onClick={() =>
-                          items.path
-                            ? navigate(`${items.path}${project._id}`)
-                            : items.onClick(project._id)
-                        }
-                      >
-                        {items.element}
-                        <span
-                          className="absolute left-1/2 -translate-x-1/2 -top-8
-                                   hidden group-hover:block
-                                     bg-black text-white text-xs rounded-md
-                                        px-2 py-1 whitespace-nowrap shadow-md
-                                          transition-opacity duration-200 opacity-0 group-hover:opacity-100"
-                        >
-                          {items.name}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="w-full bg-gray-500 rounded h-3">
-                  <div className="bg-black h-full rounded w-2/5"></div>
                 </div>
               </li>
             ))}

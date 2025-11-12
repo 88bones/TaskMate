@@ -18,8 +18,8 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className=" flex justify-center py-2">
-        <div className="flex justify-between w-full max-w-5xl mx-auto">
+      <nav className=" flex shadow-lg">
+        <div className="flex justify-between w-full max-w-full mx-auto">
           <header className="px-4 font-extrabold text-3xl flex justify-between max-sm:w-dvw ">
             TaskMate{" "}
           </header>

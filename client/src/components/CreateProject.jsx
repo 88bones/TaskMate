@@ -85,9 +85,9 @@ const CreateProject = () => {
 
   return (
     <div className="p-4 rounded h-fit w-fit bg-white shadow-md max-sm:w-full">
-      <header className="mb-2 font-extrabold text-xl">
+      {/* <header className="mb-2 font-extrabold text-xl">
         <p>Create Project</p>
-      </header>
+      </header> */}
 
       <form onSubmit={handleSubmit}>
         <input
@@ -124,20 +124,20 @@ const CreateProject = () => {
             onChange={(selected) =>
               setSelectedUsers(selected ? selected.map((s) => s.value) : [])
             }
-            className="mb-3 border rounded border-black"
+            className="mb-3 border rounded border-black w-full"
             placeholder="Select team members..."
           />
         ) : (
           <span className="text-red-500">{error || "No users found."}</span>
         )}
 
-        <div className="flex gap-10">
+        <div className="flex gap-10 w-full">
           <div className="flex flex-col">
             <label>Start Date:</label>
             <input
               type="date"
               name="startDate"
-              className="border rounded px-2 py-1 w-40"
+              className="border rounded px-2 py-1"
               value={data.startDate}
               onChange={handleChange}
             />
@@ -148,7 +148,7 @@ const CreateProject = () => {
             <input
               type="date"
               name="endDate"
-              className="border rounded px-2 py-1 w-40"
+              className="border rounded px-2 py-1 "
               value={data.endDate}
               onChange={handleChange}
             />

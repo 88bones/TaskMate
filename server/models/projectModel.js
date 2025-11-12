@@ -17,6 +17,7 @@ const ProjectSchema = new mongoose.Schema(
       type: Date,
     },
     team: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    sprints: [{ type: mongoose.Schema.Types.ObjectId, ref: "Sprint" }],
     tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },

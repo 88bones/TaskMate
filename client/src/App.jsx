@@ -18,6 +18,8 @@ import CreateTask from "./components/CreateTask";
 import CreatedTasks from "./components/CreatedTasks";
 import { useState } from "react";
 import UpdateProject from "./components/UpdateProject";
+import ProjectBoard from "./pages/ProjectBoard";
+import TimeLine from "./components/TimeLine";
 
 function AppWrapper() {
   return (
@@ -30,7 +32,7 @@ function AppWrapper() {
 function App() {
   const location = useLocation();
 
-  const hideNavbarPaths = ["/signin", "/signup", "/dashboard"];
+  const hideNavbarPaths = ["/signin", "/signup"];
 
   const hideNavbar = hideNavbarPaths.some((path) =>
     location.pathname.startsWith(path)
@@ -60,6 +62,10 @@ function App() {
         {/* Auths */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+
+        <Route path="/project-board/:projectId/" element={<ProjectBoard />}>
+          <Route path="timeline" element={<TimeLine />} />
+        </Route>
       </Routes>
     </>
   );

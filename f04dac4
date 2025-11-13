@@ -1,0 +1,44 @@
+[33mf04dac4[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m new ui in progress along with features
+[33m4e76b70[m activity and issue schema
+[33m53492a9[m getassignedtask back
+[33m734e9ab[m getAssignedProject front
+[33mfd7061d[m assigned project get backend
+[33m43ed588[m project updated except team
+[33m9ae6c23[m data displayed in update form
+[33mc67992d[m backedn done get single project
+[33m3a357a5[m update half done
+[33m4c74113[m update project controller done
+[33m88e5a43[m delete frontend done
+[33mf4d68cf[m deleteproject backedn
+[33m3c9d09e[m icons
+[33md4fadd1[m more pretty vpli
+[33md5c1876[m team fetched frontend have to make pretty
+[33mc3c0985[m route change of team
+[33m9af5ea4[m getTeams backend done
+[33m5c6758e[m multiple team members selection using react-select
+[33m1a7ba76[m fixed project not pushing bug
+[33m8991271[m redux tasks
+[33m9b192a6[m many
+[33m113170b[m gettaskcreated backend done
+[33m4bb365b[m populate and many more changes
+[33m05635e2[m task add completed
+[33mdd2ddcd[m navigated
+[33mc9cc0c4[m getUser back
+[33m1171e97[m task backend done
+[33med14434[m before tasks
+[33me338633[m minor ui
+[33mfb4df7e[m getProject agadi done
+[33m2111b77[m get project backend
+[33m7a13845[m minor ui changes
+[33md9f7385[m frontend project form works
+[33m83807f7[m preojct creation backend done
+[33mdc95864[m models created
+[33m17199b4[m sidebar
+[33mc2617ab[m redux added
+[33m0aba230[m login without redux
+[33mfb8a8af[m login backend
+[33mb7cdf2e[m signup done
+[33m5c53941[m with jwt
+[33m62c5ad2[m signup without jwt
+[33mc3f6b6d[m changes
+[33m142b013[m first commit

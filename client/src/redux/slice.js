@@ -9,6 +9,7 @@ const initialState = {
   _id: localStorage.getItem("_id") || "",
   tasks: [],
   users: [],
+  selectedProject: "",
 };
 
 const userSlice = createSlice({
@@ -62,6 +63,9 @@ const userSlice = createSlice({
     setUsers(state, action) {
       state.users = action.payload;
     },
+    setSelectedProject(state, action) {
+      state.selectedProject = action.payload;
+    },
   },
 });
 
@@ -74,6 +78,7 @@ export const {
   updateRole,
   setTasks,
   setUsers,
+  setSelectedProject,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getProject } from "../services/getProject";
-import { Plus } from "lucide-react";
-import { Trash } from "lucide-react";
-import { Pencil } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { deleteProject } from "../services/deleteProject";
+// import { deleteProject } from "../services/deleteProject";
+import { setSelectedProject } from "../redux/slice";
 
 const CreatedProjects = () => {
-  const { _id } = useSelector((state) => state.user);
+  const { _id, selectedProject } = useSelector((state) => state.user);
   const userId = _id;
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getProject(userId)
@@ -34,10 +32,10 @@ const CreatedProjects = () => {
       });
   }, [userId]);
 
-  const handleDelete = async (projectId) => {
-    const result = await deleteProject(projectId);
-    setProjects((prev) => prev.filter((p) => p._id !== projectId));
-  };
+  // const handleDelete = async (projectId) => {
+  //   const result = await deleteProject(projectId);
+  //   setProjects((prev) => prev.filter((p) => p._id !== projectId));
+  // };
 
   return (
     <div className="p-4 rounded h-fit w-full bg-white shadow-md col-span-2 max-sm:w-full overflow-scroll overflow-x-hidden">
@@ -52,7 +50,11 @@ const CreatedProjects = () => {
           <ul className="space-y-2">
             {projects.map((project) => (
               <li
-                onClick={() => navigate(`/project-board/${project._id}`)}
+                onClick={() => {
+                  dispatch(setSelectedProject(project));
+                  console.log(project);
+                  navigate(`/project-board/${project._id}`);
+                }}
                 key={project._id}
                 className="font-medium hover:cursor-pointer border-1 rounded px-2 border-gray-400"
               >

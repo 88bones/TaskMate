@@ -4,16 +4,21 @@ import activityModel from "../models/activityModel.js";
 const createProject = async (req, res) => {
   try {
     const project = req.body;
-    const newPorject = new projectModel(project);
-    await newPorject.save();
+    const newProject = new projectModel(project);
 
-    const activity= new activityModel({
-      
-    })
+    await activityModel.create({
+      user: newProject.createdBy,
+      action: "created",
+      projectType: "project",
+      projectId: newProject._id,
+      description: `created project: ${newProject.title}`,
+    });
+
+    await newProject.save();
 
     res.status(200).json({
-      message: "success",
-      newPorject,
+      message: "Project created successfully",
+      newProject,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

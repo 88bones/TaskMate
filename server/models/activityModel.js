@@ -10,11 +10,11 @@ const ActivitySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    entityType: {
+    projectType: {
       type: String,
       required: true,
     },
-    entityId: {
+    projectId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
       required: true,
@@ -26,5 +26,3 @@ const ActivitySchema = new mongoose.Schema(
 
 const Activity = mongoose.model("Activity", ActivitySchema);
 export default Activity;
-
-

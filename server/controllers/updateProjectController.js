@@ -1,4 +1,5 @@
 import projectModel from "../models/projectModel.js";
+import activityModel from "../models/activityModel.js";
 
 const updateProject = async (req, res) => {
   try {
@@ -11,6 +12,14 @@ const updateProject = async (req, res) => {
 
     const result = await projectModel.findByIdAndUpdate(projectId, newData, {
       new: true,
+    });
+
+    await activityModel.create({
+      user: newData.createdBy,
+      action: "updated",
+      projectType: "project",
+      projectId: projectId,
+      description: `updated project: ${newData.title}`,
     });
 
     res.status(200).json({

@@ -90,6 +90,7 @@ const UpdateProject = () => {
       startDate: data.startDate,
       endDate: data.endDate,
       team: data.team,
+      createdBy: _id,
     };
 
     updateProject(projectId, payload)

@@ -45,7 +45,7 @@ function App() {
         {/* Home */}
         <Route path="/" element={<Home />} />
 
-        {/* DashBoard */}
+        {/* DashBoard
         <Route path="/dashboard" element={<DashBoard />}>
           <Route path="project" element={<Project />}>
             <Route
@@ -57,14 +57,16 @@ function App() {
             <Route path="create-task/:projectId" element={<CreateTask />} />
           </Route>
           <Route path="team" element={<Team />} />
-        </Route>
+        </Route> */}
 
         {/* Auths */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
 
         <Route path="/project-board/:projectId/" element={<ProjectBoard />}>
-          <Route path="timeline" element={<TimeLine />} />
+          <Route path="timeline" element={<TimeLine />}>
+            <Route path="update-project" element={<UpdateProject />} />
+          </Route>
         </Route>
       </Routes>
     </>

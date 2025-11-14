@@ -109,7 +109,7 @@ const UpdateProject = () => {
   };
 
   return (
-    <div className="p-4 rounded h-fit w-full bg-white shadow-md max-sm:w-full">
+    <div className="p-4 rounded h-fit w-fit bg-white shadow-md max-sm:w-full">
       <header className="mb-2 font-extrabold text-xl">
         <p>Update Project</p>
       </header>

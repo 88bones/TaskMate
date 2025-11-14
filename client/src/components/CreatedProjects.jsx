@@ -23,6 +23,7 @@ const CreatedProjects = () => {
           setError(res.message);
         } else {
           setProjects(res);
+          console.log(res);
           setError(null);
         }
       })
@@ -56,7 +57,7 @@ const CreatedProjects = () => {
                   navigate(`/project-board/${project._id}`);
                 }}
                 key={project._id}
-                className="font-medium hover:cursor-pointer border-1 rounded px-2 border-gray-400"
+                className="font-medium hover:cursor-pointer border rounded px-2 border-gray-400"
               >
                 <div className="flex justify-between">
                   <span className="flex flex-col">
@@ -64,6 +65,7 @@ const CreatedProjects = () => {
                     <p className="line-clamp-3 text-gray-400">
                       {project.description}
                     </p>
+                    <p>{new Date(project.createdAt).toLocaleDateString()}</p>
                   </span>
                 </div>
               </li>

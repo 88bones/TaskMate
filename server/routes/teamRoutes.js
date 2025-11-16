@@ -3,6 +3,6 @@ import getTeam from "../controllers/getTeamController.js";
 
 const router = express.Router();
 
-router.get("/", getTeam);
+router.get("/:projectId", getTeam);
 
 export default router;

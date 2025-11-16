@@ -41,7 +41,10 @@ const NavBar = () => {
             </div>
           ) : (
             <div className="flex justify-around items-center w-64">
-              <span>
+              <span
+                className="cursor-pointer hover:text-shadow-lg"
+                onClick={() => navigate("/profile")}
+              >
                 {firstname} {lastname}
               </span>
               <button

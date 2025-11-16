@@ -23,10 +23,15 @@ const SideBar = ({ projectId }) => {
       path: `/project-board/${projectId}/timeline`,
       element: <Activity />,
     },
-    { name: "Kanban", path: "/project-board/kanban", element: <Kanban /> },
+    {
+      name: "Kanban",
+      path: `/project-board/${projectId}/kanban`,
+      element: <Kanban />,
+    },
     { name: "Projects", path: "/dashboard/project", element: <FolderKanban /> },
     { name: "Tasks", path: "/dashboard/tasks", element: <ListChecks /> },
     { name: "Team", path: "/dashboard/team", element: <Users /> },
+    { name: "Settings", path: "", element: <Settings /> },
   ];
 
   return (

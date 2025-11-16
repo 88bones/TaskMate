@@ -23,13 +23,11 @@ const CreatedProjects = () => {
           setError(res.message);
         } else {
           setProjects(res);
-          console.log(res);
           setError(null);
         }
       })
       .catch((err) => {
         console.error(err);
-        setError("Failed to fetch projects.");
       });
   }, [userId]);
 
@@ -65,14 +63,13 @@ const CreatedProjects = () => {
                     <p className="line-clamp-3 text-gray-400">
                       {project.description}
                     </p>
-                    <p>{new Date(project.createdAt).toLocaleDateString()}</p>
                   </span>
                 </div>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-red-500">{error || "No projects found."}</p>
+          <p className="text-red-500">{error}</p>
         )}
       </div>
     </div>

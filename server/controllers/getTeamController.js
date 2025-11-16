@@ -2,13 +2,16 @@ import projectModel from "../models/projectModel.js";
 
 const getTeam = async (req, res) => {
   try {
+    const projectId = req.params.projectId;
+
     const result = await projectModel
-      .find({}, { _id: 1, title: 1, description: 1, team: 1 })
+      .findOne({ _id: projectId }, { _id: 1, title: 1, team: 1 })
       .populate({ path: "team", select: "firstname lastname email" });
 
-    if (result.length === 0) {
-      res.status(200).json({ message: "No Teams found" });
+    if (!result) {
+      return res.status(200).json({ message: "No Teams found" });
     }
+
     res.json(result);
   } catch (err) {
     res.status(500).json({ message: err.message });

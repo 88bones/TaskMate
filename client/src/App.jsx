@@ -20,6 +20,8 @@ import { useState } from "react";
 import UpdateProject from "./components/UpdateProject";
 import ProjectBoard from "./pages/ProjectBoard";
 import TimeLine from "./components/TimeLine";
+import KanbanBoard from "./components/KanbanBoard";
+import UpdateUser from "./components/UpdateUser";
 
 function AppWrapper() {
   return (
@@ -44,29 +46,22 @@ function App() {
       <Routes>
         {/* Home */}
         <Route path="/" element={<Home />} />
-
-        {/* DashBoard
+        <Route path="/profile" element={<UpdateUser />} />
+        {/* DashBoard */}
         <Route path="/dashboard" element={<DashBoard />}>
-          <Route path="project" element={<Project />}>
-            <Route
-              path="update-project/:projectId"
-              element={<UpdateProject />}
-            />
-          </Route>
           <Route path="tasks" element={<Task />}>
             <Route path="create-task/:projectId" element={<CreateTask />} />
           </Route>
           <Route path="team" element={<Team />} />
-        </Route> */}
-
+        </Route>
         {/* Auths */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
-
         <Route path="/project-board/:projectId/" element={<ProjectBoard />}>
           <Route path="timeline" element={<TimeLine />}>
             <Route path="update-project" element={<UpdateProject />} />
           </Route>
+          <Route path="kanban" element={<KanbanBoard />} />
         </Route>
       </Routes>
     </>

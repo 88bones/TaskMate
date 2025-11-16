@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import Select from "react-select";
 import { getOneProject } from "../services/getProject";
 import { updateProject } from "../services/updateProject";
+import { getUser } from "../services/getUser";
 
 const UpdateProject = () => {
   const inputStyle =
@@ -11,7 +12,7 @@ const UpdateProject = () => {
 
   const { projectId } = useParams();
   const { _id } = useSelector((state) => state.user);
-  const users = useSelector((state) => state.user.users || []);
+  const [users, setUsers] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -23,6 +24,21 @@ const UpdateProject = () => {
     team: [],
     createdBy: _id,
   });
+
+  useEffect(() => {
+    getUser()
+      .then((res) => {
+        if (res.message) {
+          setError(res.message);
+          setUsers([]);
+        } else {
+          setUsers(res);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   // Convert all users into select options
   const userOptions = users.map((u) => ({
@@ -39,8 +55,6 @@ const UpdateProject = () => {
     })
     .filter(Boolean);
 
-  console.log(selectedTeam);
-
   // fetch project
   useEffect(() => {
     getOneProject(projectId)
@@ -51,11 +65,16 @@ const UpdateProject = () => {
           setData({
             title: res.title,
             description: res.description,
-            startDate: res.startDate.split("T")[0], // convert to yyyy-mm-dd
+            startDate: res.startDate.split("T")[0],
             endDate: res.endDate.split("T")[0],
-            team: Array.isArray(res.team) ? res.team : [],
+            team: Array.isArray(res.team)
+              ? res.team.map((member) =>
+                  typeof member === "string" ? member : member._id
+                )
+              : [],
             createdBy: _id,
           });
+
           setError("");
         }
       })

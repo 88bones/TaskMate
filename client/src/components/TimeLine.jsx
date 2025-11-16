@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import { useSelector } from "react-redux";
 import { getProjectActivity } from "../services/getActivity";
 import { Outlet, useNavigate } from "react-router-dom";
+import CreatedTeam from "./CreatedTeam";
 
 const TimeLine = () => {
   const [activity, setActivity] = useState([]);
@@ -41,7 +42,7 @@ const TimeLine = () => {
           setActivity([]);
         } else {
           setActivity(res);
-          console.log(res);
+
           setError("");
         }
       })
@@ -54,7 +55,7 @@ const TimeLine = () => {
     <>
       <div className="flex justify-center py-4 relative">
         <div className="w-full flex flex-col">
-          <div className="w-full flex justify-around border-b border-gray-400">
+          <div className="w-full px-10 flex justify-between border-b border-gray-400">
             <header>
               <h1 className="text-2xl font-bold">{selectedProject.title}</h1>
               <h2 className="text-gray-500 w-64 line-clamp-3 hover:line-clamp-none cursor-default">
@@ -77,21 +78,35 @@ const TimeLine = () => {
               ))}
             </div>
           </div>
-          <div className="py-4 px-4">
+          <div className="py-4 px-4 flex justify-between gap-5">
             {Array.isArray(activity) && activity.length > 0 ? (
-              <div>
+              <div className="w-2/2">
                 {activity.map((act) => (
-                  <div key={act._id}>
+                  <div
+                    className="mb-2 p-4 border-b border-gray-400"
+                    key={act._id}
+                  >
                     <p>
                       •{act.user.firstname} {act.user.lastname}{" "}
                       {act.description}
                     </p>
+                    <div>
+                      <p className="text-sm text-gray-500 px-2">
+                        {new Date(act.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
             ) : (
               <p className="text-red-500">{error || "No projects found."}</p>
             )}
+            <div className="text-center w-1/4">
+              <header className="bg-black rounded py-2 text-white">Team</header>
+              <div>
+                <CreatedTeam />
+              </div>
+            </div>
           </div>
         </div>
         {visible && (

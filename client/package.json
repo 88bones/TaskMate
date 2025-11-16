@@ -21,6 +21,7 @@
     "lucide-react": "^0.544.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-kanban-kit": "^0.0.2-beta.4",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.9.1",
     "react-select": "^5.10.2",

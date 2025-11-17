@@ -18,6 +18,7 @@ function KanbanBoard() {
     {
       id: 2,
       title: "To Do",
+      status: "todo",
       color: "bg-red-500",
       tasks: [
         { id: 1, text: "Task One" },
@@ -27,6 +28,7 @@ function KanbanBoard() {
     {
       id: 3,
       title: "In Progress",
+      status: "in-progress",
       color: "bg-orange-500",
       tasks: [
         { id: 3, text: "Working Task" },
@@ -34,10 +36,17 @@ function KanbanBoard() {
         { id: 2, text: "Task Two" },
       ],
     },
-    { id: 4, title: "Review", color: "bg-yellow-500", tasks: [] },
+    {
+      id: 4,
+      title: "Review",
+      status: "review",
+      color: "bg-yellow-500",
+      tasks: [],
+    },
     {
       id: 5,
       title: "Done",
+      status: "done",
       color: "bg-green-500",
       tasks: [{ id: 4, text: "Completed Task" }],
     },
@@ -51,12 +60,16 @@ function KanbanBoard() {
   const handleDrop = (e, dropColId) => {
     const colId = parseInt(e.dataTransfer.getData("colId"));
     const taskId = parseInt(e.dataTransfer.getData("taskId"));
+
     if (!colId || !taskId) return;
 
     const newColumns = [...columns];
     const fromCol = newColumns.find((c) => c.id === colId);
     const toCol = newColumns.find((c) => c.id === dropColId);
+
     const task = fromCol.tasks.find((t) => t.id === taskId);
+
+    task.status = toCol.status;
 
     fromCol.tasks = fromCol.tasks.filter((t) => t.id !== taskId);
     toCol.tasks.push(task);
@@ -82,7 +95,7 @@ function KanbanBoard() {
               <button className="p-2 rounded-full hover:bg-gray-200">
                 <Plus
                   onClick={() => {
-                    navigate(`create-task/${projectId}`);
+                    navigate(`create-task/${projectId}?status=${col.status}`);
                     setVisible(true);
                   }}
                 />

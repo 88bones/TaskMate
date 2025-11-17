@@ -28,4 +28,16 @@ const getTask = async (req, res) => {
   }
 };
 
-export default getTask;
+const getTasks = async (req, res) => {
+  try {
+    const tasks = await taskModel.find({});
+
+    if (tasks.length === 0) res.status(200).json({ message: "No tasks found" });
+
+    res.json(tasks);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export default { getTask, getTasks };

@@ -1,4 +1,4 @@
-'use client';;
+"use client";
 import {
   closestCenter,
   DndContext,
@@ -9,15 +9,15 @@ import {
   useDroppable,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
-import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { createContext, useContext, useState } from 'react';
-import { createPortal } from 'react-dom';
-import tunnel from 'tunnel-rat';
-import { Card } from '@/components/ui/card';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { cn } from '@/lib/utils';
+} from "@dnd-kit/core";
+import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { createContext, useContext, useState } from "react";
+import { createPortal } from "react-dom";
+import tunnel from "tunnel-rat";
+import { Card } from "@/components/ui/card";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 const t = tunnel();
 
@@ -27,11 +27,7 @@ const KanbanContext = createContext({
   activeCardId: null,
 });
 
-export const KanbanBoard = ({
-  id,
-  children,
-  className
-}) => {
+export const KanbanBoard = ({ id, children, className }) => {
   const { isOver, setNodeRef } = useDroppable({
     id,
   });
@@ -39,24 +35,18 @@ export const KanbanBoard = ({
   return (
     <div
       className={cn(
-        'flex size-full min-h-40 flex-col divide-y overflow-hidden rounded-md border bg-secondary text-xs shadow-sm ring-2 transition-all',
-        isOver ? 'ring-primary' : 'ring-transparent',
+        "flex size-full min-h-40 flex-col divide-y overflow-hidden rounded-md border bg-secondary text-xs shadow-sm ring-2 transition-all",
+        isOver ? "ring-primary" : "ring-transparent",
         className
       )}
-      ref={setNodeRef}>
+      ref={setNodeRef}
+    >
       {children}
     </div>
   );
 };
 
-export const KanbanCard = (
-  {
-    id,
-    name,
-    children,
-    className
-  }
-) => {
+export const KanbanCard = ({ id, name, children, className }) => {
   const {
     attributes,
     listeners,
@@ -79,10 +69,11 @@ export const KanbanCard = (
       <div style={style} {...listeners} {...attributes} ref={setNodeRef}>
         <Card
           className={cn(
-            'cursor-grab gap-4 rounded-md p-3 shadow-sm',
-            isDragging && 'pointer-events-none cursor-grabbing opacity-30',
+            "cursor-grab gap-4 rounded-md p-3 shadow-sm",
+            isDragging && "pointer-events-none cursor-grabbing opacity-30",
             className
-          )}>
+          )}
+        >
           {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
         </Card>
       </div>
@@ -90,10 +81,11 @@ export const KanbanCard = (
         <t.In>
           <Card
             className={cn(
-              'cursor-grab gap-4 rounded-md p-3 shadow-sm ring-2 ring-primary',
-              isDragging && 'cursor-grabbing',
+              "cursor-grab gap-4 rounded-md p-3 shadow-sm ring-2 ring-primary",
+              isDragging && "cursor-grabbing",
               className
-            )}>
+            )}
+          >
             {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
           </Card>
         </t.In>
@@ -102,13 +94,7 @@ export const KanbanCard = (
   );
 };
 
-export const KanbanCards = (
-  {
-    children,
-    className,
-    ...props
-  }
-) => {
+export const KanbanCards = ({ children, className, ...props }) => {
   const { data } = useContext(KanbanContext);
   const filteredData = data.filter((item) => item.column === props.id);
   const items = filteredData.map((item) => item.id);
@@ -116,7 +102,10 @@ export const KanbanCards = (
   return (
     <ScrollArea className="overflow-hidden">
       <SortableContext items={items}>
-        <div className={cn('flex flex-grow flex-col gap-2 p-2', className)} {...props}>
+        <div
+          className={cn("flex grow flex-col gap-2 p-2", className)}
+          {...props}
+        >
           {filteredData.map(children)}
         </div>
       </SortableContext>
@@ -125,29 +114,28 @@ export const KanbanCards = (
   );
 };
 
-export const KanbanHeader = ({
-  className,
-  ...props
-}) => (
-  <div className={cn('m-0 p-2 font-semibold text-sm', className)} {...props} />
+export const KanbanHeader = ({ className, ...props }) => (
+  <div className={cn("m-0 p-2 font-semibold text-sm", className)} {...props} />
 );
 
-export const KanbanProvider = (
-  {
-    children,
-    onDragStart,
-    onDragEnd,
-    onDragOver,
-    className,
-    columns,
-    data,
-    onDataChange,
-    ...props
-  }
-) => {
+export const KanbanProvider = ({
+  children,
+  onDragStart,
+  onDragEnd,
+  onDragOver,
+  className,
+  columns,
+  data,
+  onDataChange,
+  ...props
+}) => {
   const [activeCardId, setActiveCardId] = useState(null);
 
-  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor), useSensor(KeyboardSensor));
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor)
+  );
 
   const handleDragStart = (event) => {
     const card = data.find((item) => item.id === event.active.id);
@@ -167,14 +155,14 @@ export const KanbanProvider = (
     const activeItem = data.find((item) => item.id === active.id);
     const overItem = data.find((item) => item.id === over.id);
 
-    if (!(activeItem)) {
+    if (!activeItem) {
       return;
     }
 
     const activeColumn = activeItem.column;
     const overColumn =
       overItem?.column ||
-      columns.find(col => col.id === over.id)?.id ||
+      columns.find((col) => col.id === over.id)?.id ||
       columns[0]?.id;
 
     if (activeColumn !== overColumn) {
@@ -246,15 +234,23 @@ export const KanbanProvider = (
         onDragOver={handleDragOver}
         onDragStart={handleDragStart}
         sensors={sensors}
-        {...props}>
+        {...props}
+      >
         <div
-          className={cn('grid size-full auto-cols-fr grid-flow-col gap-4', className)}>
+          className={cn(
+            "grid size-full auto-cols-fr grid-flow-col gap-4",
+            className
+          )}
+        >
           {columns.map((column) => children(column))}
         </div>
-        {typeof window !== 'undefined' &&
-          createPortal(<DragOverlay>
-            <t.Out />
-          </DragOverlay>, document.body)}
+        {typeof window !== "undefined" &&
+          createPortal(
+            <DragOverlay>
+              <t.Out />
+            </DragOverlay>,
+            document.body
+          )}
       </DndContext>
     </KanbanContext.Provider>
   );

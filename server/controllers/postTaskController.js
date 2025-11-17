@@ -4,6 +4,7 @@ import projectModel from "../models/projectModel.js";
 export const createTask = async (req, res) => {
   try {
     const { userId, projectId } = req.params;
+    const { status } = req.query;
 
     const task = req.body;
 
@@ -13,7 +14,7 @@ export const createTask = async (req, res) => {
         .json({ message: "User and project ID not found." });
     }
 
-    const newTask = new taskModel({ ...task, createdBy: userId });
+    const newTask = new taskModel({ ...task, createdBy: userId, status });
     await newTask.save();
 
     //push task into project

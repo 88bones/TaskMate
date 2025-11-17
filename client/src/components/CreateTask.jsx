@@ -26,6 +26,7 @@ const CreateTask = () => {
     priority: "low",
     dueDate: "",
     assignedTo: "",
+    status: "",
     projectId: projectId,
     createdBy: userId,
   });

@@ -53,9 +53,9 @@ const TimeLine = () => {
 
   return (
     <>
-      <div className="flex justify-center py-4 relative">
+      <div className="flex justify-center py-4 relative px-50 max-sm:px-0">
         <div className="w-full flex flex-col">
-          <div className="w-full px-10 flex justify-between border-b border-gray-400">
+          <div className="w-full px-4 flex justify-between border-b py-6">
             <header>
               <h1 className="text-2xl font-bold">{selectedProject.title}</h1>
               <h2 className="text-gray-500 w-64 line-clamp-3 hover:line-clamp-none cursor-default">
@@ -78,20 +78,20 @@ const TimeLine = () => {
               ))}
             </div>
           </div>
-          <div className="py-4 px-4 flex justify-between gap-5">
+          <div className="py-4 flex justify-between gap-5  ">
             {Array.isArray(activity) && activity.length > 0 ? (
-              <div className="w-2/2">
+              <div className="w-2/2 ">
                 {activity.map((act) => (
                   <div
-                    className="mb-2 p-4 border-b border-gray-400"
+                    className="mb-2 p-4 border-b border-gray-200 "
                     key={act._id}
                   >
-                    <p>
+                    <p className="">
                       •{act.user.firstname} {act.user.lastname}{" "}
                       {act.description}
                     </p>
                     <div>
-                      <p className="text-sm text-gray-500 px-2">
+                      <p className="text-sm text-gray-500 px-2 ">
                         {new Date(act.createdAt).toLocaleDateString()}
                       </p>
                     </div>

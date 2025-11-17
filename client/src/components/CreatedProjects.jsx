@@ -52,7 +52,7 @@ const CreatedProjects = () => {
                 onClick={() => {
                   dispatch(setSelectedProject(project));
                   console.log(project);
-                  navigate(`/project-board/${project._id}`);
+                  navigate(`/project-board/${project._id}/timeline`);
                 }}
                 key={project._id}
                 className="font-medium hover:cursor-pointer border rounded px-2 border-gray-400"

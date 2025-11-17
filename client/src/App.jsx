@@ -22,6 +22,7 @@ import ProjectBoard from "./pages/ProjectBoard";
 import TimeLine from "./components/TimeLine";
 import KanbanBoard from "./components/KanbanBoard";
 import UpdateUser from "./components/UpdateUser";
+import Profile from "./pages/Profile";
 
 function AppWrapper() {
   return (
@@ -44,24 +45,26 @@ function App() {
     <>
       {!hideNavbar && <NavBar />}
       <Routes>
-        {/* Home */}
+        {/* ------Home------ */}
         <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<UpdateUser />} />
-        {/* DashBoard */}
-        <Route path="/dashboard" element={<DashBoard />}>
-          <Route path="tasks" element={<Task />}>
-            <Route path="create-task/:projectId" element={<CreateTask />} />
-          </Route>
-          <Route path="team" element={<Team />} />
+        {/* ------Profile------ */}
+        <Route path="/profile/:userId/" element={<Profile />}>
+          <Route path="edit-user" element={<UpdateUser />} />
         </Route>
-        {/* Auths */}
+        {/* ------DashBoard------ */}
+        <Route path="/dashboard" element={<DashBoard />}></Route>
+        {/* ------Auths------ */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+
+        {/* ------PROJECT-BOARD------ */}
         <Route path="/project-board/:projectId/" element={<ProjectBoard />}>
           <Route path="timeline" element={<TimeLine />}>
             <Route path="update-project" element={<UpdateProject />} />
           </Route>
-          <Route path="kanban" element={<KanbanBoard />} />
+          <Route path="kanban" element={<KanbanBoard />}>
+            <Route path="create-task/:projectId" element={<CreateTask />} />
+          </Route>
         </Route>
       </Routes>
     </>

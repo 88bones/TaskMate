@@ -10,7 +10,12 @@ const NavBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { firstname, lastname, signedIn } = useSelector((state) => state.user);
+  const {
+    _id: userId,
+    firstname,
+    lastname,
+    signedIn,
+  } = useSelector((state) => state.user);
 
   const handleSignOut = () => {
     dispatch(signout());
@@ -43,7 +48,7 @@ const NavBar = () => {
             <div className="flex justify-around items-center w-64">
               <span
                 className="cursor-pointer hover:text-shadow-lg"
-                onClick={() => navigate("/profile")}
+                onClick={() => navigate(`/profile/${userId}`)}
               >
                 {firstname} {lastname}
               </span>

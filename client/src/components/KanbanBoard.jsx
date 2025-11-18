@@ -4,6 +4,8 @@ import { X } from "lucide-react";
 import { EllipsisVertical } from "lucide-react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getTasks } from "../services/getTask";
 
 function KanbanBoard() {
   const { selectedProject } = useSelector((state) => state.user);
@@ -33,7 +35,7 @@ function KanbanBoard() {
       tasks: [
         { id: 3, text: "Working Task" },
         { id: 2, text: "Task Two" },
-        { id: 2, text: "Task Two" },
+        { id: 5, text: "Task Two" },
       ],
     },
     {
@@ -79,8 +81,25 @@ function KanbanBoard() {
 
   const allowDrop = (e) => e.preventDefault();
 
+  // GET TASKS
+
+  useEffect(() => {
+    getTasks(projectId)
+      .then((res) => {
+        if (res.message) {
+          console.log(res.message);
+        } else {
+          console.log(res);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [projectId]);
+
   return (
     <div className="relative">
+      <header className="p-4 font-bold text-xl">{selectedProject.title}</header>
       <div className="grid grid-cols-5 gap-2 p-4">
         {columns.map((col) => (
           <div

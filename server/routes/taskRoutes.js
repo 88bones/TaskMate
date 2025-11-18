@@ -13,6 +13,6 @@ router.get("/created-task/:userId", taskController.getTask);
 //user
 router.get("/assigned-task/:userId", getAssignedTask);
 
-router.get("/get-tasks", taskController.getTasks);
+router.get("/get-tasks/:projectId", taskController.getTasks);
 
 export default router;

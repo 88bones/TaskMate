@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../services/getUser";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { postTask } from "../services/postTask";
 import { setTasks, setUsers } from "../redux/slice";
 
@@ -10,6 +10,9 @@ const CreateTask = () => {
     "w-full border border-gray-500 rounded mb-2 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black";
 
   const dispatch = useDispatch();
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const status = query.get("status");
 
   const { _id: userId } = useSelector((state) => state.user);
   const tasks = useSelector((state) => state.user.tasks || []);
@@ -26,7 +29,7 @@ const CreateTask = () => {
     priority: "low",
     dueDate: "",
     assignedTo: "",
-    status: "",
+    status: status,
     projectId: projectId,
     createdBy: userId,
   });

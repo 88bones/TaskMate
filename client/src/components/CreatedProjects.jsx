@@ -51,7 +51,7 @@ const CreatedProjects = () => {
               <li
                 onClick={() => {
                   dispatch(setSelectedProject(project));
-                  console.log(project);
+                  // console.log(project);
                   navigate(`/project-board/${project._id}/timeline`);
                 }}
                 key={project._id}

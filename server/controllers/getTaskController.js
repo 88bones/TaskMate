@@ -30,7 +30,9 @@ const getTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
   try {
-    const tasks = await taskModel.find({});
+    const projectId = req.params.projectId;
+
+    const tasks = await taskModel.find({ projectId: projectId });
 
     if (tasks.length === 0) res.status(200).json({ message: "No tasks found" });
 

@@ -4,6 +4,7 @@ import { getUser } from "../services/getUser";
 import { useParams, useLocation } from "react-router-dom";
 import { postTask } from "../services/postTask";
 import { setTasks, setUsers } from "../redux/slice";
+import { useOutletContext } from "react-router-dom";
 
 const CreateTask = () => {
   const inputStyle =
@@ -13,6 +14,8 @@ const CreateTask = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const status = query.get("status");
+
+  const { addNewTask } = useOutletContext();
 
   const { _id: userId } = useSelector((state) => state.user);
   const tasks = useSelector((state) => state.user.tasks || []);
@@ -66,6 +69,9 @@ const CreateTask = () => {
       const newTask = await postTask(userId, projectId, data);
 
       dispatch(setTasks([...tasks, newTask]));
+      if (newTask.task) {
+        addNewTask(newTask.task);
+      }
 
       setSuccess("Task Added");
       setData({

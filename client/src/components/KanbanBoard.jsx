@@ -16,27 +16,14 @@ function KanbanBoard() {
   const [visible, setVisible] = useState(false);
 
   const [columns, setColumns] = useState([
-    { id: 1, title: "New", color: "bg-white", tasks: [] },
-    {
-      id: 2,
-      title: "To Do",
-      status: "todo",
-      color: "bg-red-500",
-      tasks: [
-        { id: 1, text: "Task One" },
-        { id: 2, text: "Task Two" },
-      ],
-    },
+    { id: 1, title: "New", status: "new", color: "bg-white", tasks: [] },
+    { id: 2, title: "To Do", status: "todo", color: "bg-red-500", tasks: [] },
     {
       id: 3,
       title: "In Progress",
       status: "in-progress",
       color: "bg-orange-500",
-      tasks: [
-        { id: 3, text: "Working Task" },
-        { id: 2, text: "Task Two" },
-        { id: 5, text: "Task Two" },
-      ],
+      tasks: [],
     },
     {
       id: 4,
@@ -45,13 +32,7 @@ function KanbanBoard() {
       color: "bg-yellow-500",
       tasks: [],
     },
-    {
-      id: 5,
-      title: "Done",
-      status: "done",
-      color: "bg-green-500",
-      tasks: [{ id: 4, text: "Completed Task" }],
-    },
+    { id: 5, title: "Done", status: "done", color: "bg-green-500", tasks: [] },
   ]);
 
   const handleDragStart = (e, colId, taskId) => {
@@ -82,20 +63,46 @@ function KanbanBoard() {
   const allowDrop = (e) => e.preventDefault();
 
   // GET TASKS
-
   useEffect(() => {
+    if (!projectId) return;
+
     getTasks(projectId)
-      .then((res) => {
-        if (res.message) {
-          console.log(res.message);
-        } else {
-          console.log(res);
-        }
+      .then((tasks) => {
+        if (!Array.isArray(tasks)) return;
+
+        // Copy columns so we don't mutate state
+        const updated = columns.map((col) => ({ ...col, tasks: [] }));
+
+        // distribute tasks
+        tasks.forEach((task) => {
+          const col = updated.find((c) => c.status === task.status);
+          if (col) {
+            col.tasks.push({
+              id: task._id,
+              text: task.title,
+              ...task,
+            });
+          }
+        });
+
+        setColumns(updated);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   }, [projectId]);
+
+  const addNewTask = (task) => {
+    setColumns((prev) =>
+      prev.map((col) => {
+        if (col.status === task.status) {
+          return {
+            ...col,
+            tasks: [...col.tasks, { id: task._id, text: task.title, ...task }],
+          };
+        }
+        return col;
+      })
+    );
+  };
 
   return (
     <div className="relative">
@@ -141,7 +148,7 @@ function KanbanBoard() {
       </div>
       {visible && (
         <div className="absolute top-0 min-w-full flex justify-center backdrop-blur-2xl gap-10 py-10">
-          <Outlet />
+          <Outlet context={{ addNewTask }} />
           <X onClick={() => setVisible(!visible)}></X>
         </div>
       )}

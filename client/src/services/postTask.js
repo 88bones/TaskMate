@@ -7,6 +7,7 @@ export const postTask = async (userId, projectId, data) => {
       `http://localhost:3001/api/task/create-task/${userId}/${projectId}?status=${status}`,
       data
     );
+
     return res.data;
   } catch (err) {
     throw err;

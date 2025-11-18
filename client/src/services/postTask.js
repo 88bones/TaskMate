@@ -13,3 +13,15 @@ export const postTask = async (userId, projectId, data) => {
     throw err;
   }
 };
+
+export const updateTaskStatus = async (taskId, status) => {
+  try {
+    const res = await axios.patch(
+      `http://localhost:3001/api/task/update-status/${taskId}`,
+      { status }
+    );
+    return res.data.task;
+  } catch (err) {
+    throw err;
+  }
+};

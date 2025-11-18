@@ -6,6 +6,7 @@ import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getTasks } from "../services/getTask";
+import { updateTaskStatus } from "../services/postTask";
 
 function KanbanBoard() {
   const { selectedProject } = useSelector((state) => state.user);
@@ -35,29 +36,38 @@ function KanbanBoard() {
     { id: 5, title: "Done", status: "done", color: "bg-green-500", tasks: [] },
   ]);
 
-  const handleDragStart = (e, colId, taskId) => {
+  const handleDragStart = (e, colId, taskId, status) => {
     e.dataTransfer.setData("colId", colId);
     e.dataTransfer.setData("taskId", taskId);
+    e.dataTransfer.setData("status", status);
   };
 
-  const handleDrop = (e, dropColId) => {
-    const colId = parseInt(e.dataTransfer.getData("colId"));
-    const taskId = parseInt(e.dataTransfer.getData("taskId"));
+  const handleDrop = async (e, dropColId) => {
+    const colId = e.dataTransfer.getData("colId");
+    const taskId = e.dataTransfer.getData("taskId");
 
     if (!colId || !taskId) return;
 
     const newColumns = [...columns];
-    const fromCol = newColumns.find((c) => c.id === colId);
-    const toCol = newColumns.find((c) => c.id === dropColId);
+    const fromCol = newColumns.find((c) => c.id == colId);
+    const toCol = newColumns.find((c) => c.id == dropColId);
 
     const task = fromCol.tasks.find((t) => t.id === taskId);
 
     task.status = toCol.status;
 
+    //auto update column
     fromCol.tasks = fromCol.tasks.filter((t) => t.id !== taskId);
     toCol.tasks.push(task);
 
     setColumns(newColumns);
+
+    //status update on drop
+    try {
+      await updateTaskStatus(taskId, toCol.status);
+    } catch (err) {
+      console.log("Failed to update backend", err);
+    }
   };
 
   const allowDrop = (e) => e.preventDefault();
@@ -134,10 +144,16 @@ function KanbanBoard() {
                   key={task.id}
                   className="bg-white p-4 rounded-md shadow-md border cursor-move"
                   draggable
-                  onDragStart={(e) => handleDragStart(e, col.id, task.id)}
+                  onDragStart={(e) => {
+                    handleDragStart(e, col.id, task.id, task.status);
+                    console.log(task.status);
+                  }}
                 >
                   <div className="flex justify-between">
-                    {task.text}
+                    <div>
+                      <p>{task.text}</p>
+                      <p className="text-xs">{task.priority}</p>
+                    </div>
                     <EllipsisVertical size={18} />
                   </div>
                 </div>

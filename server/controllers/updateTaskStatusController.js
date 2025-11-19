@@ -1,4 +1,5 @@
 import taskModel from "../models/taskModel.js";
+import actiVityModel from "../models/activityModel.js";
 
 export const updateTaskStatus = async (req, res) => {
   try {
@@ -18,6 +19,14 @@ export const updateTaskStatus = async (req, res) => {
     if (!updatedTask) {
       return res.status(404).json({ message: "Task not found" });
     }
+
+    await actiVityModel.create({
+      user: updatedTask.createdBy,
+      action: "status-update",
+      projectType: "status",
+      projectId: updatedTask.projectId,
+      description: `updated "status" of task: ${updatedTask.title}`,
+    });
 
     res.status(200).json({ message: "Status updated", task: updatedTask });
   } catch (err) {

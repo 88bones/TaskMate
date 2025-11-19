@@ -47,6 +47,7 @@ const UpdateTask = () => {
             projectId: res.projectId,
             createdBy: userId,
           });
+          console.log(res);
         }
       })
       .catch((err) => console.error(err));

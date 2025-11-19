@@ -22,7 +22,7 @@ export const updateTaskStatus = async (req, res) => {
 
     await actiVityModel.create({
       user: updatedTask.createdBy,
-      action: "status-update",
+      action: "update",
       projectType: "status",
       projectId: updatedTask.projectId,
       description: `updated "status" of task: ${updatedTask.title}`,

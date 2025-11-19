@@ -8,13 +8,21 @@ const updateTask = async (req, res) => {
 
     if (!taskId) res.status(404).json({ message: "Task not found" });
 
-    const result = await taskModel.findByIdAndUpdate(taskId, newData, {
+    const updatedTask = await taskModel.findByIdAndUpdate(taskId, newData, {
       new: true,
+    });
+
+    await activityModel.create({
+      user: updatedTask.createdBy,
+      action: "update",
+      projectType: "task",
+      projectId: updatedTask.projectId,
+      description: `updated task: ${updatedTask.title}`,
     });
 
     res.status(200).json({
       message: "Task Updated",
-      data: result,
+      data: updatedTask,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -25,3 +25,15 @@ export const updateTaskStatus = async (taskId, status) => {
     throw err;
   }
 };
+
+export const updateTask = async (taskId, payload) => {
+  try {
+    const res = await axios.put(
+      `http://localhost:3001/api/task/update-task/${taskId}`,
+      payload
+    );
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getOneTask } from "../services/getTask";
 import { getTeam } from "../services/getTeam";
+import { updateTask } from "../services/postTask";
 import Select from "react-select";
 
 const UpdateTask = () => {
@@ -10,26 +11,27 @@ const UpdateTask = () => {
     "w-full border border-gray-500 rounded mb-2 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black";
 
   const { taskId } = useParams();
-  const { _id: userId } = useSelector((state) => state.user);
-  const { selectedProject } = useSelector((state) => state.user);
-  const projectId = selectedProject._id;
+  const { _id: userId, selectedProject } = useSelector((state) => state.user);
+  const projectId = selectedProject?._id;
 
   const [data, setData] = useState({
     title: "",
     description: "",
-    priority: "",
+    priority: "low",
     dueDate: "",
     assignedTo: "",
+    projectId: "",
     createdBy: userId,
   });
 
+  const [team, setTeam] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [team, setTeam] = useState([]);
-  const [selectedTeam, setSelectedTeam] = useState(null);
 
-  // get Task
+  /** Fetch task data */
   useEffect(() => {
+    if (!taskId) return;
+
     getOneTask(taskId)
       .then((res) => {
         if (res.message) {
@@ -40,76 +42,84 @@ const UpdateTask = () => {
             title: res.title,
             description: res.description,
             priority: res.priority,
-            dueDate: res.dueDate.split("T")[0],
+            dueDate: res.dueDate?.split("T")[0],
             assignedTo: res.assignedTo,
             projectId: res.projectId,
             createdBy: userId,
           });
         }
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch((err) => console.error(err));
   }, [taskId]);
 
-  //get team
+  /** Fetch project team */
   useEffect(() => {
+    if (!projectId) return;
+
     getTeam(projectId)
       .then((res) => {
         if (res.message) {
           setError(res.message);
         } else {
           setError("");
-          setTeam(res);
+          setTeam(res.team || []);
         }
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch((err) => console.error(err));
   }, [projectId]);
 
-  const userOptions = team.team?.map((member) => ({
+  /** Convert team to dropdown options */
+  const userOptions = team.map((member) => ({
     value: member._id,
     label: `${member.firstname} ${member.lastname}`,
   }));
 
+  /** When dropdown changes */
   const handelAssignChange = (option) => {
-    setSelectedTeam(option);
-
     setData((prev) => ({
       ...prev,
-      assignedTo: option?.value || "",
+      assignedTo: option ? option.value : "",
     }));
   };
 
+  /** Handle text inputs */
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setData((prevData) => ({
-      ...prevData,
+    setData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
 
+  /** Submit form */
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const payload = {
-      title: data.title,
-      description: data.description,
-      priority: data.priority,
-      dueDate: data.dueDate.split("T")[0],
-      assignedTo: data.assignedTo,
-      projectId: data.projectId,
+      ...data,
+      dueDate: data.dueDate,
       createdBy: userId,
     };
+
+    updateTask(taskId, payload)
+      .then(() => {
+        setSuccess("Task Updated");
+        setError("");
+        setTimeout(() => setSuccess(""), 2000);
+      })
+      .catch(() => setError("Failed to update task"));
   };
+
+  /** Find selected user option */
+  const selectedUserOption =
+    userOptions.find((option) => option.value === data.assignedTo) || null;
 
   return (
     <div className="p-4 rounded h-fit w-fit bg-white shadow-md max-sm:w-full">
       <header className="mb-2 font-extrabold text-xl">
-        <p>Update Task.</p>
+        <p>Update Task</p>
       </header>
-      {/* {userId},{projectId} */}
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -120,6 +130,7 @@ const UpdateTask = () => {
           onChange={handleChange}
           required
         />
+
         <textarea
           name="description"
           placeholder="Description"
@@ -129,7 +140,8 @@ const UpdateTask = () => {
           onChange={handleChange}
           required
         />
-        <label className="mr-2">Priority:</label>
+
+        <label className="mr-2 font-semibold">Priority:</label>
         <select
           name="priority"
           className={inputStyle}
@@ -141,37 +153,34 @@ const UpdateTask = () => {
           <option value="high">High</option>
         </select>
 
-        <label className="mr-2">Assign to:</label>
-
+        <label className="mr-2 font-semibold">Assign to:</label>
         <Select
           className="mb-3 border rounded border-black"
-          placeholder="Select team members..."
+          placeholder="Select team member..."
           options={userOptions}
-          value={data.assignedTo}
+          value={selectedUserOption}
           onChange={handelAssignChange}
         />
 
-        <div className="flex flex-col">
-          <label className="mr-2">Due Date:</label>
-          <input
-            type="date"
-            name="dueDate"
-            id="dueDate"
-            className="border rounded px-2 py-1 w-full"
-            value={data.dueDate}
-            onChange={handleChange}
-          />
-        </div>
+        <label className="mr-2 font-semibold">Due Date:</label>
+        <input
+          type="date"
+          name="dueDate"
+          className="border rounded px-2 py-1 w-full"
+          value={data.dueDate}
+          onChange={handleChange}
+          required
+        />
 
         <button
-          className="mt-2 bg-black w-full text-white font-bold text-md md:text-xl py-2 rounded-xl cursor-pointer"
+          className="mt-3 bg-black w-full text-white font-bold text-md md:text-xl py-2 rounded-xl cursor-pointer"
           type="submit"
         >
           Update Task
         </button>
 
-        {error && <span className="text-red-500 font-bold">{error}</span>}
-        {success && <span className="text-green-500 font-bold">{success}</span>}
+        {error && <p className="text-red-500 font-bold mt-2">{error}</p>}
+        {success && <p className="text-green-500 font-bold mt-2">{success}</p>}
       </form>
     </div>
   );

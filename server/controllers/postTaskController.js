@@ -1,5 +1,6 @@
 import taskModel from "../models/taskModel.js";
 import projectModel from "../models/projectModel.js";
+import activityModel from "../models/activityModel.js";
 
 export const createTask = async (req, res) => {
   try {
@@ -16,6 +17,14 @@ export const createTask = async (req, res) => {
 
     const newTask = new taskModel({ ...task, createdBy: userId, status });
     await newTask.save();
+
+    await activityModel.create({
+      user: newTask.createdBy,
+      action: "created",
+      projectType: "task",
+      projectId: newTask.projectId,
+      description: `created a task: ${newTask.title}`,
+    });
 
     //push task into project
     const project = await projectModel.findById(projectId);

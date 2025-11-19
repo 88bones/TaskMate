@@ -146,12 +146,20 @@ function KanbanBoard() {
                   draggable
                   onDragStart={(e) => {
                     handleDragStart(e, col.id, task.id, task.status);
-                    console.log(task.status);
+                    // console.log(task.status);
                   }}
                 >
                   <div className="flex justify-between">
                     <div>
-                      <p>{task.text}</p>
+                      <p
+                        onClick={() => {
+                          navigate(`update-task/${task._id}`);
+                          setVisible(true);
+                        }}
+                        className="hover:cursor-pointer hover:text-blue-500"
+                      >
+                        {task.text}
+                      </p>
                       <p className="text-xs">{task.priority}</p>
                     </div>
                     <EllipsisVertical size={18} />

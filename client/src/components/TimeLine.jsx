@@ -86,10 +86,13 @@ const TimeLine = () => {
                     className="mb-2 p-4 border-b border-gray-200 "
                     key={act._id}
                   >
-                    <p className="">
-                      •{act.user.firstname} {act.user.lastname}{" "}
+                    <div className="flex gap-2">
+                      •{" "}
+                      <p className="font-bold">
+                        {act.user.firstname} {act.user.lastname}{" "}
+                      </p>
                       {act.description}
-                    </p>
+                    </div>
                     <div>
                       <p className="text-sm text-gray-500 px-2 ">
                         {new Date(act.createdAt).toLocaleDateString()}

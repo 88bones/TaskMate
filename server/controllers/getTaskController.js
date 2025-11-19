@@ -42,4 +42,21 @@ const getTasks = async (req, res) => {
   }
 };
 
-export default { getTask, getTasks };
+const getOneTask = async (req, res) => {
+  try {
+    const taskId = req.params.taskId;
+
+    const task = await taskModel
+      .findById({ _id: taskId })
+      .populate({ path: "assignedTo", select: "firstname lastname email" })
+      .populate({ path: "projectId", select: "title" });
+
+    if (!task) res.status(404).json({ message: "No task found." });
+
+    res.json(task);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export default { getTask, getTasks, getOneTask };

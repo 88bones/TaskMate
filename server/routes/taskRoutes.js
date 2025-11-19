@@ -4,6 +4,7 @@ import taskController from "../controllers/getTaskController.js";
 
 import getAssignedTask from "../controllers/getAssignedTaskController.js";
 import updateTaskStatus from "../controllers/updateTaskStatusController.js";
+import updateTask from "../controllers/updateTaskController.js";
 
 const router = express.Router();
 
@@ -15,6 +16,8 @@ router.get("/created-task/:userId", taskController.getTask);
 router.get("/assigned-task/:userId", getAssignedTask);
 
 router.get("/get-tasks/:projectId", taskController.getTasks);
+router.get("/get-task/:taskId", taskController.getOneTask);
 router.patch("/update-status/:taskId", updateTaskStatus);
+router.put("/update-task/:taskId", updateTask);
 
 export default router;

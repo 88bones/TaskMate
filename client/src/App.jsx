@@ -23,6 +23,7 @@ import TimeLine from "./components/TimeLine";
 import KanbanBoard from "./components/KanbanBoard";
 import UpdateUser from "./components/UpdateUser";
 import Profile from "./pages/Profile";
+import UpdateTask from "./components/UpdateTask";
 
 function AppWrapper() {
   return (
@@ -64,6 +65,7 @@ function App() {
           </Route>
           <Route path="kanban" element={<KanbanBoard />}>
             <Route path="create-task/:projectId" element={<CreateTask />} />
+            <Route path="update-task/:taskId" element={<UpdateTask />} />
           </Route>
         </Route>
       </Routes>

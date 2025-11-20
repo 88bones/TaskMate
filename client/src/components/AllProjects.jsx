@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getAssignedProject } from "../services/getProject";
+import { useDispatch, useSelector } from "react-redux";
+import { getAssignedProject, getProject } from "../services/getProject";
 import { useNavigate } from "react-router-dom";
-import { UserRound } from "lucide-react";
 import { setSelectedProject } from "../redux/slice";
+import { UserRound } from "lucide-react";
 
-const AssignedProject = () => {
-  const { _id: userId, selectedProject } = useSelector((state) => state.user);
+const AllProjects = () => {
+  const { _id: userId } = useSelector((state) => state.user);
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState("");
 
@@ -14,36 +14,46 @@ const AssignedProject = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getAssignedProject(userId)
-      .then((res) => {
-        if (res.message) {
-          setError(res.message);
-          setProjects([]);
-        } else {
-          setProjects(res);
-          setError("");
-        }
-      })
-      .catch((err) => {
+    async function fetchProjects() {
+      try {
+        const created = await getProject(userId); // projects you created
+        const assigned = await getAssignedProject(userId); // projects assigned to you
+
+        const createdList = created.message ? [] : created;
+        const assignedList = assigned.message ? [] : assigned;
+
+        const merged = [...createdList, ...assignedList];
+
+        // remove duplicates by _id
+        const unique = merged.filter(
+          (p, index, self) => index === self.findIndex((x) => x._id === p._id)
+        );
+
+        setProjects(unique);
+        setError(unique.length === 0 ? "No projects found." : "");
+      } catch (err) {
         console.log(err);
-      });
+        setError("Failed to load projects.");
+      }
+    }
+
+    fetchProjects();
   }, [userId]);
 
   return (
-    <div className="rounded h-fit w-full bg-white col-span-2 max-sm:w-full ">
+    <div className="py-4 rounded bg-white w-full">
       <div className="w-sm">
         {error && <p className="text-red-500">{error}</p>}
 
-        {Array.isArray(projects) && projects.length > 0 ? (
+        {projects.length > 0 ? (
           <ul className="space-y-2">
             {projects.map((project) => (
               <li
+                key={project._id}
                 onClick={() => {
                   dispatch(setSelectedProject(project));
-                  // console.log(project);
                   navigate(`/project-board/${project._id}/timeline`);
                 }}
-                key={project._id}
                 className="font-medium hover:cursor-pointer border rounded px-2 border-gray-200 hover:shadow shadow-blue-200"
               >
                 <div className="flex flex-col p-4 gap-6">
@@ -55,20 +65,21 @@ const AssignedProject = () => {
                       </p>
                     </span>
                   </div>
+
                   <div className="flex items-center gap-1">
                     <UserRound size={14} />
-                    {project.team.length}
+                    {Array.isArray(project.team) ? project.team.length : 0}
                   </div>
                 </div>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-red-500">{error}</p>
+          <p className="text-gray-500">{error}</p>
         )}
       </div>
     </div>
   );
 };
 
-export default AssignedProject;
+export default AllProjects;

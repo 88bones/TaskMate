@@ -71,7 +71,7 @@ const TimeLine = () => {
                     navigate(item.path);
                     if (item.name === "Edit") setVisible(true);
                   }}
-                  className="hover:cursor-pointer"
+                  className="hover:cursor-pointer hover:text-blue-600"
                 >
                   {item.element}
                 </div>
@@ -105,7 +105,9 @@ const TimeLine = () => {
               <p className="text-red-500">{error || "No projects found."}</p>
             )}
             <div className="text-center w-1/4">
-              <header className="bg-black rounded py-2 text-white">Team</header>
+              <header className="bg-blue-500 rounded py-2 text-white font-bold text-xl shadow">
+                Team
+              </header>
               <div>
                 <CreatedTeam />
               </div>

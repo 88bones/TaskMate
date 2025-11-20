@@ -4,15 +4,18 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CreateProject from "../components/CreateProject";
 import CreatedProject from "../components/CreatedProjects";
+import AssignedProject from "../components/AssignedProject";
+import AllProjects from "../components/AllProjects";
 
 const DashBoard = () => {
   const { signedIn } = useSelector((state) => state.user);
+
   const navigate = useNavigate();
 
   const [isCreate, setIsCreate] = useState(false);
 
   const buttonStyle =
-    "px-6 py-2 font-semibold rounded bg-black hover:shadow-lg text-white transition-colors cursor-pointer ";
+    "px-6 py-2 font-semibold rounded bg-black hover:shadow-lg text-white transition-colors cursor-pointer hover:bg-blue-500 ";
 
   return (
     <>
@@ -24,7 +27,7 @@ const DashBoard = () => {
                 Project Dashboard
               </h1>
               <div className="relative">
-                <CreatedProject />
+                <AllProjects />
               </div>
             </header>
             <div className="">

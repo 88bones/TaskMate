@@ -9,14 +9,11 @@ import {
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import Home from "./pages/Home";
-import { useSelector } from "react-redux";
+
 import DashBoard from "./pages/DashBoard";
-import Task from "./components/Task";
-import Team from "./components/Team";
-import Project from "./components/Project";
+
 import CreateTask from "./components/CreateTask";
-import CreatedTasks from "./components/CreatedTasks";
-import { useState } from "react";
+
 import UpdateProject from "./components/UpdateProject";
 import ProjectBoard from "./pages/ProjectBoard";
 import TimeLine from "./components/TimeLine";

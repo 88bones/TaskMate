@@ -29,6 +29,7 @@ router.post("/", async (req, res) => {
         firstname: user.firstname,
         lastname: user.lastname,
         email: user.email,
+        department: user.department,
         role: user.role,
       },
     });

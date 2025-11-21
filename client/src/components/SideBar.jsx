@@ -1,29 +1,49 @@
 import React, { useState } from "react";
-import { Settings, ListCollapse, Bell, Kanban, Activity } from "lucide-react";
+import {
+  Settings,
+  ListCollapse,
+  Bell,
+  Kanban,
+  Activity,
+  User,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { UserRoundCog } from "lucide-react";
 
 const SideBar = ({ projectId }) => {
+  const { role, signedIn } = useSelector((state) => state.user);
+
   const [sideBarOpen, setSideBarOpen] = useState(false);
 
   const navigate = useNavigate();
 
-  const SideItems = [
-    {
-      name: "Timeline",
-      path: `/project-board/${projectId}/timeline`,
-      element: <Activity />,
-    },
-    {
-      name: "Kanban",
-      path: `/project-board/${projectId}/kanban`,
-      element: <Kanban />,
-    },
-    { name: "Settings", path: "", element: <Settings /> },
-  ];
+  const SideItems = [];
+
+  if (signedIn && role === "user") {
+    SideItems.push(
+      {
+        name: "Timeline",
+        path: `/project-board/${projectId}/timeline`,
+        element: <Activity />,
+      },
+      {
+        name: "Kanban",
+        path: `/project-board/${projectId}/kanban`,
+        element: <Kanban />,
+      },
+      { name: "Settings", path: "", element: <Settings /> }
+    );
+  }
+  if (role === "admin")
+    SideItems.push({
+      name: "Users",
+      path: "signup",
+      element: <UserRoundCog />,
+    });
 
   return (
-    <div className="hidden md:flex h-screen max-sm:absolute">
+    <div className=" hidden md:flex h-screen max-sm:absolute">
       <div
         className={`${
           sideBarOpen ? "w-20" : "w-46"

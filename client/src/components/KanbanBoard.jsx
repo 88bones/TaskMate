@@ -201,7 +201,10 @@ function KanbanBoard() {
                                 }}
                               >
                                 {item.element}
-                                <span className="text-sm">{item.name}</span>
+                                <span className="text-sm">
+                                  {index}
+                                  {item.name}
+                                </span>
                               </div>
                             ))}
                           </div>

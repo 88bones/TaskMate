@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
 import { setUsers } from "../redux/slice";
+import UserDisplay from "./UserDisplay";
 
 const SignUp = () => {
   const validationSchema = yup.object().shape({
@@ -26,6 +27,7 @@ const SignUp = () => {
     email: "",
     password: "",
     repassword: "",
+    department: "",
   });
 
   const [success, setSuccess] = useState();
@@ -61,13 +63,13 @@ const SignUp = () => {
       localStorage.setItem("token", token);
       setSuccess("Signed Up");
       setError("");
-      navigate("/signin");
       setData({
         firstname: "",
         lastname: "",
         email: "",
         password: "",
         repassword: "",
+        department: "",
       });
     } catch (validationErr) {
       if (validationErr.inner) {
@@ -84,85 +86,93 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-black px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
-        <header>
-          <p className="text-2xl md:text-3xl font-extrabold text-center mb-6">
-            Sign Up
-          </p>
-        </header>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
-          <input
-            className={inputStyle}
-            type="text"
-            name="firstname"
-            placeholder="First name"
-            value={data.firstname}
-            onChange={handleChange}
-            required
-          />
-          <input
-            className={inputStyle}
-            type="text"
-            name="lastname"
-            placeholder="Last name"
-            value={data.lastname}
-            onChange={handleChange}
-            required
-          />
-          <input
-            className={inputStyle}
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={data.email}
-            onChange={handleChange}
-            required
-          />
-          {error && <span className="text-red-600 text-sm">{error}</span>}
+    <>
+      <div className="col-span-1 h-fit w-96 p-4">
+        <div className="flex justify-center items-center">
+          <div className="w-full max-w-md bg-white rounded shadow p-4">
+            <header>
+              <p className="text-2xl md:text-3xl font-bold mb-6">Create User</p>
+            </header>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
+              <input
+                className={inputStyle}
+                type="text"
+                name="firstname"
+                placeholder="First name"
+                value={data.firstname}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className={inputStyle}
+                type="text"
+                name="lastname"
+                placeholder="Last name"
+                value={data.lastname}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className={inputStyle}
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={data.email}
+                onChange={handleChange}
+                required
+              />
+              {error && <span className="text-red-600 text-sm">{error}</span>}
 
-          <input
-            className={inputStyle}
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={data.password}
-            onChange={handleChange}
-            required
-          />
-          <input
-            className={inputStyle}
-            type="password"
-            name="repassword"
-            placeholder="Confirm Password"
-            value={data.repassword}
-            onChange={handleChange}
-            required
-          />
-          {error && <span className="text-red-600 text-sm">{error}</span>}
+              <input
+                className={inputStyle}
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={data.password}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className={inputStyle}
+                type="password"
+                name="repassword"
+                placeholder="Confirm Password"
+                value={data.repassword}
+                onChange={handleChange}
+                required
+              />
+              {error && <span className="text-red-600 text-sm">{error}</span>}
+              <select
+                name="department"
+                value={data.department}
+                onChange={handleChange}
+                className={inputStyle}
+                required
+              >
+                <option value="">Select Department</option>
+                <option value="frontend">Frontend</option>
+                <option value="backend">Backend</option>
+                <option value="qa">QA</option>
+                <option value="ui/ux">UI/UX</option>
+                <option value="design">Design</option>
+                <option value="owner">Owner</option>
+              </select>
 
-          <button
-            className="bg-black hover:bg-blue-600 w-full text-white font-bold text-lg md:text-xl py-2 rounded-xl cursor-pointer"
-            type="submit"
-          >
-            Sign Up
-          </button>
-          {formError && (
-            <span className="text-red-600 text-sm">{formError}</span>
-          )}
-
-          <p className="text-center text-sm md:text-base">
-            Already have an account?{" "}
-            <span
-              onClick={() => navigate("/signin")}
-              className="underline cursor-pointer hover:text-blue-600"
-            >
-              Login here!
-            </span>
-          </p>
-        </form>
+              <button
+                className="bg-black hover:bg-blue-600 w-full text-white font-bold text-lg md:text-xl py-2 rounded-xl cursor-pointer"
+                type="submit"
+              >
+                Create
+              </button>
+              {formError && (
+                <span className="text-red-600 text-sm">{formError}</span>
+              )}
+            </form>
+          </div>
+        </div>
       </div>
-    </div>
+      <UserDisplay />
+    </>
   );
 };
 

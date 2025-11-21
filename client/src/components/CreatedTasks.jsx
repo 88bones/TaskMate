@@ -37,7 +37,7 @@ const CreatedTasks = () => {
         {Array.isArray(tasks) && tasks.length > 0 ? (
           <table className="max-sm:hidden w-full max-sm:text-sm text-left">
             <thead>
-              <tr className="text-lg max-sm:text-sm border-b-1 border-gray-200">
+              <tr className="text-lg max-sm:text-sm border-b border-gray-200">
                 <th className="py-2">Task</th>
                 <th>Project</th>
                 <th>Assigned To</th>
@@ -48,10 +48,7 @@ const CreatedTasks = () => {
             </thead>
             <tbody>
               {tasks.map((item, index) => (
-                <tr
-                  key={index}
-                  className="text-left border-b-1 border-gray-200"
-                >
+                <tr key={index} className="text-left border-b border-gray-200">
                   <td className="py-2">{item.title}</td>
                   <td>{item.projectId?.title}</td>
                   <td className="flex flex-col">

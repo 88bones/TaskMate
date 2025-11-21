@@ -4,7 +4,7 @@ import jwtGenerator from "../utils/jwtGenerator.js";
 
 const signUp = async (req, res) => {
   try {
-    const { firstname, lastname, email, password, role } = req.body;
+    const { firstname, lastname, email, password, department, role } = req.body;
 
     const existingEmail = await userModel.findOne({ email });
     if (existingEmail) {
@@ -19,6 +19,7 @@ const signUp = async (req, res) => {
       lastname,
       email,
       password: hashPassword,
+      department,
       role,
     });
 
@@ -35,6 +36,7 @@ const signUp = async (req, res) => {
         lastname: newUser.lastname,
         password: newUser.password,
         email: newUser.email,
+        department: newUser.department,
         role: newUser.role,
       },
     });

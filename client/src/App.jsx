@@ -21,6 +21,8 @@ import KanbanBoard from "./components/KanbanBoard";
 import UpdateUser from "./components/UpdateUser";
 import Profile from "./pages/Profile";
 import UpdateTask from "./components/UpdateTask";
+import AdminDash from "./pages/AdminDash";
+import UserDisplay from "./components/UserDisplay";
 
 function AppWrapper() {
   return (
@@ -46,13 +48,13 @@ function App() {
         {/* ------Home------ */}
         <Route path="/" element={<Home />} />
         {/* ------Profile------ */}
-        <Route path="/profile/:userId/" element={<Profile />}>
+        {/* <Route path="/profile/:userId/" element={<Profile />}>
           <Route path="edit-user" element={<UpdateUser />} />
-        </Route>
+        </Route> */}
         {/* ------DashBoard------ */}
         <Route path="/dashboard" element={<DashBoard />}></Route>
         {/* ------Auths------ */}
-        <Route path="/signup" element={<SignUp />} />
+        {/* <Route path="/signup" element={<SignUp />} /> */}
         <Route path="/signin" element={<SignIn />} />
 
         {/* ------PROJECT-BOARD------ */}
@@ -63,6 +65,13 @@ function App() {
           <Route path="kanban" element={<KanbanBoard />}>
             <Route path="create-task/:projectId" element={<CreateTask />} />
             <Route path="update-task/:taskId" element={<UpdateTask />} />
+          </Route>
+        </Route>
+
+        {/* ------ADMIN DASHBOARD------ */}
+        <Route path="/admin" element={<AdminDash />}>
+          <Route path="signup" element={<SignUp />}>
+            <Route path="edit-user/:userId" element={<UpdateUser />} />
           </Route>
         </Route>
       </Routes>

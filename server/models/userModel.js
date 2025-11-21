@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema(
     },
     department: {
       type: String,
-      enum: ["ui/ux", "design", "frontend", "backend", "owner", "qa"],
+      enum: ["ui/ux", "frontend", "backend", "owner", "qa"],
     },
     role: {
       type: String,

@@ -8,8 +8,9 @@ import AssignedProject from "../components/AssignedProject";
 import AllProjects from "../components/AllProjects";
 
 const DashBoard = () => {
-  const { signedIn } = useSelector((state) => state.user);
+  const { signedIn, role } = useSelector((state) => state.user);
 
+  console.log(role);
   const navigate = useNavigate();
 
   const [isCreate, setIsCreate] = useState(false);

@@ -6,6 +6,7 @@ const initialState = {
   role: localStorage.getItem("role") || "",
   signedIn: !!localStorage.getItem("firstname"),
   email: localStorage.getItem("email") || "",
+  department: localStorage.getItem("department" || ""),
   _id: localStorage.getItem("_id") || "",
   tasks: [],
   users: [],
@@ -17,18 +18,22 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     signin(state, action) {
-      const { firstname, lastname, role, email, _id } = action.payload;
+      const { firstname, lastname, role, email, department, _id } =
+        action.payload;
       state.firstname = firstname;
       state.lastname = lastname;
       state.role = role;
       state.email = email;
+      state.department = department;
       state._id = _id;
+
       state.signedIn = true;
 
       localStorage.setItem("firstname", firstname);
       localStorage.setItem("lastname", lastname);
       localStorage.setItem("role", role);
       localStorage.setItem("email", email);
+      localStorage.setItem("department", department);
       localStorage.setItem("_id", _id);
     },
     signout(state) {
@@ -57,6 +62,10 @@ const userSlice = createSlice({
       state.email = action.payload;
       localStorage.setItem("email", action.payload);
     },
+    updateDepartment(state, action) {
+      state.department = action.payload;
+      localStorage.setItem("department", action.payload);
+    },
     setTasks(state, action) {
       state.tasks = action.payload;
     },
@@ -75,6 +84,7 @@ export const {
   updateFirstname,
   updateLastname,
   updateEmail,
+  updateDepartment,
   updateRole,
   setTasks,
   setUsers,

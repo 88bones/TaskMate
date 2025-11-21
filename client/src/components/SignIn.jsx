@@ -45,6 +45,7 @@ const SignIn = () => {
             lastname: user.lastname,
             email: user.email,
             role: user.role,
+            department: user.department,
             _id: user._id,
           })
         );

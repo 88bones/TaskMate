@@ -15,8 +15,11 @@ const NavBar = () => {
     _id: userId,
     firstname,
     lastname,
+    role,
     signedIn,
   } = useSelector((state) => state.user);
+
+  console.log(role);
 
   const handleSignOut = () => {
     dispatch(signout());
@@ -30,7 +33,14 @@ const NavBar = () => {
           <header className="px-4 font-extrabold text-3xl flex justify-between max-sm:w-dvw ">
             TaskMate{" "}
           </header>
-
+          {role === "admin" && (
+            <span
+              className="items-center flex hover:cursor-pointer"
+              onClick={() => navigate("/admin")}
+            >
+              Admin
+            </span>
+          )}
           {!signedIn ? (
             <div className="hidden md:flex justify-around w-64">
               <button

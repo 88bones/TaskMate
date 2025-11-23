@@ -29,7 +29,7 @@ const UserDisplay = () => {
   }, []);
 
   return (
-    <div className="p-4 col-span-2 w-full">
+    <div className="p-4 col-span-2">
       <div className="h-fit shadow p-4 rounded">
         <header className="font-bold text-xl">
           <h1>All users</h1>
@@ -37,7 +37,7 @@ const UserDisplay = () => {
 
         <div className="mt-4 relative">
           {Array.isArray(users) && users.length > 0 ? (
-            <ul className="flex rounded h-88 flex-col gap-4 overflow-scroll overflow-x-hidden">
+            <ul className="flex rounded h-100 flex-col gap-4 overflow-scroll overflow-x-hidden">
               {users.map((user) => (
                 <li
                   key={user._id}

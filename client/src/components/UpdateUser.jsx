@@ -1,15 +1,15 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { getOneUser } from "../services/getUser";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { updateUser } from "../services/updateUser";
+import { useParams, useNavigate } from "react-router-dom";
 
 const UpdateUser = () => {
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { userId } = useParams();
-
-  console.log(userId);
+  const navigate = useNavigate();
 
   const inputStyle =
     "w-full border border-gray-500 rounded mb-2 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black";
@@ -21,17 +21,12 @@ const UpdateUser = () => {
     department: "",
   });
 
+  // Fetch one user
   useEffect(() => {
     getOneUser(userId)
       .then((res) => {
         if (res.message) {
           setError(res.message);
-          setData({
-            firstname: "",
-            lastname: "",
-            email: "",
-            department: "",
-          });
         } else {
           setData({
             firstname: res.firstname,
@@ -44,18 +39,57 @@ const UpdateUser = () => {
       })
       .catch((err) => {
         console.log(err);
+        setError("Failed to load user data");
       });
   }, [userId]);
 
-  const handleChange = () => {};
+  // Handle input change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Submit update
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      // Get current user ID from localStorage or context
+      const currentUserId = localStorage.getItem("userId"); // Adjust based on your auth setup
+
+      const payload = {
+        ...data,
+        createdBy: currentUserId, // Backend expects this field
+      };
+
+      const res = await updateUser(userId, payload);
+      setSuccess(res.message || "User updated successfully");
+
+      // Navigate back or reload after a delay
+      setTimeout(() => {
+        navigate("/admin/signup");
+        window.location.reload();
+      }, 1500);
+    } catch (err) {
+      setError(err.message || "Update failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="w-full backdrop-blur-xl flex items-center justify-center flex-col">
+    <div className="w-full backdrop-blur-xl flex items-center justify-center flex-col p-4">
       <header>
-        <p className="font-bold text-xl">Edit Profile</p>
+        <p className="font-bold text-xl mb-4">Edit User</p>
       </header>
 
-      <form action="">
+      <form onSubmit={handleSubmit} className="w-96">
         <input
           type="text"
           name="firstname"
@@ -63,7 +97,9 @@ const UpdateUser = () => {
           value={data.firstname}
           onChange={handleChange}
           className={inputStyle}
+          required
         />
+
         <input
           type="text"
           name="lastname"
@@ -71,6 +107,17 @@ const UpdateUser = () => {
           value={data.lastname}
           onChange={handleChange}
           className={inputStyle}
+          required
+        />
+
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={data.email}
+          onChange={handleChange}
+          className={inputStyle}
+          required
         />
 
         <select
@@ -85,16 +132,19 @@ const UpdateUser = () => {
           <option value="backend">Backend</option>
           <option value="qa">QA</option>
           <option value="ui/ux">UI/UX</option>
-          <option value="design">Design</option>
           <option value="owner">Owner</option>
         </select>
 
         <button
           type="submit"
-          className="w-full bg-black rounded p-2 text-white"
+          className="w-full bg-black rounded p-2 text-white mt-2 disabled:bg-gray-400"
+          disabled={loading}
         >
-          Update
+          {loading ? "Updating..." : "Update"}
         </button>
+
+        {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+        {success && <p className="text-green-600 text-sm mt-2">{success}</p>}
       </form>
     </div>
   );

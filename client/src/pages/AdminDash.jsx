@@ -8,7 +8,7 @@ const AdminDash = () => {
   return (
     <div className="flex">
       <SideBar />
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-3 max-md:grid-cols-1">
         <Outlet />
       </div>
     </div>

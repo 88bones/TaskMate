@@ -16,6 +16,7 @@ const TaskSchema = new mongoose.Schema(
       enum: ["low", "medium", "high"],
     },
     dueDate: Date,
+    attachments: [String],
     assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
     sprintId: { type: mongoose.Schema.Types.ObjectId, ref: "Sprint" },

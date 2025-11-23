@@ -26,12 +26,43 @@ export const updateTaskStatus = async (taskId, status) => {
   }
 };
 
-export const updateTask = async (taskId, payload) => {
+export const updateTask = async (taskId, payload, files = null) => {
   try {
-    const res = await axios.put(
-      `http://localhost:3001/api/task/update-task/${taskId}`,
-      payload
-    );
+    let res;
+    
+    // If files are provided, use FormData
+    if (files && files.length > 0) {
+      const formData = new FormData();
+      
+      // Append all form fields
+      Object.keys(payload).forEach((key) => {
+        if (payload[key] !== null && payload[key] !== undefined) {
+          formData.append(key, payload[key]);
+        }
+      });
+      
+      // Append files
+      Array.from(files).forEach((file) => {
+        formData.append("attachments", file);
+      });
+      
+      res = await axios.put(
+        `http://localhost:3001/api/task/update-task/${taskId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    } else {
+      // Regular JSON request if no files
+      res = await axios.put(
+        `http://localhost:3001/api/task/update-task/${taskId}`,
+        payload
+      );
+    }
+    
     return res.data;
   } catch (err) {
     throw err;

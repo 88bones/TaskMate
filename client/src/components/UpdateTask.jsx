@@ -5,6 +5,7 @@ import { getOneTask } from "../services/getTask";
 import { getTeam } from "../services/getTeam";
 import { updateTask } from "../services/postTask";
 import Select from "react-select";
+import { Paperclip, X, File } from "lucide-react";
 
 const UpdateTask = () => {
   const inputStyle =
@@ -27,6 +28,8 @@ const UpdateTask = () => {
   const [team, setTeam] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [existingAttachments, setExistingAttachments] = useState([]);
 
   /** Fetch task data */
   useEffect(() => {
@@ -43,11 +46,13 @@ const UpdateTask = () => {
             description: res.description,
             priority: res.priority,
             dueDate: res.dueDate?.split("T")[0],
-            assignedTo: res.assignedTo,
-            projectId: res.projectId,
+            assignedTo: res.assignedTo ? String(res.assignedTo) : "",
+            projectId: res.projectId ? String(res.projectId) : "",
             createdBy: userId,
           });
-          console.log(res);
+          if (res.attachments && Array.isArray(res.attachments)) {
+            setExistingAttachments(res.attachments);
+          }
         }
       })
       .catch((err) => console.error(err));
@@ -69,13 +74,11 @@ const UpdateTask = () => {
       .catch((err) => console.error(err));
   }, [projectId]);
 
-  /** Convert team to dropdown options */
   const userOptions = team.map((member) => ({
     value: member._id,
     label: `${member.firstname} ${member.lastname}`,
   }));
 
-  /** When dropdown changes */
   const handelAssignChange = (option) => {
     setData((prev) => ({
       ...prev,
@@ -83,7 +86,6 @@ const UpdateTask = () => {
     }));
   };
 
-  /** Handle text inputs */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => ({
@@ -92,26 +94,58 @@ const UpdateTask = () => {
     }));
   };
 
-  /** Submit form */
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const payload = {
-      ...data,
-      dueDate: data.dueDate,
-      createdBy: userId,
-    };
-
-    updateTask(taskId, payload)
-      .then(() => {
-        setSuccess("Task Updated");
-        setError("");
-        setTimeout(() => setSuccess(""), 2000);
-      })
-      .catch(() => setError("Failed to update task"));
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedFiles((prev) => [...prev, ...files]);
   };
 
-  /** Find selected user option */
+  const removeSelectedFile = (index) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const getFileName = (filePath) => {
+    if (typeof filePath === "string") {
+      return filePath.split("/").pop();
+    }
+    return filePath?.name || "Unknown file";
+  };
+
+  /** Submit form */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Use FormData to send files
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("priority", data.priority);
+      formData.append("assignedTo", data.assignedTo);
+      formData.append("dueDate", data.dueDate);
+      formData.append("createdBy", userId);
+
+      // Append selected files
+      selectedFiles.forEach((file) => {
+        formData.append("attachments", file);
+      });
+
+      const res = await updateTask(taskId, formData);
+      setSuccess("Task Updated");
+      setError("");
+
+      // Update existing attachments
+      if (res.data?.attachments) {
+        setExistingAttachments(res.data.attachments);
+      }
+
+      // Clear selected files
+      setSelectedFiles([]);
+      setTimeout(() => setSuccess(""), 2000);
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to update task");
+    }
+  };
+
   const selectedUserOption =
     userOptions.find((option) => option.value === data.assignedTo) || null;
 
@@ -167,11 +201,88 @@ const UpdateTask = () => {
         <input
           type="date"
           name="dueDate"
-          className="border rounded px-2 py-1 w-full"
+          className="border rounded px-2 py-1 w-full mb-2"
           value={data.dueDate}
           onChange={handleChange}
           required
         />
+
+        {/* Existing Attachments */}
+        {existingAttachments.length > 0 && (
+          <div className="mb-3">
+            <label className="mr-2 font-semibold block mb-2">
+              Existing Attachments:
+            </label>
+            <div className="space-y-2">
+              {existingAttachments.map((attachment, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-2 bg-gray-100 rounded border"
+                >
+                  <div className="flex items-center gap-2 flex-1">
+                    <File size={16} className="text-gray-600" />
+                    <a
+                      href={`http://localhost:3001${attachment}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-blue-600 hover:underline truncate"
+                    >
+                      {getFileName(attachment)}
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* File Upload */}
+        <div className="mb-3">
+          <label className="mr-2 font-semibold block mb-2">
+            Add Attachments:
+          </label>
+          <div className="border border-gray-500 rounded p-2">
+            <input
+              type="file"
+              multiple
+              onChange={handleFileChange}
+              className="w-full text-sm"
+              accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip,.rar"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Max 10 files, 10MB each. Allowed: images, documents, archives
+            </p>
+          </div>
+
+          {/* Selected Files Preview */}
+          {selectedFiles.length > 0 && (
+            <div className="mt-2 space-y-1">
+              {selectedFiles.map((file, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-2 bg-blue-50 rounded border border-blue-200"
+                >
+                  <div className="flex items-center gap-2 flex-1">
+                    <Paperclip size={14} className="text-blue-600" />
+                    <span className="text-sm text-gray-700 truncate">
+                      {file.name}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      ({(file.size / 1024).toFixed(2)} KB)
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeSelectedFile(index)}
+                    className="ml-2 p-1 hover:bg-red-100 rounded"
+                  >
+                    <X size={14} className="text-red-600" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         <button
           className="mt-3 bg-black w-full text-white font-bold text-md md:text-xl py-2 rounded-xl cursor-pointer"

@@ -43,7 +43,7 @@ const SideBar = ({ projectId }) => {
     });
 
   return (
-    <div className=" hidden md:flex h-screen max-sm:absolute">
+    <div className=" hidden md:flex h-screen max-sm:absolute bg-gray-700 text-white shadow-lg">
       <div
         className={`${
           sideBarOpen ? "w-20" : "w-46"

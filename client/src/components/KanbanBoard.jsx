@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Plus, X, EllipsisVertical, Trash, Pencil } from "lucide-react";
+import {
+  Plus,
+  X,
+  EllipsisVertical,
+  Trash,
+  Pencil,
+  Filter,
+  XCircle,
+} from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate, Outlet } from "react-router-dom";
 import { getTasks } from "../services/getTask";
 import { updateTaskStatus } from "../services/postTask";
+import { getTeam } from "../services/getTeam";
+import { getUser } from "../services/getUser";
+import Select from "react-select";
 
 function KanbanBoard() {
   const { selectedProject } = useSelector((state) => state.user);
@@ -31,6 +42,82 @@ function KanbanBoard() {
     { id: 5, title: "Done", status: "done", color: "bg-green-500", tasks: [] },
   ]);
   const [openTaskOptions, setOpenTaskOptions] = useState(null); // track which task options are open
+  const [allTasks, setAllTasks] = useState([]); // Store all tasks for filtering
+  const [teamMembers, setTeamMembers] = useState([]); // Store team members
+  const [allUsers, setAllUsers] = useState([]); // Store all users
+  const [filterCreatedBy, setFilterCreatedBy] = useState(null); // Filter by creator
+  const [filterAssignedTo, setFilterAssignedTo] = useState(null); // Filter by assignee
+
+  // Function to apply filters and update columns
+  const applyFilters = React.useCallback(
+    (tasks) => {
+      let filteredTasks = [...tasks];
+
+      // Filter by creator
+      if (filterCreatedBy) {
+        filteredTasks = filteredTasks.filter((task) => {
+          const createdById =
+            typeof task.createdBy === "object"
+              ? task.createdBy._id || task.createdBy
+              : task.createdBy;
+          return String(createdById) === String(filterCreatedBy.value);
+        });
+      }
+
+      // Filter by assignee
+      if (filterAssignedTo) {
+        filteredTasks = filteredTasks.filter((task) => {
+          if (!task.assignedTo) return false; // Exclude tasks with no assignee
+          const assignedToId =
+            typeof task.assignedTo === "object"
+              ? task.assignedTo._id || task.assignedTo
+              : task.assignedTo;
+          return String(assignedToId) === String(filterAssignedTo.value);
+        });
+      }
+
+      // Update columns with filtered tasks - use initial column structure
+      const columnStructure = [
+        { id: 1, title: "New", status: "new", color: "bg-white", tasks: [] },
+        {
+          id: 2,
+          title: "To Do",
+          status: "todo",
+          color: "bg-red-500",
+          tasks: [],
+        },
+        {
+          id: 3,
+          title: "In Progress",
+          status: "in-progress",
+          color: "bg-orange-500",
+          tasks: [],
+        },
+        {
+          id: 4,
+          title: "Review",
+          status: "review",
+          color: "bg-yellow-500",
+          tasks: [],
+        },
+        {
+          id: 5,
+          title: "Done",
+          status: "done",
+          color: "bg-green-500",
+          tasks: [],
+        },
+      ];
+
+      filteredTasks.forEach((task) => {
+        const col = columnStructure.find((c) => c.status === task.status);
+        if (col) col.tasks.push({ id: task._id, text: task.title, ...task });
+      });
+
+      setColumns(columnStructure);
+    },
+    [filterCreatedBy, filterAssignedTo]
+  );
 
   // DRAG & DROP HANDLERS
   const handleDragStart = (e, colId, taskId) => {
@@ -63,6 +150,29 @@ function KanbanBoard() {
 
   const allowDrop = (e) => e.preventDefault();
 
+  // GET TEAM MEMBERS AND USERS
+  useEffect(() => {
+    if (!projectId) return;
+
+    // Fetch team members
+    getTeam(projectId)
+      .then((res) => {
+        if (res.team && Array.isArray(res.team)) {
+          setTeamMembers(res.team);
+        }
+      })
+      .catch((err) => console.log("Failed to fetch team:", err));
+
+    // Fetch all users
+    getUser()
+      .then((users) => {
+        if (Array.isArray(users)) {
+          setAllUsers(users);
+        }
+      })
+      .catch((err) => console.log("Failed to fetch users:", err));
+  }, [projectId]);
+
   // GET TASKS
   useEffect(() => {
     if (!projectId) return;
@@ -70,38 +180,113 @@ function KanbanBoard() {
     getTasks(projectId)
       .then((tasks) => {
         if (!Array.isArray(tasks)) return;
-        const updated = columns.map((col) => ({ ...col, tasks: [] }));
-
-        tasks.forEach((task) => {
-          const col = updated.find((c) => c.status === task.status);
-          if (col) col.tasks.push({ id: task._id, text: task.title, ...task });
-        });
-
-        setColumns(updated);
+        setAllTasks(tasks); // Store all tasks
+        applyFilters(tasks); // Apply filters and update columns
       })
       .catch((err) => console.log(err));
   }, [projectId]);
 
-  const addNewTask = (task) => {
-    setColumns((prev) =>
-      prev.map((col) => {
-        if (col.status === task.status) {
-          return {
-            ...col,
-            tasks: [...col.tasks, { id: task._id, text: task.title, ...task }],
-          };
-        }
-        return col;
-      })
-    );
+  // Apply filters when filter values change or allTasks updates
+  useEffect(() => {
+    if (allTasks.length > 0) {
+      applyFilters(allTasks);
+    }
+  }, [filterCreatedBy, filterAssignedTo, allTasks.length, applyFilters]);
+
+  // Clear all filters
+  const clearFilters = () => {
+    setFilterCreatedBy(null);
+    setFilterAssignedTo(null);
   };
+
+  const addNewTask = (task) => {
+    // Add to allTasks for filtering
+    setAllTasks((prev) => [...prev, task]);
+  };
+
+  // Prepare user options for filters
+  const creatorOptions = allUsers.map((user) => ({
+    value: user._id,
+    label: `${user.firstname} ${user.lastname}`,
+  }));
+
+  const assigneeOptions = teamMembers.map((member) => ({
+    value: member._id,
+    label: `${member.firstname} ${member.lastname}`,
+  }));
+
+  // Check if any filters are active
+  const hasActiveFilters = filterCreatedBy || filterAssignedTo;
 
   return (
     <div className="relative">
       <header className="p-4 font-bold text-xl text-center sm:text-left">
         {selectedProject?.title}
       </header>
+
+      {/* Filter Section */}
+      <div className="px-4 pb-2 flex flex-wrap gap-3 items-end">
+        <div className="flex items-center gap-2">
+          <Filter size={18} className="text-gray-600" />
+          <span className="text-sm font-semibold text-gray-700">Filters:</span>
+        </div>
+
+        {/* Filter by Creator */}
+        <div className="min-w-[180px]">
+          <label className="text-xs text-gray-600 mb-1 block">Created By</label>
+          <Select
+            value={filterCreatedBy}
+            onChange={setFilterCreatedBy}
+            options={creatorOptions}
+            placeholder="All creators"
+            isClearable
+            className="text-sm"
+            styles={{
+              control: (base) => ({
+                ...base,
+                minHeight: "36px",
+                height: "36px",
+              }),
+            }}
+          />
+        </div>
+
+        {/* Filter by Assignee */}
+        <div className="min-w-[180px]">
+          <label className="text-xs text-gray-600 mb-1 block">
+            Assigned To
+          </label>
+          <Select
+            value={filterAssignedTo}
+            onChange={setFilterAssignedTo}
+            options={assigneeOptions}
+            placeholder="All assignees"
+            isClearable
+            className="text-sm"
+            styles={{
+              control: (base) => ({
+                ...base,
+                minHeight: "36px",
+                height: "36px",
+              }),
+            }}
+          />
+        </div>
+
+        {/* Clear Filters Button */}
+        {hasActiveFilters && (
+          <button
+            onClick={clearFilters}
+            className="flex items-center gap-1 px-3 py-2 text-sm bg-gray-200 hover:bg-gray-300 rounded border border-gray-300 transition-colors"
+          >
+            <XCircle size={14} />
+            Clear Filters
+          </button>
+        )}
+      </div>
+
       <div className="overflow-x-auto">
+        <div></div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 p-4 min-w-[600px]">
           {columns.map((col) => (
             <div

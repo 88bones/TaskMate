@@ -54,7 +54,7 @@ const AllProjects = () => {
                   dispatch(setSelectedProject(project));
                   navigate(`/project-board/${project._id}/timeline`);
                 }}
-                className="font-medium hover:cursor-pointer border rounded px-2 border-gray-200 hover:shadow shadow-blue-200"
+                className="font-medium hover:cursor-pointer border rounded px-2 bg-gray-100 border-gray-200 hover:shadow shadow-blue-200"
               >
                 <div className="flex flex-col p-4 gap-6">
                   <div className="flex justify-between">

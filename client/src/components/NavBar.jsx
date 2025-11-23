@@ -6,7 +6,7 @@ import { Bell } from "lucide-react";
 
 const NavBar = () => {
   const buttonStyle =
-    "px-2 font-semibold rounded hover:bg-black hover:text-white transition-colors cursor-pointer";
+    "px-4 h-fit rounded hover:bg-black hover:text-white transition-colors cursor-pointer";
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className=" flex shadow">
+      <nav className=" flex shadow bg-blue-50">
         <div className="flex justify-between w-full max-w-full mx-auto">
           <header className="px-4 font-extrabold text-3xl flex justify-between max-sm:w-dvw ">
             TaskMate{" "}
@@ -42,18 +42,12 @@ const NavBar = () => {
             </span>
           )}
           {!signedIn ? (
-            <div className="hidden md:flex justify-around w-64">
+            <div className="hidden md:flex justify-around items-center w-64">
               <button
                 className={buttonStyle}
                 onClick={() => navigate("/signin")}
               >
                 Sign In
-              </button>
-              <button
-                className={buttonStyle}
-                onClick={() => navigate("/signup")}
-              >
-                Sign Up
               </button>
             </div>
           ) : (

@@ -46,10 +46,11 @@ const UpdateTask = () => {
             description: res.description,
             priority: res.priority,
             dueDate: res.dueDate?.split("T")[0],
-            assignedTo: res.assignedTo ? String(res.assignedTo) : "",
+            assignedTo: res.assignedTo?._id ? String(res.assignedTo._id) : "",
             projectId: res.projectId ? String(res.projectId) : "",
             createdBy: userId,
           });
+
           if (res.attachments && Array.isArray(res.attachments)) {
             setExistingAttachments(res.attachments);
           }
@@ -132,7 +133,9 @@ const UpdateTask = () => {
       const res = await updateTask(taskId, formData);
       setSuccess("Task Updated");
       setError("");
-
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
       // Update existing attachments
       if (res.data?.attachments) {
         setExistingAttachments(res.data.attachments);

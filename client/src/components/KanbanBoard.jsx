@@ -98,125 +98,121 @@ function KanbanBoard() {
 
   return (
     <div className="relative">
-      <header className="p-4 font-bold text-xl">
+      <header className="p-4 font-bold text-xl text-center sm:text-left">
         {selectedProject?.title}
       </header>
-      <div className="grid grid-cols-5 gap-2 p-4">
-        {columns.map((col) => (
-          <div
-            key={col.id}
-            className="p-4 bg-gray-100 rounded shadow"
-            onDragOver={allowDrop}
-            onDrop={(e) => handleDrop(e, col.id)}
-          >
-            {/* Column Header */}
-            <div className="flex items-center mb-3">
-              <span className={`h-4 w-2 rounded mr-2 ${col.color}`}></span>
-              <h2 className="text-xl font-semibold flex-1">{col.title}</h2>
-              <button
-                className="p-2 rounded-full hover:bg-gray-200"
-                onClick={() => {
-                  navigate(`create-task/${projectId}?status=${col.status}`);
-                  setVisible(true);
-                }}
-              >
-                <Plus className="hover:cursor-pointer w-5 h-5" />
-              </button>
-            </div>
+      <div className="overflow-x-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 p-4 min-w-[600px]">
+          {columns.map((col) => (
+            <div
+              key={col.id}
+              className="p-3 bg-gray-100 rounded shadow min-w-[200px]"
+              onDragOver={allowDrop}
+              onDrop={(e) => handleDrop(e, col.id)}
+            >
+              {/* Column Header */}
+              <div className="flex items-center mb-3">
+                <span className={`h-4 w-2 rounded mr-2 ${col.color}`}></span>
+                <h2 className="text-lg sm:text-xl font-semibold flex-1">
+                  {col.title}
+                </h2>
+                <button
+                  className="p-2 rounded-full hover:bg-gray-200"
+                  onClick={() => {
+                    navigate(`create-task/${projectId}?status=${col.status}`);
+                    setVisible(true);
+                  }}
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+              </div>
 
-            {/* Tasks */}
-            <div className="space-y-3">
-              {col.tasks.map((task) => {
-                const ActionItems = [
-                  {
-                    name: "Delete Task",
-                    path: "",
-                    element: <Trash />,
-                  },
-                  {
-                    name: "Edit Task",
-                    path: `update-task/${task._id}`,
-                    element: <Pencil />,
-                  },
-                ];
+              {/* Tasks */}
+              <div className="space-y-2">
+                {col.tasks.map((task) => {
+                  const ActionItems = [
+                    { name: "Delete Task", path: "", element: <Trash /> },
+                    {
+                      name: "Edit Task",
+                      path: `update-task/${task._id}`,
+                      element: <Pencil />,
+                    },
+                  ];
+                  return (
+                    <div
+                      key={task.id}
+                      className="bg-white py-3 px-2 rounded-md shadow border cursor-move relative"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, col.id, task.id)}
+                    >
+                      <div className="flex justify-between">
+                        <div>
+                          <p
+                            onClick={() => {
+                              navigate(`update-task/${task._id}`);
+                              setVisible(true);
+                            }}
+                            className="hover:cursor-pointer hover:text-blue-500 font-light text-sm sm:text-base"
+                          >
+                            {task.text}
+                          </p>
+                          <p className="text-xs mt-1">
+                            {task.priority === "medium" ? (
+                              <span className="bg-purple-500 text-white px-2 rounded text-[10px] sm:text-xs">
+                                {task.priority.toUpperCase()}
+                              </span>
+                            ) : task.priority === "high" ? (
+                              <span className="bg-red-500 text-white px-2 rounded text-[10px] sm:text-xs">
+                                {task.priority.toUpperCase()}
+                              </span>
+                            ) : (
+                              <span className="bg-blue-500 text-white px-2 rounded text-[10px] sm:text-xs">
+                                {task.priority.toUpperCase()}
+                              </span>
+                            )}
+                          </p>
+                        </div>
 
-                return (
-                  <div
-                    key={task.id}
-                    className="bg-white py-4 px-2 rounded-md shadow border cursor-move relative"
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, col.id, task.id)}
-                  >
-                    <div className="flex justify-between">
-                      <div>
-                        <p
-                          onClick={() => {
-                            navigate(`update-task/${task._id}`);
-                            setVisible(true);
-                          }}
-                          className="hover:cursor-pointer hover:text-blue-500 font-light text-sm"
-                        >
-                          {task.text}
-                        </p>
-                        <p className="text-xs mt-1">
-                          {task.priority === "medium" ? (
-                            <span className="bg-purple-500 text-white px-2 rounded">
-                              {task.priority.toUpperCase()}
-                            </span>
-                          ) : task.priority === "high" ? (
-                            <span className="bg-red-500 text-white px-2 rounded">
-                              {task.priority.toUpperCase()}
-                            </span>
-                          ) : (
-                            <span className="bg-blue-500 text-white px-2 rounded">
-                              {task.priority.toUpperCase()}
-                            </span>
+                        {/* Options */}
+                        <div className="relative">
+                          <EllipsisVertical
+                            className="hover:cursor-pointer"
+                            size={16}
+                            onClick={() =>
+                              setOpenTaskOptions((prev) =>
+                                prev === task.id ? null : task.id
+                              )
+                            }
+                          />
+                          {openTaskOptions === task.id && (
+                            <div className="absolute right-0 top-5 bg-white shadow-lg rounded w-32 sm:w-36 p-2 z-10 space-y-1">
+                              {ActionItems.map((item, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-center gap-2 p-1 hover:bg-gray-100 rounded cursor-pointer text-sm"
+                                  onClick={() => {
+                                    if (item.path) {
+                                      navigate(item.path);
+                                      setVisible(true);
+                                    } else console.log(item.name); // Delete placeholder
+                                    setOpenTaskOptions(null);
+                                  }}
+                                >
+                                  {item.element}
+                                  <span>{item.name}</span>
+                                </div>
+                              ))}
+                            </div>
                           )}
-                        </p>
-                      </div>
-
-                      {/* Options */}
-                      <div className="relative">
-                        <EllipsisVertical
-                          className="hover:cursor-pointer"
-                          size={16}
-                          onClick={() =>
-                            setOpenTaskOptions((prev) =>
-                              prev === task.id ? null : task.id
-                            )
-                          }
-                        />
-                        {openTaskOptions === task.id && (
-                          <div className="absolute right-0 top-5 bg-white shadow-lg rounded w-36 p-2 z-10 space-y-1">
-                            {ActionItems.map((item, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center gap-2 p-1 hover:bg-gray-100 rounded cursor-pointer"
-                                onClick={() => {
-                                  if (item.path) {
-                                    navigate(item.path);
-                                    setVisible(true);
-                                  } else console.log(item.name); // placeholder for Delete
-                                  setOpenTaskOptions(null);
-                                }}
-                              >
-                                {item.element}
-                                <span className="text-sm">
-                                  {index}
-                                  {item.name}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Task Modal */}

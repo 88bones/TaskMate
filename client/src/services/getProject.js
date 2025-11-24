@@ -32,3 +32,15 @@ export const getAssignedProject = async (userId) => {
     throw err;
   }
 };
+
+export const getProjects = async () => {
+  try {
+    const res = await axios.get(
+      `http://localhost:3001/api/project/get-projects/`
+    );
+
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};

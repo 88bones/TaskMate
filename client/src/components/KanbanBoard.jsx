@@ -41,12 +41,12 @@ function KanbanBoard() {
     },
     { id: 5, title: "Done", status: "done", color: "bg-green-500", tasks: [] },
   ]);
-  const [openTaskOptions, setOpenTaskOptions] = useState(null); // track which task options are open
-  const [allTasks, setAllTasks] = useState([]); // Store all tasks for filtering
-  const [teamMembers, setTeamMembers] = useState([]); // Store team members
-  const [allUsers, setAllUsers] = useState([]); // Store all users
-  const [filterCreatedBy, setFilterCreatedBy] = useState(null); // Filter by creator
-  const [filterAssignedTo, setFilterAssignedTo] = useState(null); // Filter by assignee
+  const [openTaskOptions, setOpenTaskOptions] = useState(null);
+  const [allTasks, setAllTasks] = useState([]);
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [filterCreatedBy, setFilterCreatedBy] = useState(null);
+  const [filterAssignedTo, setFilterAssignedTo] = useState(null);
 
   // Function to apply filters and update columns
   const applyFilters = React.useCallback(
@@ -76,7 +76,7 @@ function KanbanBoard() {
         });
       }
 
-      // Update columns with filtered tasks - use initial column structure
+      // Update columns with filtered tasks
       const columnStructure = [
         { id: 1, title: "New", status: "new", color: "bg-white", tasks: [] },
         {
@@ -180,8 +180,8 @@ function KanbanBoard() {
     getTasks(projectId)
       .then((tasks) => {
         if (!Array.isArray(tasks)) return;
-        setAllTasks(tasks); // Store all tasks
-        applyFilters(tasks); // Apply filters and update columns
+        setAllTasks(tasks);
+        applyFilters(tasks);
       })
       .catch((err) => console.log(err));
   }, [projectId]);
@@ -199,10 +199,17 @@ function KanbanBoard() {
     setFilterAssignedTo(null);
   };
 
-  const addNewTask = (task) => {
-    // Add to allTasks for filtering
-    setAllTasks((prev) => [...prev, task]);
-  };
+  const addNewTask = React.useCallback((task) => {
+    // Format task to match the structure used in columns
+    const formattedTask = {
+      id: task._id,
+      text: task.title,
+      ...task,
+    };
+
+    // Add to allTasks - the useEffect will automatically apply filters
+    setAllTasks((prev) => [...prev, formattedTask]);
+  }, []);
 
   // Prepare user options for filters
   const creatorOptions = allUsers.map((user) => ({
@@ -225,7 +232,7 @@ function KanbanBoard() {
       </header>
 
       {/* Filter Section */}
-      <div className="px-4 pb-2 flex flex-wrap gap-3 items-end">
+      <div className="px-4 pb-2 flex flex-wrap gap-3 items-center">
         <div className="flex items-center gap-2">
           <Filter size={18} className="text-gray-600" />
           <span className="text-sm font-semibold text-gray-700">Filters:</span>
@@ -233,7 +240,7 @@ function KanbanBoard() {
 
         {/* Filter by Creator */}
         <div className="min-w-[180px]">
-          <label className="text-xs text-gray-600 mb-1 block">Created By</label>
+          {/* <label className="text-xs text-gray-600 mb-1 block">Created By</label> */}
           <Select
             value={filterCreatedBy}
             onChange={setFilterCreatedBy}
@@ -253,9 +260,9 @@ function KanbanBoard() {
 
         {/* Filter by Assignee */}
         <div className="min-w-[180px]">
-          <label className="text-xs text-gray-600 mb-1 block">
+          {/* <label className="text-xs text-gray-600 mb-1 block">
             Assigned To
-          </label>
+          </label> */}
           <Select
             value={filterAssignedTo}
             onChange={setFilterAssignedTo}

@@ -133,9 +133,7 @@ const UpdateTask = () => {
       const res = await updateTask(taskId, formData);
       setSuccess("Task Updated");
       setError("");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+
       // Update existing attachments
       if (res.data?.attachments) {
         setExistingAttachments(res.data.attachments);

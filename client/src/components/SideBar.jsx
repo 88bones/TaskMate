@@ -6,6 +6,8 @@ import {
   Kanban,
   Activity,
   User,
+  FolderKanban,
+  House,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,14 +38,18 @@ const SideBar = ({ projectId }) => {
     );
   }
   if (role === "admin")
-    SideItems.push({
-      name: "Users",
-      path: "signup",
-      element: <UserRoundCog />,
-    });
+    SideItems.push(
+      { name: "Dashboard", path: "admin-dash", element: <House /> },
+      {
+        name: "Users",
+        path: "signup",
+        element: <UserRoundCog />,
+      },
+      { name: "Projects", path: "admin-projects", element: <FolderKanban /> }
+    );
 
   return (
-    <div className=" hidden md:flex h-screen max-sm:absolute bg-gray-700 text-white shadow-lg">
+    <div className=" hidden md:flex h-dvh max-sm:absolute bg-gray-700 text-white shadow-lg sticky top-0">
       <div
         className={`${
           sideBarOpen ? "w-20" : "w-46"

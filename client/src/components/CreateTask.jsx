@@ -66,11 +66,22 @@ const CreateTask = () => {
     e.preventDefault();
 
     try {
-      const newTask = await postTask(userId, projectId, data);
+      const taskData = {
+        ...data,
+        status: status || data.status || "new",
+      };
 
-      dispatch(setTasks([...tasks, newTask]));
-      if (newTask.task) {
-        addNewTask(newTask.task);
+      const response = await postTask(userId, projectId, taskData);
+
+      dispatch(setTasks([...tasks, response]));
+
+      // Call addNewTask if it exists and task is in response
+      if (addNewTask && response.task) {
+        try {
+          addNewTask(response.task);
+        } catch (err) {
+          console.error("Error adding task to board:", err);
+        }
       }
 
       setSuccess("Task Added");
@@ -80,6 +91,7 @@ const CreateTask = () => {
         priority: "low",
         dueDate: "",
         assignedTo: "",
+        status: status, // Preserve status
         projectId: projectId,
         createdBy: userId,
       });

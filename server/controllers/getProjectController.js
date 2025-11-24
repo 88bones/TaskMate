@@ -13,8 +13,23 @@ const getProject = async (req, res) => {
 
     return res.json(result);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
 
-export default getProject;
+const getProjects = async (req, res) => {
+  try {
+    const projects = await projectModel
+      .find({})
+      .populate({ path: "createdBy", select: "firstname lastname" });
+
+    if (projects.length === 0)
+      res.status(404).json({ message: "No projects found." });
+
+    res.json(projects);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export default { getProject, getProjects };

@@ -8,7 +8,7 @@ const updateTask = async (req, res) => {
 
     if (!taskId) return res.status(404).json({ message: "Task not found" });
 
-    // Handle multiple file uploads
+    // multiple file uploads
     if (req.files && req.files.length > 0) {
       const filePaths = req.files.map(
         (file) => `/uploads/tasks/${file.filename}`

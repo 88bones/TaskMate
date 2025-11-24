@@ -33,14 +33,7 @@ const NavBar = () => {
           <header className="px-4 font-extrabold text-3xl flex justify-between max-sm:w-dvw ">
             TaskMate{" "}
           </header>
-          {role === "admin" && (
-            <span
-              className="items-center flex hover:cursor-pointer"
-              onClick={() => navigate("/admin")}
-            >
-              Admin
-            </span>
-          )}
+
           {!signedIn ? (
             <div className="hidden md:flex justify-around items-center w-64">
               <button
@@ -52,6 +45,14 @@ const NavBar = () => {
             </div>
           ) : (
             <div className="flex justify-around items-center w-96">
+              {role === "admin" && (
+                <span
+                  className="items-center flex  hover:cursor-pointer text-red-500"
+                  onClick={() => navigate("/admin/admin-dash")}
+                >
+                  Admin
+                </span>
+              )}
               <div>
                 <Bell
                   size={18}
@@ -74,6 +75,7 @@ const NavBar = () => {
               </div>
             </div>
           )}
+
           <div className="md:hidden flex right-0">
             <button className="text-2xl">&#9776;</button>
           </div>

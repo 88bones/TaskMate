@@ -19,11 +19,12 @@ import ProjectBoard from "./pages/ProjectBoard";
 import TimeLine from "./components/TimeLine";
 import KanbanBoard from "./components/KanbanBoard";
 import UpdateUser from "./components/UpdateUser";
-import Profile from "./pages/Profile";
+
 import UpdateTask from "./components/UpdateTask";
 import AdminDash from "./pages/AdminDash";
-import UserDisplay from "./components/UserDisplay";
 
+import AdminAnalytics from "./components/AdminAnalytics";
+import AdminProjects from "./components/AdminProjects";
 function AppWrapper() {
   return (
     <Router>
@@ -70,6 +71,8 @@ function App() {
 
         {/* ------ADMIN DASHBOARD------ */}
         <Route path="/admin" element={<AdminDash />}>
+          <Route index path="admin-dash" element={<AdminAnalytics />} />
+          <Route path="admin-projects" element={<AdminProjects />} />
           <Route path="signup" element={<SignUp />}>
             <Route path="edit-user/:userId" element={<UpdateUser />} />
           </Route>

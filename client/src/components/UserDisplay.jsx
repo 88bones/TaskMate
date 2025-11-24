@@ -30,29 +30,40 @@ const UserDisplay = () => {
 
   return (
     <div className="p-4 col-span-2">
-      <div className="h-fit shadow p-4 rounded">
-        <header className="font-bold text-xl">
-          <h1>All users</h1>
+      <div className="h-fit rounded-2xl border border-gray-100 bg-white shadow-xl p-6">
+        <header className="flex flex-col gap-1">
+          <p className="text-sm font-semibold uppercase text-blue-600 tracking-widest">
+            Directory
+          </p>
+          <h1 className="text-2xl font-bold text-gray-900">All users</h1>
+          <p className="text-sm text-gray-500">
+            Manage every teammate from a single glance.
+          </p>
         </header>
 
-        <div className="mt-4 relative">
+        <div className="mt-6">
           {Array.isArray(users) && users.length > 0 ? (
-            <ul className="flex rounded h-100 flex-col gap-4 overflow-scroll overflow-x-hidden">
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 max-h-128 overflow-y-auto pr-1">
               {users.map((user) => (
-                <li
+                <div
                   key={user._id}
-                  className="flex justify-between items-center p-2 border rounded"
+                  className="flex justify-between items-center p-4 border border-gray-100 rounded-2xl bg-linear-to-br from-gray-50 to-white shadow-sm hover:shadow-lg transition cursor-pointer"
                 >
                   <div>
-                    {user.firstname} {user.lastname}
+                    <p className="text-base font-semibold text-gray-900">
+                      {user.firstname} {user.lastname}
+                    </p>
+                    <p className="text-xs font-bold text-blue-600 tracking-wide">
+                      {user.department?.toUpperCase()}
+                    </p>
+                    <p className="text-xs text-gray-500">{user.email}</p>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex gap-3">
+                  <div className="flex gap-2">
                     {ActionItems.map((item, index) => (
                       <button
                         key={index}
-                        className="p-2 hover:bg-gray-200 rounded"
+                        className="p-2 rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-600 transition"
                         onClick={() => {
                           navigate(`edit-user/${user._id}`);
                           setVisible(true);
@@ -62,23 +73,27 @@ const UserDisplay = () => {
                       </button>
                     ))}
                   </div>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           ) : (
-            ""
+            <div className="text-center text-gray-500 py-12 border border-dashed border-gray-200 rounded-2xl">
+              {error || "No users found yet."}
+            </div>
           )}
         </div>
       </div>
       {visible && (
-        <div className="absolute top-0 left-0 w-full h-full flex justify-center backdrop-blur-2xl z-20">
-          <Outlet />
-          <button
-            className="absolute top-0 right-0 p-2 rounded-full hover:bg-gray-200"
-            onClick={() => setVisible(false)}
-          >
-            <X className="w-6 h-6 text-gray-700" />
-          </button>
+        <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-50 p-4">
+          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl p-6">
+            <button
+              className="absolute top-4 right-4 p-2 rounded-full text-blue-600 hover:bg-gray-100"
+              onClick={() => setVisible(false)}
+            >
+              <X className="w-5 h-5 text-blue-600" />
+            </button>
+            <Outlet />
+          </div>
         </div>
       )}
     </div>

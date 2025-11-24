@@ -45,7 +45,8 @@ const SideBar = ({ projectId }) => {
         path: "signup",
         element: <UserRoundCog />,
       },
-      { name: "Projects", path: "admin-projects", element: <FolderKanban /> }
+      { name: "Projects", path: "admin-projects", element: <FolderKanban /> },
+      { name: "Tasks", path: "admin-tasks", element: <Activity /> }
     );
 
   return (

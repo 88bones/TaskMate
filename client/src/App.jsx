@@ -25,6 +25,7 @@ import AdminDash from "./pages/AdminDash";
 
 import AdminAnalytics from "./components/AdminAnalytics";
 import AdminProjects from "./components/AdminProjects";
+import AdminTask from "./components/AdminTask";
 function AppWrapper() {
   return (
     <Router>
@@ -73,6 +74,7 @@ function App() {
         <Route path="/admin" element={<AdminDash />}>
           <Route index path="admin-dash" element={<AdminAnalytics />} />
           <Route path="admin-projects" element={<AdminProjects />} />
+          <Route path="admin-tasks" element={<AdminTask />} />
           <Route path="signup" element={<SignUp />}>
             <Route path="edit-user/:userId" element={<UpdateUser />} />
           </Route>

@@ -6,19 +6,29 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const uploadsDir = path.join(__dirname, "../uploads/tasks");
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+const uploadsTasksDir = path.join(__dirname, "../uploads/tasks");
+const uploadsUsersDir = path.join(__dirname, "../uploads/users");
+
+if (!fs.existsSync(uploadsTasksDir)) {
+  fs.mkdirSync(uploadsTasksDir, { recursive: true });
+}
+if (!fs.existsSync(uploadsUsersDir)) {
+  fs.mkdirSync(uploadsUsersDir, { recursive: true });
 }
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadsDir);
+    // route files to users folder when fieldname is 'photo' (user avatar)
+    if (file.fieldname === "photo") {
+      cb(null, uploadsUsersDir);
+    } else {
+      cb(null, uploadsTasksDir);
+    }
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
-    const name = path.basename(file.originalname, ext);
+    const name = path.basename(file.originalname, ext).replace(/\s+/g, "_");
     cb(null, `${name}-${uniqueSuffix}${ext}`);
   },
 });

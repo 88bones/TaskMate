@@ -8,6 +8,38 @@ const UserDisplay = () => {
   const [error, setError] = useState("");
   const [visible, setVisible] = useState(false);
 
+  const Avatar = ({ user, sizeClass = "w-12 h-12" }) => {
+    const [imgError, setImgError] = useState(false);
+    const initials = `${user.firstname?.[0] || ""}${
+      user.lastname?.[0] || ""
+    }`.toUpperCase();
+
+    const src = user.photo
+      ? user.photo.startsWith("http")
+        ? user.photo
+        : `http://localhost:3001${user.photo}`
+      : null;
+
+    return (
+      <div
+        className={`${sizeClass} rounded-full bg-gray-100 overflow-hidden shrink-0 flex items-center justify-center border`}
+      >
+        {src && !imgError ? (
+          <img
+            src={src}
+            alt={`${user.firstname} ${user.lastname}`}
+            className="w-full h-full object-cover"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-200 text-sm font-semibold text-gray-700">
+            {initials || "U"}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const navigate = useNavigate();
 
   const ActionItems = [
@@ -49,14 +81,17 @@ const UserDisplay = () => {
                   key={user._id}
                   className="flex justify-between items-center p-4 border border-gray-100 rounded-2xl bg-linear-to-br from-gray-50 to-white shadow-sm hover:shadow-lg transition cursor-pointer"
                 >
-                  <div>
-                    <p className="text-base font-semibold text-gray-900">
-                      {user.firstname} {user.lastname}
-                    </p>
-                    <p className="text-xs font-bold text-blue-600 tracking-wide">
-                      {user.department?.toUpperCase()}
-                    </p>
-                    <p className="text-xs text-gray-500">{user.email}</p>
+                  <div className="flex items-center gap-4">
+                    <Avatar user={user} sizeClass="w-12 h-12" />
+                    <div>
+                      <p className="text-base font-semibold text-gray-900">
+                        {user.firstname} {user.lastname}
+                      </p>
+                      <p className="text-xs font-bold text-blue-600 tracking-wide">
+                        {user.department?.toUpperCase()}
+                      </p>
+                      <p className="text-xs text-gray-500">{user.email}</p>
+                    </div>
                   </div>
 
                   <div className="flex gap-2">

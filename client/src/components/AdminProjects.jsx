@@ -21,22 +21,17 @@ const AdminProjects = () => {
   const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setLoading(true);
-        const response = await getProjects();
+    getProjects()
+      .then((response) => {
         const projectList = Array.isArray(response) ? response : [];
         setProjects(projectList);
         setError(projectList.length === 0 ? "No projects available yet." : "");
-      } catch (err) {
+      })
+      .catch((err) => {
         console.error(err);
         setError("Unable to load projects. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const decoratedProjects = useMemo(
@@ -133,13 +128,7 @@ const AdminProjects = () => {
     <div className="p-6 bg-gray-50 min-h-screen w-full">
       <div className="max-w-7xl mx-auto">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Projects Control Center
-          </h1>
-          <p className="text-gray-600">
-            Monitor every project, track timelines, and jump straight into the
-            workspaces that need you.
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Projects</h1>
         </header>
 
         {error && (

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import createTask from "../controllers/postTaskController.js";
 import taskController from "../controllers/getTaskController.js";
 
@@ -20,5 +20,6 @@ router.get("/get-tasks/:projectId", taskController.getTasks);
 router.get("/get-task/:taskId", taskController.getOneTask);
 router.patch("/update-status/:taskId", updateTaskStatus);
 router.put("/update-task/:taskId", upload.array("attachments", 10), updateTask);
+router.get("/get-all-tasks/", taskController.getAllTasks);
 
 export default router;

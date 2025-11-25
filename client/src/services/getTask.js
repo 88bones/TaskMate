@@ -43,3 +43,12 @@ export const getOneTask = async (taskId) => {
     throw err;
   }
 };
+
+export const getAllTasks = async () => {
+  try {
+    const res = await axios.get(`http://localhost:3001/api/task/get-all-tasks`);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};

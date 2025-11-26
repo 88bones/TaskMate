@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useDispatch } from "react-redux";
 import { setUsers } from "../redux/slice";
 import UserDisplay from "./UserDisplay";
+import { useEffect } from "react";
 
 const SignUp = () => {
   const validationSchema = yup.object().shape({
@@ -24,6 +25,7 @@ const SignUp = () => {
   const [data, setData] = useState({
     firstname: "",
     lastname: "",
+    username: "",
     email: "",
     password: "",
     repassword: "",
@@ -43,6 +45,21 @@ const SignUp = () => {
       [name]: value,
     });
   };
+
+  useEffect(() => {
+    if (data.firstname && data.lastname) {
+      const username =
+        data.firstname.charAt(0).toLowerCase() +
+        data.lastname.toLowerCase().replace(/\s+/g, "") +
+        number +
+        1;
+
+      setData((prev) => ({
+        ...prev,
+        username,
+      }));
+    }
+  }, [data.firstname, data.lastname]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,6 +83,7 @@ const SignUp = () => {
       setData({
         firstname: "",
         lastname: "",
+        username: "",
         email: "",
         password: "",
         repassword: "",
@@ -116,6 +134,16 @@ const SignUp = () => {
                 value={data.lastname}
                 onChange={handleChange}
                 required
+              />
+
+              <input
+                className={inputStyle}
+                type="text"
+                name="username"
+                placeholder="Username"
+                value={data.username}
+                onChange={handleChange}
+                readOnly
               />
               <input
                 className={inputStyle}

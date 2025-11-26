@@ -87,7 +87,7 @@ const SignUp = () => {
 
   return (
     <>
-      <div className="col-span-1 h-fit w-full max-w-lg p-4">
+      <div className="col-span-1 h-fit w-full max-w-md p-4">
         <div className="flex justify-center items-center">
           <div className="w-full rounded-2xl border border-gray-100 shadow-xl bg-white p-6 sm:p-8 transition hover:shadow-2xl">
             <header className="mb-6">
@@ -96,9 +96,6 @@ const SignUp = () => {
               </p>
               <p className="text-2xl md:text-3xl font-bold text-gray-900">
                 Create User
-              </p>
-              <p className="text-sm text-gray-500 mt-2">
-                Invite teammates to collaborate across projects.
               </p>
             </header>
             <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">

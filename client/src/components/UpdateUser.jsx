@@ -108,16 +108,13 @@ const UpdateUser = () => {
     setSuccess("");
 
     try {
-      // form-data for image upload
       const formData = new FormData();
       formData.append("firstname", data.firstname);
       formData.append("lastname", data.lastname);
       formData.append("email", data.email);
       formData.append("department", data.department);
 
-      if (data.photo instanceof File) {
-        formData.append("photo", data.photo);
-      }
+      formData.append("photo", data.photo);
 
       const res = await updateUser(userId, formData);
 

@@ -68,9 +68,6 @@ const UserDisplay = () => {
             Directory
           </p>
           <h1 className="text-2xl font-bold text-gray-900">All users</h1>
-          <p className="text-sm text-gray-500">
-            Manage every teammate from a single glance.
-          </p>
         </header>
 
         <div className="mt-6">
@@ -94,11 +91,11 @@ const UserDisplay = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex">
                     {ActionItems.map((item, index) => (
                       <button
                         key={index}
-                        className="p-2 rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-600 transition"
+                        className=" rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-600 transition"
                         onClick={() => {
                           navigate(`edit-user/${user._id}`);
                           setVisible(true);

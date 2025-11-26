@@ -11,14 +11,13 @@ const TimeLine = () => {
   const [visible, setVisible] = useState(false);
 
   const navigate = useNavigate();
-
   const selectedProject = useSelector((state) => state.user.selectedProject);
   const projectId = selectedProject?._id;
 
   const ActionItems = [
     {
       name: "Add Task",
-      path: ``,
+      path: `/project-board/${projectId}/add-task`,
       element: <Plus />,
     },
     {
@@ -29,6 +28,43 @@ const TimeLine = () => {
     { name: "Delete", element: <Trash /> },
   ];
 
+  //Avatar Component Fix
+  const Avatar = ({ user, sizeClass = "w-10 h-10" }) => {
+    const [imgError, setImgError] = useState(false);
+
+    const initials = `${user?.firstname?.[0] || ""}${
+      user?.lastname?.[0] || ""
+    }`.toUpperCase();
+
+    const src = user?.photo
+      ? user.photo.startsWith("http")
+        ? user.photo
+        : `http://localhost:3001${
+            user.photo.startsWith("/") ? user.photo : "/" + user.photo
+          }`
+      : null;
+
+    return (
+      <div
+        className={`${sizeClass} rounded-full bg-gray-100 overflow-hidden shrink-0 flex items-center justify-center border`}
+      >
+        {src && !imgError ? (
+          <img
+            src={src}
+            alt={user?.firstname || "User"}
+            className="w-full h-full object-cover"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-200 text-xs font-semibold text-gray-700">
+            {initials || "U"}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  //Fetch Activity
   useEffect(() => {
     if (!projectId) return;
 
@@ -39,13 +75,10 @@ const TimeLine = () => {
           setActivity([]);
         } else {
           setActivity(res);
-
           setError("");
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   }, [projectId]);
 
   if (!selectedProject) {
@@ -62,6 +95,7 @@ const TimeLine = () => {
   return (
     <div className="relative w-full bg-linear-to-br from-gray-50 to-white py-8 px-4 sm:px-6 lg:px-10">
       <div className="max-w-6xl mx-auto space-y-8">
+        {/* Header */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 flex flex-col gap-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <header>
@@ -81,8 +115,12 @@ const TimeLine = () => {
                 <button
                   key={index}
                   onClick={() => {
-                    if (item.path) navigate(item.path);
-                    if (item.name === "Edit") setVisible(true);
+                    if (item.name === "Edit") {
+                      setVisible(true);
+                      navigate(item.path);
+                    } else if (item.path) {
+                      navigate(item.path);
+                    }
                   }}
                   className="inline-flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-blue-600 transition"
                 >
@@ -94,7 +132,9 @@ const TimeLine = () => {
           </div>
         </div>
 
+        {/* Timeline + Team */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Timeline */}
           <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
@@ -113,14 +153,19 @@ const TimeLine = () => {
                   {activity.map((act, idx) => (
                     <div key={act._id || idx} className="relative pl-12">
                       <div className="absolute left-3 top-2 w-2 h-2 rounded-full bg-blue-500" />
+
                       <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 shadow-sm">
                         <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
+                          <Avatar user={act.user} sizeClass="w-10 h-10" />
+
                           <p className="font-semibold text-gray-900">
                             {act.user?.firstname} {act.user?.lastname}
                           </p>
+
                           <span className="text-gray-400">•</span>
                           <p>{act.description}</p>
                         </div>
+
                         <p className="text-xs text-gray-500 mt-2">
                           {new Date(act.createdAt).toLocaleString()}
                         </p>
@@ -137,15 +182,13 @@ const TimeLine = () => {
             )}
           </div>
 
+          {/* Team */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
               <header className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-gray-900">Team</h2>
                 <span className="text-sm text-gray-500">
-                  {Array.isArray(selectedProject.team)
-                    ? selectedProject.team.length
-                    : 0}{" "}
-                  members
+                  {selectedProject.team?.length || 0} members
                 </span>
               </header>
               <div className="border border-gray-100 rounded-xl p-4 bg-gray-50">
@@ -156,8 +199,9 @@ const TimeLine = () => {
         </div>
       </div>
 
+      {/* Modal */}
       {visible && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm p-4">
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6">
             <button
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"

@@ -10,6 +10,6 @@ const router = express.Router();
 router.post("/signup", signUp);
 router.get("/user", getUser);
 router.get("/profile/:userId", getOneUser);
-router.put("/edit-user/:userId", upload.single("photo", 10), updateUser);
+router.put("/edit-user/:userId", upload.single("photo"), updateUser);
 
 export default router;

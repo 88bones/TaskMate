@@ -7,18 +7,8 @@ const updateUser = async (req, res) => {
     const userId = req.params.userId;
     const newData = { ...req.body };
 
-    // If a file was uploaded via multer, attach its public path
-    if (req.file && req.file.filename) {
-      // determine whether file was saved in users or tasks folder
-      const dest = req.file.destination || "";
-      const isUsers =
-        dest.includes(`${path.sep}uploads${path.sep}users`) ||
-        dest.endsWith("uploads/users");
-      const publicPath = isUsers
-        ? `/uploads/users/${req.file.filename}`
-        : `/uploads/tasks/${req.file.filename}`;
-
-      newData.photo = publicPath;
+    if (req.file && req.file.filename && req.file.fieldname === "photo") {
+      newData.photo = `/uploads/users/${req.file.filename}`;
     }
 
     if (!userId) res.status(404).json({ message: "No user found" });

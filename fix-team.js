@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+const fs = require("fs");
+
+const content = `import React, { useEffect, useState } from "react";
 import { getTeam } from "../services/getTeam";
 import { useSelector } from "react-redux";
 
@@ -9,28 +11,22 @@ const CreatedTeam = () => {
   const [team, setTeam] = useState([]);
   const [error, setError] = useState("");
 
-  // Avatar Component
   const Avatar = ({ member, sizeClass = "w-10 h-10" }) => {
     const [imgError, setImgError] = useState(false);
-
-    const initials = `${member.firstname?.[0] || ""}${
-      member.lastname?.[0] || ""
-    }`.toUpperCase();
+    const initials = \`\${member.firstname?.[0] || ""}\${member.lastname?.[0] || ""}\`.toUpperCase();
 
     const src = member.photo
       ? member.photo.startsWith("http")
         ? member.photo
-        : `http://localhost:3001${member.photo}`
+        : \`http://localhost:3001\${member.photo}\`
       : null;
 
     return (
-      <div
-        className={`${sizeClass} rounded-full bg-gray-100 overflow-hidden shrink-0 flex items-center justify-center border`}
-      >
+      <div className={\`\${sizeClass} rounded-full bg-gray-100 overflow-hidden shrink-0 flex items-center justify-center border\`}>
         {src && !imgError ? (
           <img
             src={src}
-            alt={member.firstname}
+            alt={\`\${member.firstname} \${member.lastname}\`}
             className="w-full h-full object-cover"
             onError={() => setImgError(true)}
           />
@@ -53,28 +49,26 @@ const CreatedTeam = () => {
           setTeam(res);
         }
       })
-      .catch(() => setError("Failed to load team."));
+      .catch((err) => {
+        console.log(err);
+        setError("Failed to load team.");
+      });
   }, [projectId]);
 
   return (
     <div>
       {Array.isArray(team.team) && team.team.length > 0 ? (
-        <div className="flex gap-3">
+        <div className="">
           {team.team.map((member) => (
-            <div key={member._id} className="relative group">
-              {/* Avatar */}
+            <div key={member._id} className="mb-2 p-2 border-b flex items-center gap-3">
               <Avatar member={member} sizeClass="w-10 h-10" />
 
-              {/* Hover Text (Tooltip) */}
-              <span
-                className="
-                absolute left-1/2 -translate-x-1/2 -top-8 
-                px-2 py-1 rounded bg-black text-white text-xs whitespace-nowrap 
-                opacity-0 group-hover:opacity-100 transition-all
-              "
-              >
-                {member.firstname} {member.lastname}
-              </span>
+              <div>
+                <p className="">
+                  {member.firstname} {member.lastname}
+                </p>
+                <p className="text-xs text-gray-400">{member.email}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -86,3 +80,11 @@ const CreatedTeam = () => {
 };
 
 export default CreatedTeam;
+`;
+
+fs.writeFileSync(
+  "c:\\Users\\user\\Documents\\My-Projects\\REACT\\TaskMate\\client\\src\\components\\CreatedTeam.jsx",
+  content,
+  "utf8"
+);
+console.log("CreatedTeam.jsx updated successfully");

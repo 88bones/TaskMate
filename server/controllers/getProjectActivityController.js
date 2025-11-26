@@ -5,7 +5,7 @@ const getProjectActivity = async (req, res) => {
     const projectId = req.params.projectId;
     const result = await activityModel
       .find({ projectId: projectId })
-      .populate({ path: "user", selec: "firstname lastname" })
+      .populate({ path: "user", selec: "firstname lastname photo" })
       .populate({ path: "projectId", select: "title description" })
       .sort({ createdAt: -1 });
 

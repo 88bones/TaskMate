@@ -1,6 +1,7 @@
 import taskModel from "../models/taskModel.js";
 import projectModel from "../models/projectModel.js";
 import activityModel from "../models/activityModel.js";
+import notificationModel from "../models/notificationModel.js";
 
 export const createTask = async (req, res) => {
   try {
@@ -24,6 +25,15 @@ export const createTask = async (req, res) => {
       projectType: "task",
       projectId: newTask.projectId,
       description: `created a task: ${newTask.title}`,
+    });
+
+    await notificationModel.create({
+      user: newTask.assignedTo,
+      action: "assigned",
+      entityType: "task",
+      project: newTask.projectId,
+      taskId: newTask._id,
+      message: `A new task "${newTask.title}" was assigned to you.`,
     });
 
     //push task into project

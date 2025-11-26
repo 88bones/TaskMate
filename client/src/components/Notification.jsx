@@ -76,7 +76,7 @@ const Notification = () => {
                 <div className="flex justify-between items-start gap-2">
                   <div className="flex-1">
                     <p className="text-gray-800 text-sm font-medium">
-                      You were {notification.message}
+                      {notification.message}
                     </p>
                     <div className="flex  items-center gap-2 mt-1">
                       <span className="inline-block px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-semibold">

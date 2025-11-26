@@ -28,7 +28,7 @@ const TimeLine = () => {
     { name: "Delete", element: <Trash /> },
   ];
 
-  //Avatar Component Fix
+  //Avatar
   const Avatar = ({ user, sizeClass = "w-10 h-10" }) => {
     const [imgError, setImgError] = useState(false);
 
@@ -39,9 +39,7 @@ const TimeLine = () => {
     const src = user?.photo
       ? user.photo.startsWith("http")
         ? user.photo
-        : `http://localhost:3001${
-            user.photo.startsWith("/") ? user.photo : "/" + user.photo
-          }`
+        : `http://localhost:3001${user.photo}`
       : null;
 
     return (

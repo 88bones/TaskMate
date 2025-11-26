@@ -10,6 +10,7 @@ import projectRoutes from "./routes/projectRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
 import activityRoutes from "./routes/activityRoutes.js";
+import notificationRoute from "./routes/notificationRoute.js";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use("/api/project", projectRoutes);
 app.use("/api/task", taskRoutes);
 app.use("/api/team", teamRoutes);
 app.use("/api/activity", activityRoutes);
+app.use("/api/notification", notificationRoute);
 
 app.listen(PORT, () => {
   console.log("App is running.");

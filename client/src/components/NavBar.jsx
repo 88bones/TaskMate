@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { signout } from "../redux/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { Bell } from "lucide-react";
+import { useState } from "react";
+import Notification from "./Notification";
 
 const NavBar = () => {
   const buttonStyle =
@@ -19,7 +21,7 @@ const NavBar = () => {
     signedIn,
   } = useSelector((state) => state.user);
 
-  console.log(role);
+  const [isNotification, setIsNotification] = useState(false);
 
   const handleSignOut = () => {
     dispatch(signout());
@@ -56,9 +58,17 @@ const NavBar = () => {
               <div>
                 <Bell
                   size={18}
-                  className="hover:cursor-pointer hover:text-blue-500"
+                  className="hover:cursor-pointer hover:text-blue-500 relative"
+                  onClick={() => setIsNotification(!isNotification)}
                 />
               </div>
+
+              {isNotification && (
+                <div className="absolute top-10 right-60 z-50">
+                  <Notification />
+                </div>
+              )}
+
               <div className="flex items-center gap-2">
                 <span
                   className="cursor-pointer hover:text-shadow-lg"

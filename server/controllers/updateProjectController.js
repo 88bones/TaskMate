@@ -1,5 +1,6 @@
 import projectModel from "../models/projectModel.js";
 import activityModel from "../models/activityModel.js";
+import notificationModel from "../models/notificationModel.js";
 
 const updateProject = async (req, res) => {
   try {

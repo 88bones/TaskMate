@@ -4,12 +4,16 @@ const getProjectNotification = async (req, res) => {
   try {
     const userId = req.params.userId;
 
-    const notification = await notificationModel.find({ user: userId });
+    const notification = await notificationModel
+      .find({ user: userId })
+      .sort({ createdAt: -1 });
 
     if (!notification || notification.length === 0)
-      res.status(404).json({ message: "No new notifications." });
+      return res
+        .status(200)
+        .json({ message: "No new notifications.", data: [] });
 
-    res.json(notification);
+    res.status(200).json({ data: notification });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

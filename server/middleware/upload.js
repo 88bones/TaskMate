@@ -18,7 +18,6 @@ if (!fs.existsSync(uploadsUsersDir)) {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // route files to users folder when fieldname is 'photo' (user avatar)
     if (file.fieldname === "photo") {
       cb(null, uploadsUsersDir);
     } else {

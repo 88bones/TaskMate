@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   firstname: localStorage.getItem("firstname") || "",
   lastname: localStorage.getItem("lastname") || "",
-  username: localStorage.getItem("usernmae"),
+  username: localStorage.getItem("usernmae") || "",
   role: localStorage.getItem("role") || "",
   signedIn: !!localStorage.getItem("firstname"),
   email: localStorage.getItem("email") || "",
@@ -19,7 +19,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     signin(state, action) {
-      const { firstname, lastname, role, email, department, _id } =
+      const { firstname, lastname, username, role, email, department, _id } =
         action.payload;
       state.firstname = firstname;
       state.lastname = lastname;

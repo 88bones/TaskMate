@@ -26,6 +26,7 @@ import AdminDash from "./pages/AdminDash";
 import AdminAnalytics from "./components/AdminAnalytics";
 import AdminProjects from "./components/AdminProjects";
 import AdminTask from "./components/AdminTask";
+import ProjectTeam from "./components/ProjectTeam";
 function AppWrapper() {
   return (
     <Router>
@@ -68,6 +69,7 @@ function App() {
             <Route path="create-task/:projectId" element={<CreateTask />} />
             <Route path="update-task/:taskId" element={<UpdateTask />} />
           </Route>
+          <Route path="team" element={<ProjectTeam />} />
         </Route>
 
         {/* ------ADMIN DASHBOARD------ */}

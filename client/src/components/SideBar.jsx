@@ -26,15 +26,15 @@ const SideBar = ({ projectId }) => {
     SideItems.push(
       {
         name: "Timeline",
-        path: `/project-board/${projectId}/timeline`,
+        path: `timeline`,
         element: <Activity />,
       },
       {
         name: "Kanban",
-        path: `/project-board/${projectId}/kanban`,
+        path: `kanban`,
         element: <Kanban />,
       },
-      { name: "Team", path: "", element: <User /> }
+      { name: "Team", path: "team", element: <User /> }
     );
   }
   if (role === "admin")

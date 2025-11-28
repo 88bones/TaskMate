@@ -6,7 +6,10 @@ const getTeam = async (req, res) => {
 
     const result = await projectModel
       .findOne({ _id: projectId }, { _id: 1, title: 1, team: 1 })
-      .populate({ path: "team", select: "firstname lastname email photo" });
+      .populate({
+        path: "team",
+        select: "firstname lastname email department photo",
+      });
 
     if (!result) {
       return res.status(200).json({ message: "No Teams found" });

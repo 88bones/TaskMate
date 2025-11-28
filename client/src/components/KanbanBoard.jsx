@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, Outlet } from "react-router-dom";
 import { getTasks } from "../services/getTask";
 import { updateTaskStatus } from "../services/postTask";
+import { deleteTask } from "../services/deleteTask";
 import { getTeam } from "../services/getTeam";
 import { getUser } from "../services/getUser";
 import Select from "react-select";
@@ -200,18 +201,28 @@ function KanbanBoard() {
   };
 
   const addNewTask = React.useCallback((task) => {
-    // Format task to match the structure used in columns
     const formattedTask = {
       id: task._id,
       text: task.title,
       ...task,
     };
 
-    // Add to allTasks - the useEffect will automatically apply filters
     setAllTasks((prev) => [...prev, formattedTask]);
   }, []);
 
-  // Prepare user options for filters
+  // Delete task handler
+  const handleDeleteTask = async (taskId) => {
+    try {
+      await deleteTask(taskId);
+
+      setAllTasks((prev) => prev.filter((task) => task._id !== taskId));
+      setOpenTaskOptions(null);
+    } catch (err) {
+      console.log("Failed to delete task:", err);
+      alert("Failed to delete task");
+    }
+  };
+
   const creatorOptions = allUsers.map((user) => ({
     value: user._id,
     label: `${user.firstname} ${user.lastname}`,
@@ -322,14 +333,6 @@ function KanbanBoard() {
               {/* Tasks */}
               <div className="space-y-2">
                 {col.tasks.map((task) => {
-                  const ActionItems = [
-                    { name: "Delete Task", path: "", element: <Trash /> },
-                    {
-                      name: "Edit Task",
-                      path: `update-task/${task._id}`,
-                      element: <Pencil />,
-                    },
-                  ];
                   return (
                     <div
                       key={task.id}
@@ -378,15 +381,28 @@ function KanbanBoard() {
                           />
                           {openTaskOptions === task.id && (
                             <div className="absolute right-0 top-5 bg-white shadow-lg rounded w-32 sm:w-36 p-2 z-10 space-y-1">
-                              {ActionItems.map((item, index) => (
+                              {[
+                                {
+                                  name: "Delete Task",
+                                  onClick: () => handleDeleteTask(task._id),
+                                  element: <Trash />,
+                                },
+                                {
+                                  name: "Edit Task",
+                                  path: `update-task/${task._id}`,
+                                  element: <Pencil />,
+                                },
+                              ].map((item, index) => (
                                 <div
                                   key={index}
                                   className="flex items-center gap-2 p-1 hover:bg-gray-100 rounded cursor-pointer text-sm"
                                   onClick={() => {
-                                    if (item.path) {
+                                    if (item.onClick) {
+                                      item.onClick();
+                                    } else if (item.path) {
                                       navigate(item.path);
                                       setVisible(true);
-                                    } else console.log(item.name); // Delete placeholder
+                                    }
                                     setOpenTaskOptions(null);
                                   }}
                                 >

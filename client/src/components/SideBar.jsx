@@ -34,7 +34,7 @@ const SideBar = ({ projectId }) => {
         path: `/project-board/${projectId}/kanban`,
         element: <Kanban />,
       },
-      { name: "Settings", path: "", element: <Settings /> }
+      { name: "Team", path: "", element: <User /> }
     );
   }
   if (role === "admin")

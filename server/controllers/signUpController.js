@@ -4,12 +4,17 @@ import jwtGenerator from "../utils/jwtGenerator.js";
 
 const signUp = async (req, res) => {
   try {
-    const { firstname, lastname, email, password, department, role } = req.body;
+    const { firstname, lastname, username, email, password, department, role } =
+      req.body;
 
     const existingEmail = await userModel.findOne({ email });
     if (existingEmail) {
       return res.status(400).json({ message: "Email already in use." });
     }
+
+    const existingUserName = await userModel.findOne({ username });
+    if (existingUserName)
+      return res.status(400).json({ message: "Username already in use." });
 
     //hash pw
     const hashPassword = await bcrypt.hash(password, 10);
@@ -17,6 +22,7 @@ const signUp = async (req, res) => {
     const newUser = new userModel({
       firstname,
       lastname,
+      username,
       email,
       password: hashPassword,
       department,
@@ -34,6 +40,7 @@ const signUp = async (req, res) => {
         id: newUser._id,
         firstname: newUser.firstname,
         lastname: newUser.lastname,
+        username: newUser.username,
         password: newUser.password,
         email: newUser.email,
         department: newUser.department,

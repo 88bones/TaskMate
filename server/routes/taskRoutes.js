@@ -6,6 +6,7 @@ import getAssignedTask from "../controllers/getAssignedTaskController.js";
 import updateTaskStatus from "../controllers/updateTaskStatusController.js";
 import updateTask from "../controllers/updateTaskController.js";
 import upload from "../middleware/upload.js";
+import deleteTask from "../controllers/deleteTaskController.js";
 
 const router = express.Router();
 
@@ -21,5 +22,7 @@ router.get("/get-task/:taskId", taskController.getOneTask);
 router.patch("/update-status/:taskId", updateTaskStatus);
 router.put("/update-task/:taskId", upload.array("attachments", 10), updateTask);
 router.get("/get-all-tasks/", taskController.getAllTasks);
+
+router.delete("/delete-task/:taskId", deleteTask);
 
 export default router;

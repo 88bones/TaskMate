@@ -16,11 +16,6 @@ const TimeLine = () => {
 
   const ActionItems = [
     {
-      name: "Add Task",
-      path: `/project-board/${projectId}/add-task`,
-      element: <Plus />,
-    },
-    {
       name: "Edit",
       path: `/project-board/${projectId}/timeline/update-project`,
       element: <Pencil />,

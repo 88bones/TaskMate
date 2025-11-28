@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { postSignUp } from "../services/postSignUp";
-import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
 import { setUsers } from "../redux/slice";
@@ -11,6 +10,7 @@ const SignUp = () => {
   const validationSchema = yup.object().shape({
     firstname: yup.string().max(20),
     lastname: yup.string(),
+    username: yup.string(),
     email: yup.string().email("Invalid email format"),
     password: yup
       .string()
@@ -36,8 +36,6 @@ const SignUp = () => {
   const [error, setError] = useState();
   const [formError, setFormError] = useState();
 
-  const navigate = useNavigate();
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({
@@ -51,8 +49,7 @@ const SignUp = () => {
       const username =
         data.firstname.charAt(0).toLowerCase() +
         data.lastname.toLowerCase().replace(/\s+/g, "") +
-        number +
-        1;
+        Math.floor(Math.random() * 1000);
 
       setData((prev) => ({
         ...prev,

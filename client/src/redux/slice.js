@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   firstname: localStorage.getItem("firstname") || "",
   lastname: localStorage.getItem("lastname") || "",
+  username: localStorage.getItem("usernmae"),
   role: localStorage.getItem("role") || "",
   signedIn: !!localStorage.getItem("firstname"),
   email: localStorage.getItem("email") || "",
@@ -22,6 +23,7 @@ const userSlice = createSlice({
         action.payload;
       state.firstname = firstname;
       state.lastname = lastname;
+      state.username = username;
       state.role = role;
       state.email = email;
       state.department = department;
@@ -31,6 +33,7 @@ const userSlice = createSlice({
 
       localStorage.setItem("firstname", firstname);
       localStorage.setItem("lastname", lastname);
+      localStorage.setItem("username", username);
       localStorage.setItem("role", role);
       localStorage.setItem("email", email);
       localStorage.setItem("department", department);
@@ -39,6 +42,7 @@ const userSlice = createSlice({
     signout(state) {
       state.firstname = "";
       state.lastname = "";
+      state.username = "";
       state.role = "";
       state.email = "";
       state._id = "";
@@ -53,6 +57,10 @@ const userSlice = createSlice({
     updateLastname(state, action) {
       state.lastname = action.payload;
       localStorage.setItem("lastname", action.payload);
+    },
+    updateUserName(state, action) {
+      state.username = action.payload;
+      localStorage.setItem("username", action.payload);
     },
     updateRole(state, action) {
       state.role = action.payload;
@@ -83,6 +91,7 @@ export const {
   signout,
   updateFirstname,
   updateLastname,
+  updateUserName,
   updateEmail,
   updateDepartment,
   updateRole,

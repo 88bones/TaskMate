@@ -7,11 +7,14 @@ const updateUser = async (req, res) => {
     const userId = req.params.userId;
     const newData = { ...req.body };
 
-    if (req.file && req.file.filename && req.file.fieldname === "photo") {
-      newData.photo = `/uploads/users/${req.file.filename}`;
+    // Handle photo upload
+    if (req.file && req.file.filename) {
+      if (req.file.fieldname === "photo") {
+        newData.photo = `/uploads/users/${req.file.filename}`;
+      }
     }
 
-    if (!userId) res.status(404).json({ message: "No user found" });
+    if (!userId) return res.status(404).json({ message: "No user found" });
 
     const result = await userModel.findByIdAndUpdate(userId, newData, {
       new: true,

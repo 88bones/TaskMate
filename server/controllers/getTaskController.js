@@ -16,7 +16,10 @@ const getTask = async (req, res) => {
         path: "projectId",
         select: "title",
       })
-      .populate({ path: "assignedTo", select: "firstname lastname email" });
+      .populate({
+        path: "assignedTo",
+        select: "firstname lastname email photo",
+      });
 
     if (result.length === 0) {
       res.status(200).json({ message: "No tasks found." });
@@ -69,7 +72,7 @@ const getAllTasks = async (req, res) => {
       })
       .populate({
         path: "assignedTo",
-        select: "firstname lastname email",
+        select: "firstname lastname email photo",
       });
 
     if (allTasks.length === 0)

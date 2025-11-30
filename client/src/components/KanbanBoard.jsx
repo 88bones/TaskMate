@@ -49,6 +49,63 @@ function KanbanBoard() {
   const [filterCreatedBy, setFilterCreatedBy] = useState(null);
   const [filterAssignedTo, setFilterAssignedTo] = useState(null);
 
+  // Small Avatar helper for showing user photo or initials
+  const Avatar = ({ user, sizeClass = "w-6 h-6" }) => {
+    if (!user) return null;
+    const [imgError, setImgError] = useState(false);
+    const initials = `${user.firstname?.[0] || ""}${
+      user.lastname?.[0] || ""
+    }`.toUpperCase();
+
+    const src = user.photo
+      ? user.photo.startsWith("http")
+        ? user.photo
+        : `http://localhost:3001${user.photo}`
+      : null;
+
+    return (
+      <div
+        className={`${sizeClass} rounded-full bg-gray-100 overflow-hidden shrink-0 flex items-center justify-center border`}
+      >
+        {src && !imgError ? (
+          <img
+            src={src}
+            alt={`${user.firstname} ${user.lastname}`}
+            className="w-full h-full object-cover"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-200 text-[10px] font-semibold text-gray-700">
+            {initials || "U"}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Resolve assignee object from task.assignedTo (can be id or populated object)
+  const getAssignee = (task) => {
+    if (!task || !task.assignedTo) return null;
+    // If already populated with user fields
+    if (typeof task.assignedTo === "object") {
+      if (task.assignedTo.firstname) return task.assignedTo;
+      const id = task.assignedTo._id || task.assignedTo;
+      return (
+        teamMembers.find((m) => String(m._id) === String(id)) ||
+        allUsers.find((u) => String(u._id) === String(id)) ||
+        null
+      );
+    }
+
+    // assignedTo is likely an id string
+    const id = String(task.assignedTo);
+    return (
+      teamMembers.find((m) => String(m._id) === id) ||
+      allUsers.find((u) => String(u._id) === id) ||
+      null
+    );
+  };
+
   // Function to apply filters and update columns
   const applyFilters = React.useCallback(
     (tasks) => {
@@ -333,6 +390,7 @@ function KanbanBoard() {
               {/* Tasks */}
               <div className="space-y-2">
                 {col.tasks.map((task) => {
+                  const assignee = getAssignee(task);
                   return (
                     <div
                       key={task.id}
@@ -366,6 +424,13 @@ function KanbanBoard() {
                               </span>
                             )}
                           </p>
+
+                          {/* Assignee photo below title */}
+                          {assignee && (
+                            <div className="mt-2 flex items-center gap-2">
+                              <Avatar user={assignee} sizeClass="w-7 h-7" />
+                            </div>
+                          )}
                         </div>
 
                         {/* Options */}

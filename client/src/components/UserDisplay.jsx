@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getUser } from "../services/getUser";
+import { deleteUser } from "../services/deleteUser";
 import { Pencil, Trash, X } from "lucide-react";
 import { useNavigate, Outlet } from "react-router-dom";
 
@@ -41,6 +42,24 @@ const UserDisplay = () => {
   };
 
   const navigate = useNavigate();
+
+  const handleDeleteUser = async (userId) => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this user? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+    try {
+      await deleteUser(userId);
+      setUsers((prev) => prev.filter((user) => user._id !== userId));
+      alert("User deleted successfully");
+    } catch (err) {
+      console.log("Failed to delete user:", err);
+      alert("Failed to delete user");
+    }
+  };
 
   const ActionItems = [
     { name: "Edit", element: <Pencil /> },
@@ -94,8 +113,12 @@ const UserDisplay = () => {
                         key={index}
                         className=" rounded-full border p-2 border-gray-200 hover:bg-blue-50 hover:text-blue-600 transition"
                         onClick={() => {
-                          navigate(`edit-user/${user._id}`);
-                          setVisible(true);
+                          if (item.name === "Delete") {
+                            handleDeleteUser(user._id);
+                          } else if (item.name === "Edit") {
+                            navigate(`edit-user/${user._id}`);
+                            setVisible(true);
+                          }
                         }}
                       >
                         {item.element}

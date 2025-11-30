@@ -19,7 +19,6 @@ const TaskSchema = new mongoose.Schema(
     attachments: [String],
     assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
-    sprintId: { type: mongoose.Schema.Types.ObjectId, ref: "Sprint" },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }

@@ -157,6 +157,7 @@ const UpdateTask = () => {
       </header>
 
       <form onSubmit={handleSubmit}>
+        <label htmlFor="">Title:</label>
         <input
           type="text"
           name="title"
@@ -167,6 +168,7 @@ const UpdateTask = () => {
           required
         />
 
+        <label htmlFor="">Description:</label>
         <textarea
           name="description"
           placeholder="Description"

@@ -117,6 +117,7 @@ const CreateTask = () => {
       </header>
       {/* {userId},{projectId} */}
       <form onSubmit={handleSubmit}>
+        <label htmlFor="">Title:</label>
         <input
           type="text"
           name="title"
@@ -126,6 +127,7 @@ const CreateTask = () => {
           onChange={handleChange}
           required
         />
+        <label htmlFor="">Description:</label>
         <textarea
           name="description"
           placeholder="Description"

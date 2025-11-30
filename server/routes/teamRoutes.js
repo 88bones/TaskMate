@@ -1,6 +1,6 @@
 import express from "express";
 import getTeam from "../controllers/getTeamController.js";
-import addTeamMember from "../controllers/addTeamMemberController.js";
+import addTeamMember from "../controllers/updateTeamController.js";
 
 const router = express.Router();
 

@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { setUsers } from "../redux/slice";
 import UserDisplay from "./UserDisplay";
 import { useEffect } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 const SignUp = () => {
   const validationSchema = yup.object().shape({
@@ -35,6 +36,7 @@ const SignUp = () => {
   const [success, setSuccess] = useState();
   const [error, setError] = useState();
   const [formError, setFormError] = useState();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -153,15 +155,24 @@ const SignUp = () => {
               />
               {error && <span className="text-red-600 text-sm">{error}</span>}
 
-              <input
-                className={inputStyle}
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={data.password}
-                onChange={handleChange}
-                required
-              />
+              <div className="flex items-center justify-center border rounded border-black px-2">
+                <input
+                  className="w-full py-2 focus:outline-none"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  value={data.password}
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="p-1"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
               <input
                 className={inputStyle}
                 type="password"

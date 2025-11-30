@@ -64,21 +64,18 @@ const UserDisplay = () => {
     <div className="p-4 col-span-2">
       <div className="h-fit rounded-2xl border border-gray-100 bg-white shadow-xl p-6">
         <header className="flex flex-col gap-1">
-          <p className="text-sm font-semibold uppercase text-blue-600 tracking-widest">
-            Directory
-          </p>
           <h1 className="text-2xl font-bold text-gray-900">All users</h1>
         </header>
 
         <div className="mt-6">
           {Array.isArray(users) && users.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 max-h-128 overflow-y-auto pr-1">
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-2 max-h-128 overflow-y-auto overflow-x-hidden pr-1">
               {users.map((user) => (
                 <div
                   key={user._id}
                   className="flex justify-between items-center p-4 border border-gray-100 rounded-2xl bg-linear-to-br from-gray-50 to-white shadow-sm hover:shadow-lg transition cursor-pointer"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
                     <Avatar user={user} sizeClass="w-12 h-12" />
                     <div>
                       <p className="text-base font-semibold text-gray-900">
@@ -95,7 +92,7 @@ const UserDisplay = () => {
                     {ActionItems.map((item, index) => (
                       <button
                         key={index}
-                        className=" rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-600 transition"
+                        className=" rounded-full border p-2 border-gray-200 hover:bg-blue-50 hover:text-blue-600 transition"
                         onClick={() => {
                           navigate(`edit-user/${user._id}`);
                           setVisible(true);
@@ -117,13 +114,13 @@ const UserDisplay = () => {
       </div>
       {visible && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-50 p-4">
+          <button
+            className="absolute top-4 right-4 p-2 rounded-full text-black hover:bg-gray-100"
+            onClick={() => setVisible(false)}
+          >
+            <X className="w-6 h-6 text-black" />
+          </button>
           <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl p-6">
-            <button
-              className="absolute top-4 right-4 p-2 rounded-full text-blue-600 hover:bg-gray-100"
-              onClick={() => setVisible(false)}
-            >
-              <X className="w-5 h-5 text-blue-600" />
-            </button>
             <Outlet />
           </div>
         </div>

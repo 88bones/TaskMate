@@ -135,6 +135,7 @@ const UpdateProject = () => {
       </header>
 
       <form className="flex flex-col" onSubmit={handleSubmit}>
+        <label htmlFor="">Title:</label>
         <input
           className={inputStyle}
           type="text"
@@ -145,6 +146,7 @@ const UpdateProject = () => {
           required
         />
 
+        <label htmlFor="">Description:</label>
         <textarea
           name="description"
           rows={5}
@@ -154,6 +156,7 @@ const UpdateProject = () => {
           className={inputStyle}
         />
 
+        <label htmlFor="">Team:</label>
         <Select
           className="mb-3 border rounded border-black"
           placeholder="Select team members..."

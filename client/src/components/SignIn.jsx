@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { postSignIn } from "../services/postSignIn";
 import { useDispatch } from "react-redux";
 import { signin } from "../redux/slice";
+import { Eye, EyeOff } from "lucide-react";
 
 const SignIn = () => {
   const inputStyle =
@@ -13,6 +14,7 @@ const SignIn = () => {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
 
@@ -80,38 +82,39 @@ const SignIn = () => {
             required
           />
 
-          <input
-            className={inputStyle}
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={data.password}
-            onChange={handleChange}
-            required
-          />
+          <div className="flex items-center justify-center border rounded border-black px-2">
+            <input
+              className="w-full py-2 focus:outline-none"
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={data.password}
+              onChange={handleChange}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="p-1"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
 
           <button
-            className="bg-black hover:bg-blue-600 w-full text-white font-bold text-lg md:text-xl py-2 rounded-xl cursor-pointer"
+            className="bg-black hover:bg-blue-600 w-full text-white font-bold text-lg md:text-xl py-2 rounded-xl cursor-pointer mb-4"
             type="submit"
           >
             Sign In
           </button>
+
           {formError && (
             <span className="text-red-600 text-sm">{formError}</span>
           )}
-
-          <p className="text-center text-sm md:text-base">
-            Don't have an account?{" "}
-            <span
-              onClick={() => navigate("/signup")}
-              className="underline cursor-pointer hover:text-blue-600"
-            >
-              SignUp here!
-            </span>
-          </p>
         </form>
       </div>
     </div>
   );
 };
+
 export default SignIn;

@@ -24,24 +24,24 @@ export const createTask = async (req, res) => {
       action: "created",
       projectType: "task",
       projectId: newTask.projectId,
+      taskId: newTask._id,
       description: `created a task: ${newTask.title}`,
     });
 
+    const project = await projectModel.findById(projectId);
+    if (!project) {
+      res.status(404).json({ message: "Project not found." });
+    }
     await notificationModel.create({
       user: [newTask.assignedTo],
       action: "assigned",
       entityType: "task",
       projectId: newTask.projectId,
       taskId: newTask._id,
-      message: `A new task "${newTask.title}" was assigned to you in project "${newTask.projectId.title}".`,
+      message: `A new task "${newTask.title}" was assigned to you in project "${project.title}".`,
     });
 
     //push task into project
-    const project = await projectModel.findById(projectId);
-    if (!project) {
-      res.status(404).json({ message: "Project not found." });
-    }
-
     project.tasks.push(newTask._id);
     await project.save();
     res

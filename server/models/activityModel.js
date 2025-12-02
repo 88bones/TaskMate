@@ -19,6 +19,11 @@ const ActivitySchema = new mongoose.Schema(
       ref: "Project",
       required: true,
     },
+    taskId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Task",
+      required: true,
+    },
     description: String,
   },
   { timestamps: true }

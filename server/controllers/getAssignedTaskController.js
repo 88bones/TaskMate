@@ -3,9 +3,10 @@ import taskModel from "../models/taskModel.js";
 const getAssignedTask = async (req, res) => {
   try {
     const userId = req.params.userId;
+    const projectId = req.params.projectId;
 
     const result = await taskModel
-      .find({ assignedTo: userId })
+      .find({ assignedTo: userId, projectId })
       .populate({ path: "projectId", select: "title" });
 
     if (result.length === 0) {

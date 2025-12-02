@@ -2,10 +2,11 @@ import React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getProjectNotification } from "../services/getNotification";
+import { markAllRead } from "../services/updateNotification";
 import { useState } from "react";
 import { Clock } from "lucide-react";
 
-const Notification = () => {
+const Notification = ({ onCount }) => {
   const { _id: userId } = useSelector((state) => state.user);
 
   const [notifications, setIsNotifications] = useState([]);
@@ -36,6 +37,7 @@ const Notification = () => {
         } else {
           const notificationList = Array.isArray(res.data) ? res.data : [];
           setIsNotifications(notificationList);
+          onCount(notificationList.length);
           setError("");
         }
       })
@@ -54,6 +56,13 @@ const Notification = () => {
       </div>
     );
   }
+
+  const handleMarkAllRead = async () => {
+    await markAllRead(userId);
+
+    setIsNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    onCount(0);
+  };
 
   return (
     <div className="bg-blue-50 p-4 rounded-xl w-full max-w-sm">
@@ -79,7 +88,7 @@ const Notification = () => {
                       {notification.message}
                     </p>
                     <div className="flex  items-center gap-2 mt-1">
-                      <span className="inline-block px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-semibold">
+                      <span className="inline-block px-2 py-1 bg-blue-100 text-blue-950 text-xs rounded font-semibold">
                         {notification.entityType}
                       </span>
                       <span className="text-gray-400 text-xs whitespace-nowrap ml-2">
@@ -93,6 +102,12 @@ const Notification = () => {
           </ul>
         )}
       </div>
+      <button
+        onClick={handleMarkAllRead}
+        className="px-2 text-xs text-blue-900 mt-2 hover:underline cursor-pointer w-full flex justify-end"
+      >
+        Mark all as read
+      </button>
     </div>
   );
 };

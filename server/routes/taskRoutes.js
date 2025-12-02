@@ -15,7 +15,7 @@ router.post("/create-task/:userId/:projectId", createTask);
 router.get("/created-task/:userId", taskController.getTask);
 
 //user
-router.get("/assigned-task/:userId", getAssignedTask);
+router.get("/assigned-task/:userId/:projectId", getAssignedTask);
 
 router.get("/get-tasks/:projectId", taskController.getTasks);
 router.get("/get-task/:taskId", taskController.getOneTask);

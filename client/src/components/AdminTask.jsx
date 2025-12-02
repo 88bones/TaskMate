@@ -12,6 +12,7 @@ const AdminTask = () => {
     getAllTasks()
       .then((res) => {
         setTasks(Array.isArray(res) ? res : []);
+        console.log(res);
         setError("");
       })
       .catch((err) => {
@@ -192,19 +193,24 @@ const AdminTask = () => {
                           </div>
 
                           {/* Assigned To */}
-                          <div className="text-right ml-4">
-                            {task.assignedTo ? (
-                              <>
-                                <div className="text-sm font-medium text-gray-800">
-                                  {task.assignedTo.firstname}{" "}
-                                  {task.assignedTo.lastname}
-                                </div>
-                                {task.assignedTo.email && (
-                                  <div className="text-xs text-gray-500">
-                                    {task.assignedTo.email}
+                          {/* Assigned To */}
+                          <div className="text-right ml-4 min-w-[120px]">
+                            {Array.isArray(task.assignedTo) &&
+                            task.assignedTo.length > 0 ? (
+                              <div className="space-y-1">
+                                {task.assignedTo.map((user) => (
+                                  <div key={user._id} className="text-right">
+                                    <div className="text-sm font-medium text-gray-800">
+                                      {user.firstname} {user.lastname}
+                                    </div>
+                                    {user.email && (
+                                      <div className="text-xs text-gray-500">
+                                        {user.email}
+                                      </div>
+                                    )}
                                   </div>
-                                )}
-                              </>
+                                ))}
+                              </div>
                             ) : (
                               <div className="text-sm text-gray-500">
                                 Unassigned

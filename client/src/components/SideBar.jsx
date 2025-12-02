@@ -8,6 +8,7 @@ import {
   User,
   FolderKanban,
   House,
+  ClipboardCheck,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,14 +28,15 @@ const SideBar = ({ projectId }) => {
       {
         name: "Timeline",
         path: `timeline`,
-        element: <Activity />,
+        element: <ClipboardCheck />,
       },
       {
         name: "Kanban",
         path: `kanban`,
         element: <Kanban />,
       },
-      { name: "Team", path: "team", element: <User /> }
+      { name: "Team", path: "team", element: <User /> },
+      { name: "Task", path: "task", element: <ClipboardCheck /> }
     );
   }
   if (role === "admin")

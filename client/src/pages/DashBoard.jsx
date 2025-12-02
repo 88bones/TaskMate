@@ -6,6 +6,7 @@ import CreateProject from "../components/CreateProject";
 import CreatedProject from "../components/CreatedProjects";
 import AssignedProject from "../components/AssignedProject";
 import AllProjects from "../components/AllProjects";
+import AssignedTask from "../components/AssignedTask";
 
 const DashBoard = () => {
   const { signedIn, role } = useSelector((state) => state.user);
@@ -31,6 +32,7 @@ const DashBoard = () => {
                 <AllProjects />
               </div>
             </header>
+
             <div className="">
               <button
                 className={buttonStyle}

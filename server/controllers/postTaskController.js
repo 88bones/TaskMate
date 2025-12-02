@@ -28,12 +28,12 @@ export const createTask = async (req, res) => {
     });
 
     await notificationModel.create({
-      user: newTask.assignedTo,
+      user: [newTask.assignedTo],
       action: "assigned",
       entityType: "task",
-      project: newTask.projectId,
+      projectId: newTask.projectId,
       taskId: newTask._id,
-      message: `A new task "${newTask.title}" was assigned to you.`,
+      message: `A new task "${newTask.title}" was assigned to you in project "${newTask.projectId.title}".`,
     });
 
     //push task into project

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const NotificationSchema = new mongoose.Schema(
   {
@@ -28,6 +29,10 @@ const NotificationSchema = new mongoose.Schema(
     message: {
       type: String,
       required: true,
+    },
+    isRead: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

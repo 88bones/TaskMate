@@ -11,10 +11,10 @@ export const getTask = async (userId) => {
   }
 };
 
-export const getAssignedTask = async (userId) => {
+export const getAssignedTask = async ({ userId, projectId }) => {
   try {
     const res = await axios.get(
-      `http://localhost:3001/api/task/assigned-task/${userId}`
+      `http://localhost:3001/api/task/assigned-task/${userId}/${projectId}`
     );
     return res.data;
   } catch (err) {

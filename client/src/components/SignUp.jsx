@@ -37,6 +37,7 @@ const SignUp = () => {
   const [error, setError] = useState();
   const [formError, setFormError] = useState();
   const [showPassword, setShowPassword] = useState(false);
+  const [showRePassword, setShowRePassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -155,9 +156,9 @@ const SignUp = () => {
               />
               {error && <span className="text-red-600 text-sm">{error}</span>}
 
-              <div className="flex items-center justify-center border rounded border-black px-2">
+              <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus-within:ring-2 focus-within:ring-blue-500 transition">
                 <input
-                  className="w-full py-2 focus:outline-none"
+                  className="w-full text-sm bg-gray-50 focus:outline-none"
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Password"
@@ -168,21 +169,29 @@ const SignUp = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="p-1"
+                  className="p-1 text-gray-600 hover:text-gray-900"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              <input
-                className={inputStyle}
-                type="password"
-                name="repassword"
-                placeholder="Confirm Password"
-                value={data.repassword}
-                onChange={handleChange}
-                required
-              />
-              {error && <span className="text-red-600 text-sm">{error}</span>}
+              <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus-within:ring-2 focus-within:ring-blue-500 transition">
+                <input
+                  className="w-full text-sm bg-gray-50 focus:outline-none"
+                  type={showRePassword ? "text" : "password"}
+                  name="repassword"
+                  placeholder="Confirm Password"
+                  value={data.repassword}
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowRePassword(!showRePassword)}
+                  className="p-1 text-gray-600 hover:text-gray-900"
+                >
+                  {showRePassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
               <select
                 name="department"
                 value={data.department}

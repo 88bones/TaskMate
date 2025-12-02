@@ -86,8 +86,8 @@ const TimeLine = () => {
   }
 
   return (
-    <div className="relative w-full bg-linear-to-br from-gray-50 to-white py-8 px-4 sm:px-6 lg:px-10">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="relative w-full bg-linear-to-br from-gray-50 to-white py-4 sm:px-6 lg:px-10">
+      <div className="max-w-full mx-auto space-y-8">
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 flex flex-col gap-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">

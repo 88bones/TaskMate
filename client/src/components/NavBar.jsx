@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { signout } from "../redux/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { Bell } from "lucide-react";
+import { Bell, BellDot } from "lucide-react";
 import { useState } from "react";
 import Notification from "./Notification";
 
@@ -22,6 +22,7 @@ const NavBar = () => {
   } = useSelector((state) => state.user);
 
   const [isNotification, setIsNotification] = useState(false);
+  const [notifCount, setNotifCount] = useState(0);
 
   const handleSignOut = () => {
     dispatch(signout());
@@ -55,17 +56,23 @@ const NavBar = () => {
                   Admin
                 </span>
               )}
-              <div>
-                <Bell
+              {notifCount > 0 ? (
+                <BellDot
                   size={18}
-                  className="hover:cursor-pointer hover:text-blue-500 relative"
+                  className="hover:cursor-pointer"
                   onClick={() => setIsNotification(!isNotification)}
                 />
-              </div>
+              ) : (
+                <Bell
+                  size={18}
+                  className="hover:cursor-pointer hover:text-blue-500"
+                  onClick={() => setIsNotification(!isNotification)}
+                />
+              )}
 
               {isNotification && (
                 <div className="absolute top-10 right-60 z-50">
-                  <Notification />
+                  <Notification onCount={setNotifCount} />
                 </div>
               )}
 

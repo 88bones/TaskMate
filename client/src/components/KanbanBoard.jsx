@@ -136,7 +136,7 @@ function KanbanBoard() {
 
       // Update columns with filtered tasks
       const columnStructure = [
-        { id: 1, title: "New", status: "new", color: "bg-white", tasks: [] },
+        { id: 1, title: "New", status: "new", color: "bg-gray-300", tasks: [] },
         {
           id: 2,
           title: "To Do",
@@ -294,8 +294,8 @@ function KanbanBoard() {
   const hasActiveFilters = filterCreatedBy || filterAssignedTo;
 
   return (
-    <div className="relative">
-      <header className="p-4 font-bold text-xl text-center sm:text-left">
+    <div className="relative p-4">
+      <header className="p-4 font-bold text-3xl text-center sm:text-left ">
         {selectedProject?.title}
       </header>
 
@@ -371,11 +371,13 @@ function KanbanBoard() {
               onDrop={(e) => handleDrop(e, col.id)}
             >
               {/* Column Header */}
-              <div className="flex items-center mb-3">
-                <span className={`h-4 w-2 rounded mr-2 ${col.color}`}></span>
-                <h2 className="text-lg sm:text-xl font-semibold flex-1">
-                  {col.title}
-                </h2>
+              <div className="flex items-center justify-between mb-3 rounded shadow px-2 bg-white">
+                <div className="flex items-center">
+                  <span className={`h-4 w-2 rounded mr-2 ${col.color}`}></span>
+                  <h2 className="text-lg sm:text-xl font-semibold flex-1">
+                    {col.title}
+                  </h2>
+                </div>
                 <button
                   className="p-2 rounded-full hover:bg-gray-200"
                   onClick={() => {

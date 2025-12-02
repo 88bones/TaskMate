@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getAssignedTask } from "../services/getTask";
-import SmallScreenTask from "./SmallScreenTask";
-import Select from "react-select";
 
 const AssignedTask = () => {
-  const { _id: userId } = useSelector((state) => state.user);
+  const { _id: userId, selectedProject } = useSelector((state) => state.user);
+  const projectId = selectedProject._id;
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    getAssignedTask(userId)
+    getAssignedTask({ userId, projectId })
       .then((res) => {
         if (res.message) {
           setError(res.message);
@@ -23,7 +22,7 @@ const AssignedTask = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [userId]);
+  }, [userId, projectId]);
   return (
     <div className="bg-white max-sm:p-2 p-4 rounded h-fit shadow-md col-span-2 max-sm:w-full overflow-scroll overflow-x-hidden">
       <header className="mb-2 font-extrabold text-xl">
@@ -92,11 +91,6 @@ const AssignedTask = () => {
         ) : (
           <p className="text-gray-500">No tasks available.</p>
         )}
-
-        {/* ✅ Mobile View */}
-        <span className="md:hidden">
-          <SmallScreenTask tasks={tasks} />
-        </span>
       </div>
     </div>
   );

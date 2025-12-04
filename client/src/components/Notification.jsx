@@ -58,8 +58,9 @@ const Notification = ({ onCount }) => {
   }
 
   const handleMarkAllRead = async () => {
-    await markAllRead(userId);
+    const res = await markAllRead(userId);
 
+    if(res) console.log("asd")
     setIsNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     onCount(0);
   };

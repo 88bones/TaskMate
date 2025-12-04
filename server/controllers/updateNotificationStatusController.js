@@ -7,7 +7,7 @@ export const updateNotificationStatus = async (req, res) => {
     const result = await notificationModel.updateMany(
       {
         user: userId,
-        isRead: flase,
+        isRead: false,
       },
       { $set: { isRead: true } }
     );

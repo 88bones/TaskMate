@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAssignedProject, getProject } from "../services/getProject";
 import { useNavigate } from "react-router-dom";
 import { setSelectedProject } from "../redux/slice";
-import { UserRound } from "lucide-react";
+import { ClipboardCheck, UserRound } from "lucide-react";
 
 const AllProjects = () => {
   const { _id: userId } = useSelector((state) => state.user);
@@ -30,6 +30,7 @@ const AllProjects = () => {
         );
 
         setProjects(unique);
+        console.log(unique);
         setError(unique.length === 0 ? "No projects found." : "");
       } catch (err) {
         console.log(err);
@@ -69,6 +70,9 @@ const AllProjects = () => {
                   <div className="flex items-center gap-1">
                     <UserRound size={14} />
                     {Array.isArray(project.team) ? project.team.length : 0}
+
+                    <ClipboardCheck size={14} className="ml-2" />
+                    {Array.isArray(project.tasks) ? project.tasks.length : 0}
                   </div>
                 </div>
               </li>

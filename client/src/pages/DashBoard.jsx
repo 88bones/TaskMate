@@ -11,7 +11,6 @@ import AssignedTask from "../components/AssignedTask";
 const DashBoard = () => {
   const { signedIn, role } = useSelector((state) => state.user);
 
-  console.log(role);
   const navigate = useNavigate();
 
   const [isCreate, setIsCreate] = useState(false);

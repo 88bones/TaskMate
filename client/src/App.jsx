@@ -60,6 +60,7 @@ function App() {
         {/* ------Auths------ */}
         {/* <Route path="/signup" element={<SignUp />} /> */}
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/update-profile/:userId" element={<UpdateUser />} />
 
         {/* ------PROJECT-BOARD------ */}
         <Route path="/project-board/:projectId/" element={<ProjectBoard />}>

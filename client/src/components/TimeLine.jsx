@@ -79,7 +79,6 @@ const TimeLine = () => {
       <div className="flex items-center justify-center w-full min-h-screen bg-gray-50">
         <div className="text-center text-gray-600">
           <Activity className="w-8 h-8 mx-auto mb-3 opacity-60" />
-          Please select a project to view its timeline.
         </div>
       </div>
     );

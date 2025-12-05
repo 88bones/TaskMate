@@ -4,7 +4,7 @@ import { getProject } from "../services/getProject";
 import { useNavigate } from "react-router-dom";
 // import { deleteProject } from "../services/deleteProject";
 import { setSelectedProject } from "../redux/slice";
-import { UserRound } from "lucide-react";
+import { ClipboardCheck, UserRound } from "lucide-react";
 
 const CreatedProjects = () => {
   const { _id, selectedProject } = useSelector((state) => state.user);
@@ -65,6 +65,8 @@ const CreatedProjects = () => {
                   <div className="flex items-center gap-1">
                     <UserRound size={14} />
                     {project.team.length}
+                    <ClipboardCheck />
+                    {project.tasks.length}
                   </div>
                 </div>
               </li>

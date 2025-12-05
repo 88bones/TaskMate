@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getOneUser } from "../services/getUser";
 import { updateUser } from "../services/updateUser";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const UpdateUser = () => {
   const [error, setError] = useState("");
@@ -9,7 +10,7 @@ const UpdateUser = () => {
   const [loading, setLoading] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(null);
 
-  const { userId } = useParams();
+  const { _id: userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const inputStyle =

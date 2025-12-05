@@ -5,6 +5,7 @@ import { getAssignedTask } from "../services/getTask";
 const AssignedTask = () => {
   const { _id: userId, selectedProject } = useSelector((state) => state.user);
   const projectId = selectedProject._id;
+
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
 
@@ -19,79 +20,134 @@ const AssignedTask = () => {
           setError("");
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   }, [userId, projectId]);
+
+  const priorityColor = {
+    low: "bg-yellow-500",
+    medium: "bg-orange-500",
+    high: "bg-red-500",
+  };
+
+  const statusColor = {
+    todo: "bg-gray-700",
+    "in-progress": "bg-blue-500",
+    done: "bg-green-500",
+  };
+
   return (
-    <div className="bg-white max-sm:p-2 p-4 rounded h-fit shadow-md col-span-2 max-sm:w-full overflow-scroll overflow-x-hidden">
-      <header className="mb-2 font-extrabold text-xl">
-        <p>Assigned Tasks.</p>
+    <div className="bg-white max-sm:p-3 p-5 rounded-xl shadow-lg col-span-2 max-sm:w-full overflow-y-auto">
+      <header className="mb-4">
+        <h1 className="font-extrabold text-2xl text-gray-800">
+          Assigned Tasks
+        </h1>
+        <p className="text-gray-500 text-sm">
+          Here are the tasks assigned to you.
+        </p>
       </header>
 
-      <div>
-        {error && <p className="text-red-500">{error}</p>}
+      {error && (
+        <p className="text-red-500 font-semibold bg-red-100 p-2 rounded mb-3">
+          {error}
+        </p>
+      )}
 
-        {Array.isArray(tasks) && tasks.length > 0 ? (
-          <table className="max-sm:hidden w-full max-sm:text-sm text-left">
+      {Array.isArray(tasks) && tasks.length > 0 ? (
+        <>
+          {/* Mobile View (Card UI) */}
+          <div className="sm:hidden space-y-3">
+            {tasks.map((task, index) => (
+              <div
+                key={index}
+                className="border p-3 rounded-lg shadow-sm bg-gray-50"
+              >
+                <p className="font-bold text-lg">{task.title}</p>
+                <p className="text-sm text-gray-500">
+                  Project: {task.projectId?.title}
+                </p>
+
+                <div className="flex gap-2 my-2">
+                  <span
+                    className={`text-white text-xs px-2 py-1 rounded ${
+                      priorityColor[task.priority]
+                    }`}
+                  >
+                    {task.priority}
+                  </span>
+
+                  <span
+                    className={`text-white text-xs px-2 py-1 rounded ${
+                      statusColor[task.status]
+                    }`}
+                  >
+                    {task.status}
+                  </span>
+                </div>
+
+                <p className="text-sm text-gray-600">
+                  Due:{" "}
+                  {task.dueDate
+                    ? new Date(task.dueDate).toISOString().split("T")[0]
+                    : "No due date"}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Table View */}
+          <table className="hidden sm:table w-full text-left">
             <thead>
-              <tr className="text-lg max-sm:text-sm border-b border-gray-200">
-                <th className="py-2">Task</th>
+              <tr className="border-b border-gray-200 text-gray-600 text-lg">
+                <th className="py-3">Task</th>
                 <th>Project</th>
                 <th>Priority</th>
                 <th>Status</th>
                 <th>Due Date</th>
               </tr>
             </thead>
+
             <tbody>
               {tasks.map((item, index) => (
-                <tr key={index} className="text-left border-b border-gray-200">
-                  <td className="py-2">{item.title}</td>
+                <tr
+                  key={index}
+                  className="border-b border-gray-100 hover:bg-gray-50 transition"
+                >
+                  <td className="py-3 font-medium">{item.title}</td>
                   <td>{item.projectId?.title}</td>
 
                   <td>
-                    {item.priority === "medium" ? (
-                      <span className="bg-orange-500 text-white px-2  rounded">
-                        {item.priority}
-                      </span>
-                    ) : item.priority === "high" ? (
-                      <span className="bg-red-500 text-white px-2 rounded">
-                        {item.priority}
-                      </span>
-                    ) : (
-                      <span className="bg-yellow-500 text-white px-2 rounded">
-                        {item.priority}
-                      </span>
-                    )}
+                    <span
+                      className={`text-white px-2 py-1 rounded text-sm ${
+                        priorityColor[item.priority]
+                      }`}
+                    >
+                      {item.priority}
+                    </span>
                   </td>
+
                   <td>
-                    {item.status === "done" ? (
-                      <span className="bg-green-500 text-white px-2  rounded">
-                        {item.status}
-                      </span>
-                    ) : item.status === "in-progress" ? (
-                      <span className="bg-blue-500 text-white px-2 rounded">
-                        {item.status}
-                      </span>
-                    ) : (
-                      <span className="bg-black text-white px-2 rounded">
-                        {item.status}
-                      </span>
-                    )}
+                    <span
+                      className={`text-white px-2 py-1 rounded text-sm ${
+                        statusColor[item.status]
+                      }`}
+                    >
+                      {item.status}
+                    </span>
                   </td>
+
                   <td>
                     {item.dueDate
                       ? new Date(item.dueDate).toISOString().split("T")[0]
-                      : "No dueDate"}
+                      : "No due date"}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        ) : (
-          <p className="text-gray-500">No tasks available.</p>
-        )}
-      </div>
+        </>
+      ) : (
+        <p className="text-gray-500 text-center py-4">No tasks available.</p>
+      )}
     </div>
   );
 };

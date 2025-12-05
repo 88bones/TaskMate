@@ -82,7 +82,7 @@ const NavBar = () => {
 
             {/* Notification Dropdown */}
             {isNotificationOpen && (
-              <div className="absolute top-10 right-0 z-50">
+              <div className="absolute top-10 w-full right-0 z-50">
                 <Notification
                   onCount={setNotifCount} // updates BellDot
                 />
@@ -92,7 +92,7 @@ const NavBar = () => {
             <div className="flex items-center gap-2 ml-4">
               <span
                 className="cursor-pointer hover:text-shadow-lg"
-                onClick={() => navigate(`/profile/${userId}`)}
+                onClick={() => navigate(`/update-profile/${userId}`)}
               >
                 {firstname} {lastname}
               </span>

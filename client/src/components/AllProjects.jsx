@@ -16,8 +16,8 @@ const AllProjects = () => {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const created = await getProject(userId); // projects you created
-        const assigned = await getAssignedProject(userId); // projects assigned to you
+        const created = await getProject(userId);
+        const assigned = await getAssignedProject(userId);
 
         const createdList = created.message ? [] : created;
         const assignedList = assigned.message ? [] : assigned;

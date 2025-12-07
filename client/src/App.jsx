@@ -51,10 +51,7 @@ function App() {
       <Routes>
         {/* ------Home------ */}
         <Route path="/" element={<Home />} />
-        {/* ------Profile------ */}
-        {/* <Route path="/profile/:userId/" element={<Profile />}>
-          <Route path="edit-user" element={<UpdateUser />} />
-        </Route> */}
+
         {/* ------DashBoard------ */}
         <Route path="/dashboard" element={<DashBoard />}></Route>
         {/* ------Auths------ */}

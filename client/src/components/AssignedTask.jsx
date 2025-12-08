@@ -33,7 +33,7 @@ const AssignedTask = () => {
 
   const statusColor = {
     todo: "bg-gray-700",
-    "in-progress": "bg-blue-500",
+    inprogress: "bg-blue-500",
     done: "bg-green-500",
   };
 
@@ -210,7 +210,6 @@ const AssignedTask = () => {
                         {attachment.split("/").pop() || "Attachment"}
                       </p>
                     </div>
-                    <span className="text-sm text-gray-500">↓</span>
                   </a>
                 ))}
               </div>

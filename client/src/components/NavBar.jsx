@@ -71,7 +71,10 @@ const NavBar = () => {
               onClick={() => setIsNotificationOpen((prev) => !prev)}
             >
               {notifCount > 0 ? (
-                <BellDot size={20} className="hover:cursor-pointer" />
+                <BellDot
+                  size={20}
+                  className="hover:cursor-pointer text-red-500 animate-pulse"
+                />
               ) : (
                 <Bell
                   size={20}

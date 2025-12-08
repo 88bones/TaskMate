@@ -4,3 +4,5 @@ client/.env
 
 # Uploaded files
 server/uploads/
+
+node_modules

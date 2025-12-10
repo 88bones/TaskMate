@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Bell, BellDot } from "lucide-react";
+import { Bell } from "lucide-react";
 import { signout } from "../redux/slice";
 import Notification from "./Notification";
 import { getProjectNotification } from "../services/getNotification";
@@ -20,18 +20,29 @@ const NavBar = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notifCount, setNotifCount] = useState(0);
 
+  // Fetch notifications on component mount
   useEffect(() => {
     if (userId) {
-      getProjectNotification(userId)
-        .then((res) => {
-          const notifications = Array.isArray(res.data) ? res.data : [];
-          const unreadCount = notifications.filter((n) => !n.isRead).length;
-          setNotifCount(unreadCount);
-          console.log(unreadCount);
-        })
-        .catch((err) => console.log(err));
+      refreshNotificationCount();
     }
   }, [userId]);
+
+  // Refresh notification count when dropdown is opened
+  useEffect(() => {
+    if (isNotificationOpen && userId) {
+      refreshNotificationCount();
+    }
+  }, [isNotificationOpen]);
+
+  const refreshNotificationCount = () => {
+    getProjectNotification(userId)
+      .then((res) => {
+        const notifications = Array.isArray(res.data) ? res.data : [];
+        const unreadCount = notifications.filter((n) => !n.isRead).length;
+        setNotifCount(unreadCount);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const handleSignOut = () => {
     dispatch(signout());
@@ -67,19 +78,14 @@ const NavBar = () => {
 
             {/* Notification Bell */}
             <span
-              className="relative"
+              className="relative cursor-pointer"
               onClick={() => setIsNotificationOpen((prev) => !prev)}
             >
-              {notifCount > 0 ? (
-                <BellDot
-                  size={20}
-                  className="hover:cursor-pointer text-red-500 animate-pulse"
-                />
-              ) : (
-                <Bell
-                  size={20}
-                  className="hover:cursor-pointer hover:text-blue-500"
-                />
+              <Bell size={20} className="hover:text-blue-500" />
+              {notifCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {notifCount}
+                </span>
               )}
             </span>
 

@@ -37,7 +37,8 @@ const Notification = ({ onCount }) => {
         } else {
           const notificationList = Array.isArray(res.data) ? res.data : [];
           setIsNotifications(notificationList);
-          onCount(notificationList.length);
+          const unreadCount = notificationList.filter((n) => !n.isRead).length;
+          onCount(unreadCount);
           setError("");
         }
       })
@@ -46,7 +47,7 @@ const Notification = ({ onCount }) => {
         setError("Failed to load notifications");
       })
       .finally(() => setLoading(false));
-  }, [userId]);
+  }, [userId, onCount]);
 
   if (loading) {
     return (
@@ -58,11 +59,13 @@ const Notification = ({ onCount }) => {
   }
 
   const handleMarkAllRead = async () => {
-    const res = await markAllRead(userId);
-
-    if (res) console.log("asd");
-    setIsNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
-    onCount(0);
+    try {
+      await markAllRead(userId);
+      setIsNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+      onCount(0);
+    } catch (err) {
+      console.log("Failed to mark all as read", err);
+    }
   };
 
   return (

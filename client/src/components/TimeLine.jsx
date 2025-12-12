@@ -20,7 +20,6 @@ const TimeLine = () => {
       path: `/project-board/${projectId}/timeline/update-project`,
       element: <Pencil />,
     },
-    { name: "Delete", element: <Trash /> },
   ];
 
   //Avatar

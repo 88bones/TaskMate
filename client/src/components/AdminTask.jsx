@@ -8,6 +8,31 @@ const AdminTask = () => {
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
+  const statusColor = {
+    new: "bg-gray-300",
+    todo: "bg-red-500",
+    "in-progress": "bg-orange-500",
+    review: "bg-yellow-500",
+    done: "bg-green-500",
+  };
+
+  const priorityColor = {
+    low: "bg-yellow-500",
+    medium: "bg-orange-500",
+    high: "bg-red-500",
+  };
+
+  const getStatusLabel = (status) => {
+    const labels = {
+      new: "New",
+      todo: "To Do",
+      "in-progress": "In Progress",
+      review: "Review",
+      done: "Done",
+    };
+    return labels[status] || status.charAt(0).toUpperCase() + status.slice(1);
+  };
+
   useEffect(() => {
     getAllTasks()
       .then((res) => {
@@ -149,43 +174,28 @@ const AdminTask = () => {
                             <div className="text-xs mt-2 flex gap-3 items-center flex-wrap">
                               {/* Status badge */}
                               <span
-                                className={
-                                  `inline-block text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-semibold ` +
-                                  (task.status === "todo"
-                                    ? "bg-red-100 text-red-700"
-                                    : task.status === "in-progress"
-                                    ? "bg-orange-100 text-orange-800"
-                                    : task.status === "review"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : task.status === "done"
-                                    ? "bg-green-100 text-green-800"
-                                    : task.status === "new"
-                                    ? "bg-white text-gray-800 border border-gray-300"
-                                    : "bg-gray-100 text-gray-700")
-                                }
+                                className={`inline-block text-[10px] sm:text-xs px-3 py-1 rounded-full font-semibold text-white ${
+                                  statusColor[task.status] || "bg-gray-400"
+                                }`}
                               >
-                                {String(task.status || "unknown").toUpperCase()}
+                                {getStatusLabel(task.status)}
                               </span>
 
                               {/* Priority badge */}
                               <span
-                                className={
-                                  `inline-block text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-semibold ` +
-                                  (task.priority === "high"
-                                    ? "bg-red-500 text-white"
-                                    : task.priority === "medium"
-                                    ? "bg-purple-500 text-white"
-                                    : task.priority
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-gray-100 text-gray-700")
-                                }
+                                className={`inline-block text-[10px] sm:text-xs px-3 py-1 rounded-full font-semibold text-white ${
+                                  priorityColor[task.priority] || "bg-gray-400"
+                                }`}
                               >
-                                {String(task.priority || "n/a").toUpperCase()}
+                                {task.priority
+                                  ? task.priority.charAt(0).toUpperCase() +
+                                    task.priority.slice(1)
+                                  : "N/A"}
                               </span>
 
                               {task.dueDate && (
-                                <span className="text-gray-500">
-                                  Due:{" "}
+                                <span className="text-gray-500 text-xs">
+                                  📅{" "}
                                   {new Date(task.dueDate).toLocaleDateString()}
                                 </span>
                               )}
@@ -193,26 +203,25 @@ const AdminTask = () => {
                           </div>
 
                           {/* Assigned To */}
-                          {/* Assigned To */}
-                          <div className="text-right ml-4 min-w-[120px]">
-                            {Array.isArray(task.assignedTo) &&
-                            task.assignedTo.length > 0 ? (
+                          <div className="text-right ml-4 min-w-[140px]">
+                            {task.assignedTo ? (
                               <div className="space-y-1">
-                                {task.assignedTo.map((user) => (
-                                  <div key={user._id} className="text-right">
-                                    <div className="text-sm font-medium text-gray-800">
-                                      {user.firstname} {user.lastname}
+                                <div className="text-sm font-medium text-gray-800">
+                                  {typeof task.assignedTo === "object"
+                                    ? `${task.assignedTo.firstname || ""} ${
+                                        task.assignedTo.lastname || ""
+                                      }`.trim()
+                                    : "Assigned"}
+                                </div>
+                                {typeof task.assignedTo === "object" &&
+                                  task.assignedTo.email && (
+                                    <div className="text-xs text-gray-500 truncate">
+                                      {task.assignedTo.email}
                                     </div>
-                                    {user.email && (
-                                      <div className="text-xs text-gray-500">
-                                        {user.email}
-                                      </div>
-                                    )}
-                                  </div>
-                                ))}
+                                  )}
                               </div>
                             ) : (
-                              <div className="text-sm text-gray-500">
+                              <div className="text-sm text-gray-400 italic">
                                 Unassigned
                               </div>
                             )}

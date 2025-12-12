@@ -20,7 +20,7 @@ const DashBoard = () => {
 
   return (
     <>
-      {signedIn ? (
+      {signedIn && role == "user" ? (
         <div className="flex">
           <div className="flex flex-row w-screen justify-around py-6 max-w-full">
             <header>

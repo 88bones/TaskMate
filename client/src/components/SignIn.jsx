@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { postSignIn } from "../services/postSignIn";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signin } from "../redux/slice";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -53,7 +53,11 @@ const SignIn = () => {
           })
         );
       }
-      navigate("/dashboard/");
+      if (user.role === "admin") {
+        navigate("/admin/admin-dash");
+      } else {
+        navigate("/dashboard/");
+      }
     } catch (err) {
       if (err.response && err.response.data && err.response.data.message) {
         setFormError(err.response.data.message || "Login Failed");

@@ -1,9 +1,12 @@
 import axios from "axios";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3001";
+
 export const deleteProject = async (projectId) => {
   try {
     const res = await axios.delete(
-      `http://localhost:3001/api/project/delete-project/${projectId}`
+      `${API_BASE_URL}/api/project/delete-project/${projectId}`
     );
     return res.data;
   } catch (err) {

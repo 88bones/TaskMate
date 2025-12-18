@@ -1,10 +1,13 @@
 import axios from "axios";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3001";
+
 export const postTask = async (userId, projectId, data) => {
   try {
     const status = data.status;
     const res = await axios.post(
-      `http://localhost:3001/api/task/create-task/${userId}/${projectId}?status=${status}`,
+      `${API_BASE_URL}/api/task/create-task/${userId}/${projectId}?status=${status}`,
       data
     );
 
@@ -17,7 +20,7 @@ export const postTask = async (userId, projectId, data) => {
 export const updateTaskStatus = async (taskId, status) => {
   try {
     const res = await axios.patch(
-      `http://localhost:3001/api/task/update-status/${taskId}`,
+      `${API_BASE_URL}/api/task/update-status/${taskId}`,
       { status }
     );
     return res.data.task;
@@ -47,7 +50,7 @@ export const updateTask = async (taskId, payload, files = null) => {
       });
 
       res = await axios.put(
-        `http://localhost:3001/api/task/update-task/${taskId}`,
+        `${API_BASE_URL}/api/task/update-task/${taskId}`,
         formData,
         {
           headers: {
@@ -58,7 +61,7 @@ export const updateTask = async (taskId, payload, files = null) => {
     } else {
       // Regular JSON request if no files
       res = await axios.put(
-        `http://localhost:3001/api/task/update-task/${taskId}`,
+        `${API_BASE_URL}/api/task/update-task/${taskId}`,
         payload
       );
     }
